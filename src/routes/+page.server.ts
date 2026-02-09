@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
-// Using mock client while real API is under maintenance
-// TODO: Switch back to '$lib/api/client' when API is available
-import { getPosts, getTokens } from '$lib/api/mock';
+// Import from unified API - automatically switches between mock/real based on env
+import { getPosts, getTokens } from '$lib/api';
+
 
 export const load: PageServerLoad = async () => {
     // Fetch posts excluding 'activity' section
