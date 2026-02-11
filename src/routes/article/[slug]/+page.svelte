@@ -1,11 +1,11 @@
 <script lang="ts">
     import "../../../app.css";
     import { getPostCoverUrl } from "$lib/utils/assets";
-    import type { Post } from "$types/api";
+    import type { Post, PostDetail } from "$types/api";
 
     interface Props {
         data: {
-            post: Post | null;
+            post: PostDetail | null;
             relatedPosts: Post[];
         };
     }
@@ -63,7 +63,7 @@
 
             <img
                 class="cover"
-                src={getPostCoverUrl(data.post.coverImageId)}
+                src={getPostCoverUrl(data.post.coverImage?.id)}
                 alt={data.post.title}
             />
 
@@ -86,7 +86,7 @@
                     {#each data.relatedPosts as post}
                         <a href="/article/{post.slug}" class="related-card">
                             <img
-                                src={getPostCoverUrl(post.coverImageId)}
+                                src={getPostCoverUrl(post.coverImage?.id)}
                                 alt={post.title}
                             />
                             <div class="info">

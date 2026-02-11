@@ -51,7 +51,7 @@
             {#each data.fatwa as post}
                 <article class="card">
                     <img
-                        src={getPostCoverUrl(post.coverImageId)}
+                        src={getPostCoverUrl(post.coverImage?.id)}
                         alt={post.title}
                         loading="lazy"
                     />
@@ -81,7 +81,7 @@
             {#each data.teknologi as post}
                 <article class="card">
                     <img
-                        src={getPostCoverUrl(post.coverImageId)}
+                        src={getPostCoverUrl(post.coverImage?.id)}
                         alt={post.title}
                         loading="lazy"
                     />
@@ -111,7 +111,7 @@
             {#each data.studiKasus as post}
                 <article class="card">
                     <img
-                        src={getPostCoverUrl(post.coverImageId)}
+                        src={getPostCoverUrl(post.coverImage?.id)}
                         alt={post.title}
                         loading="lazy"
                     />

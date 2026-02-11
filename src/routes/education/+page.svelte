@@ -51,7 +51,7 @@
         {@const featured = data.upcomingWebinars[0]}
         <section class="featured-webinar">
             <img
-                src={getPostCoverUrl(featured.coverImageId)}
+                src={getPostCoverUrl(featured.coverImage?.id)}
                 alt={featured.title}
             />
             <div class="content">
@@ -92,7 +92,7 @@
             {#each data.upcomingWebinars as webinar}
                 <article class="card">
                     <img
-                        src={getPostCoverUrl(webinar.coverImageId)}
+                        src={getPostCoverUrl(webinar.coverImage?.id)}
                         alt={webinar.title}
                         loading="lazy"
                     />
@@ -129,7 +129,7 @@
             {#each data.pastWebinars as webinar}
                 <article class="card">
                     <img
-                        src={getPostCoverUrl(webinar.coverImageId)}
+                        src={getPostCoverUrl(webinar.coverImage?.id)}
                         alt={webinar.title}
                         loading="lazy"
                     />
@@ -161,7 +161,7 @@
             {#each data.posts as post}
                 <article class="card">
                     <img
-                        src={getPostCoverUrl(post.coverImageId)}
+                        src={getPostCoverUrl(post.coverImage?.id)}
                         alt={post.title}
                         loading="lazy"
                     />

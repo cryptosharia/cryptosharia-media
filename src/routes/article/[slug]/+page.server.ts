@@ -9,13 +9,13 @@ export const load: PageServerLoad = async ({ params }) => {
     const post = postResponse.data?.data ?? null;
 
     // Fetch related posts (same section)
-    let relatedPosts: typeof post extends null ? [] : NonNullable<typeof post>[] = [];
+    let relatedPosts: import('$types/api').Post[] = [];
     if (post) {
         const relatedResponse = await getPosts({
             sections: [post.section as 'news' | 'education' | 'research' | 'activity'],
             limit: 3,
         });
-        relatedPosts = (relatedResponse.data?.data ?? []).filter((p) => p.slug !== slug);
+        relatedPosts = (relatedResponse.data?.data?.items ?? []).filter((p) => p.slug !== slug);
     }
 
     return {

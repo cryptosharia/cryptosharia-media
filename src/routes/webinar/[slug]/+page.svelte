@@ -1,11 +1,11 @@
 <script lang="ts">
     import "../../../app.css";
     import { getPostCoverUrl } from "$lib/utils/assets";
-    import type { Post } from "$types/api";
+    import type { Post, PostDetail } from "$types/api";
 
     interface Props {
         data: {
-            webinar: Post | null;
+            webinar: PostDetail | null;
         };
     }
 
@@ -44,7 +44,7 @@
         <div class="webinar-content">
             <img
                 class="cover"
-                src={getPostCoverUrl(data.webinar.coverImageId)}
+                src={getPostCoverUrl(data.webinar.coverImage?.id)}
                 alt={data.webinar.title}
             />
 

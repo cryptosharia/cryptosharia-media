@@ -17,7 +17,7 @@ export const load: PageServerLoad = async () => {
     });
 
     const now = new Date();
-    const webinars = webinarsResponse.data?.data ?? [];
+    const webinars = webinarsResponse.data?.data?.items ?? [];
 
     // Split webinars into upcoming and past
     const upcomingWebinars = webinars.filter(
@@ -28,7 +28,7 @@ export const load: PageServerLoad = async () => {
     );
 
     return {
-        posts: postsResponse.data?.data ?? [],
+        posts: postsResponse.data?.data?.items ?? [],
         upcomingWebinars,
         pastWebinars,
     };
