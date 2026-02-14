@@ -1,7 +1,8 @@
 <script lang="ts">
+    import { theme } from "$lib/stores/theme";
     import "../../app.css";
 
-    let darkMode = $state(true);
+    // Use the store directly for darkMode
     let pushNotification = $state(true);
     let newsletter = $state(false);
 
@@ -10,260 +11,544 @@
         email: "naufal@cryptosharia.id",
         joinDate: "2024-01-15",
         membershipType: "Premium",
+        avatar: "https://images.squarespace-cdn.com/content/v1/5d016c1ba9f2e7000120c08c/1560579210527-7LDCZH62S91OLOJIKAE9/AdobeStock_87517185.jpeg?format=1500w",
     };
-
-    const settingsLinks = [
-        { icon: "🔐", label: "Password", href: "/profile/password" },
-        { icon: "❓", label: "Help Center", href: "/help" },
-        { icon: "📋", label: "Terms of Use", href: "/terms" },
-        { icon: "🔒", label: "Privacy Policy", href: "/privacy" },
-    ];
 </script>
 
 <svelte:head>
-    <title>Profile · CryptoSharia</title>
+    <title>Profile - CryptoSharia News</title>
     <meta
         name="description"
-        content="Kelola profil dan pengaturan akun CryptoSharia Anda."
+        content="Portal news seputar crypto & syariah: fatwa, teknologi, dan pasar."
     />
 </svelte:head>
 
-<header>
-    <nav class="menu">
-        <a href="/">News</a>
-        <a href="/education">Education</a>
-        <a href="/research">Research</a>
-        <a href="/community">Premium</a>
-        <a href="/profile" class="active">Profile</a>
-    </nav>
-    <div class="container nav">
-        <a href="/" class="brand">
-            <div class="logo"></div>
-            <span class="title">CryptoSharia</span>
+<main class="container">
+    <div class="profile-page">
+        <a href="#" class="profile-header">
+            <img src={user.avatar} alt="Avatar" class="avatar" />
+            <div class="info">
+                <span class="welcome">Welcome</span>
+                <span class="name">{user.name}</span>
+            </div>
+            <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
         </a>
+
+        <div class="profile-section">
+            <ul class="profile-list">
+                <li>
+                    <a href="#">
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect
+                                x="3"
+                                y="11"
+                                width="18"
+                                height="11"
+                                rx="2"
+                                ry="2"
+                            ></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <span>Password</span>
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="chevron"
+                        >
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </a>
+                </li>
+                <li class="item-toggle">
+                    <div class="label">
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"
+                            ></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span>Push Notification</span>
+                    </div>
+                    <label class="switch">
+                        <input
+                            type="checkbox"
+                            bind:checked={pushNotification}
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </li>
+                <li class="item-toggle">
+                    <div class="label">
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                            ></path>
+                        </svg>
+                        <span>Dark Mode</span>
+                    </div>
+                    <label class="switch">
+                        <input
+                            type="checkbox"
+                            id="darkModeToggle"
+                            checked={$theme}
+                            onchange={(e) => theme.set(e.currentTarget.checked)}
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </li>
+                <li class="item-toggle">
+                    <div class="label">
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                            ></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span>Subscribe Newsletter</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" bind:checked={newsletter} />
+                        <span class="slider"></span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <div class="profile-section">
+            <ul class="profile-list">
+                <li>
+                    <a href="#">
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"
+                            ></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <span>Help Center</span>
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="chevron"
+                        >
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"
+                            ></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        <span>Terms of Use</span>
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="chevron"
+                        >
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                            ></path>
+                        </svg>
+                        <span>Privacy Policy</span>
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="chevron"
+                        >
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="profile-section">
+            <ul class="profile-list">
+                <li class="danger-zone">
+                    <a href="#">
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path
+                                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                            ></path>
+                        </svg>
+                        <span>Delete Account</span>
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="chevron"
+                        >
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="logout-section">
+            <button class="btn-logout">
+                <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Log Out</span>
+            </button>
+        </div>
+
+        <div class="version-footer">
+            <p>Version 2.2.1, © 2025 CryptoSharia</p>
+            <p>Portal Berita & Edukasi Kripto Syariah</p>
+        </div>
     </div>
-</header>
-
-<main class="container profile-page">
-    <!-- User Info -->
-    <section class="user-info">
-        <div class="avatar">👤</div>
-        <div class="details">
-            <h2>Welcome</h2>
-            <h3>{user.name}</h3>
-            <span class="membership">{user.membershipType}</span>
-        </div>
-    </section>
-
-    <!-- Settings -->
-    <section class="settings-section">
-        <h4>Pengaturan</h4>
-
-        <div class="setting-item">
-            <div class="setting-label">
-                <span class="icon">🔐</span>
-                <span>Password</span>
-            </div>
-            <a href="/profile/password" class="setting-action">Ubah →</a>
-        </div>
-
-        <div class="setting-item">
-            <div class="setting-label">
-                <span class="icon">🔔</span>
-                <span>Push Notification</span>
-            </div>
-            <label class="toggle">
-                <input type="checkbox" bind:checked={pushNotification} />
-                <span class="slider"></span>
-            </label>
-        </div>
-
-        <div class="setting-item">
-            <div class="setting-label">
-                <span class="icon">🌙</span>
-                <span>Dark Mode</span>
-            </div>
-            <label class="toggle">
-                <input type="checkbox" bind:checked={darkMode} />
-                <span class="slider"></span>
-            </label>
-        </div>
-
-        <div class="setting-item">
-            <div class="setting-label">
-                <span class="icon">📧</span>
-                <span>Subscribe Newsletter</span>
-            </div>
-            <label class="toggle">
-                <input type="checkbox" bind:checked={newsletter} />
-                <span class="slider"></span>
-            </label>
-        </div>
-    </section>
-
-    <!-- Links -->
-    <section class="settings-section">
-        <h4>Bantuan & Legal</h4>
-        {#each settingsLinks as link}
-            <a href={link.href} class="setting-item link">
-                <div class="setting-label">
-                    <span class="icon">{link.icon}</span>
-                    <span>{link.label}</span>
-                </div>
-                <span class="arrow">→</span>
-            </a>
-        {/each}
-    </section>
-
-    <!-- Danger Zone -->
-    <section class="settings-section danger">
-        <a href="/profile/delete" class="setting-item link danger">
-            <div class="setting-label">
-                <span class="icon">⚠️</span>
-                <span>Delete Account</span>
-            </div>
-            <span class="arrow">→</span>
-        </a>
-    </section>
-
-    <footer class="profile-footer">
-        <p>Version 2.2.1</p>
-        <p>© 2025 CryptoSharia</p>
-    </footer>
 </main>
 
 <style>
+    /* Profile Page */
     .profile-page {
         max-width: 600px;
         margin: 0 auto;
-        padding-bottom: 100px;
+        padding: 1rem 0 6rem;
     }
-    .user-info {
+
+    .profile-header {
         display: flex;
         align-items: center;
-        gap: 1.5rem;
+        gap: 1rem;
+        padding: 1.5rem;
         background: var(--elev);
         border-radius: var(--radius);
-        padding: 2rem;
+        border: 1px solid var(--border-color);
         margin-bottom: 1.5rem;
+        transition:
+            transform 0.2s,
+            background 0.2s;
     }
-    .avatar {
-        width: 80px;
-        height: 80px;
-        background: var(--border-color);
+
+    .profile-header:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 248, 248, 0.03);
+    }
+
+    :global(body.light-mode) .profile-header:hover {
+        background: rgba(0, 0, 0, 0.03);
+    }
+
+    .profile-header .avatar {
+        width: 64px;
+        height: 64px;
         border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--brand);
+    }
+
+    .profile-header .info {
+        flex: 1;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
+        flex-direction: column;
     }
-    .details h2 {
-        margin: 0;
-        font-size: 0.875rem;
-        color: var(--text-muted);
-        font-weight: normal;
+
+    .profile-header .welcome {
+        font-size: 0.85rem;
+        color: var(--muted);
     }
-    .details h3 {
-        margin: 0.25rem 0;
-        font-size: 1.5rem;
+
+    .profile-header .name {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text);
     }
-    .membership {
-        background: var(--brand);
-        color: var(--bg);
-        padding: 0.25rem 0.75rem;
-        border-radius: 12px;
-        font-size: 0.75rem;
-        font-weight: 600;
-    }
-    .settings-section {
+
+    .profile-section {
+        margin-bottom: 1.5rem;
         background: var(--elev);
         border-radius: var(--radius);
-        margin-bottom: 1rem;
+        border: 1px solid var(--border-color);
         overflow: hidden;
     }
-    .settings-section h4 {
-        padding: 1rem 1.5rem 0.5rem;
+
+    .profile-list {
+        list-style: none;
+        padding: 0;
         margin: 0;
-        font-size: 0.875rem;
-        color: var(--text-muted);
     }
-    .setting-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 1.5rem;
+
+    .profile-list li {
         border-bottom: 1px solid var(--border-color);
     }
-    .setting-item:last-child {
+
+    .profile-list li:last-child {
         border-bottom: none;
     }
-    .setting-item.link {
-        text-decoration: none;
-        color: var(--text);
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-    .setting-item.link:hover {
-        background: var(--bg);
-    }
-    .setting-item.danger {
-        color: #ef4444;
-    }
-    .setting-label {
+
+    .profile-list li a,
+    .profile-list li.item-toggle {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        justify-content: space-between;
+        padding: 1rem 1.25rem;
+        color: var(--text);
+        gap: 1rem;
+        transition: background 0.2s;
+        cursor: pointer;
     }
-    .setting-label .icon {
-        font-size: 1.25rem;
+
+    .profile-list li a:hover {
+        background: rgba(255, 248, 248, 0.03);
     }
-    .setting-action {
-        color: var(--brand);
-        text-decoration: none;
-        font-size: 0.875rem;
+
+    :global(body.light-mode) .profile-list li a:hover {
+        background: rgba(0, 0, 0, 0.03);
     }
-    .toggle {
+
+    .profile-list li a span,
+    .profile-list li .label span {
+        flex: 1;
+        font-weight: 500;
+    }
+
+    .profile-list li svg {
+        color: var(--muted);
+    }
+
+    .profile-list li a .chevron {
+        color: var(--muted);
+        opacity: 0.5;
+    }
+
+    .profile-list li.danger-zone a {
+        color: var(--danger);
+    }
+
+    .profile-list li.danger-zone svg {
+        color: var(--danger);
+    }
+
+    .profile-list .label {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex: 1;
+    }
+
+    /* Switch Toggle */
+    .switch {
         position: relative;
-        width: 48px;
-        height: 28px;
+        display: inline-block;
+        width: 46px;
+        height: 26px;
     }
-    .toggle input {
+
+    .switch input {
         opacity: 0;
         width: 0;
         height: 0;
     }
+
     .slider {
         position: absolute;
         cursor: pointer;
-        inset: 0;
-        background: var(--border-color);
-        border-radius: 28px;
-        transition: 0.3s;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--border-color);
+        transition: 0.4s;
+        border-radius: 34px;
     }
-    .slider::before {
-        content: "";
+
+    .slider:before {
         position: absolute;
-        width: 20px;
+        content: "";
         height: 20px;
-        left: 4px;
-        bottom: 4px;
-        background: white;
+        width: 20px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
         border-radius: 50%;
-        transition: 0.3s;
     }
-    .toggle input:checked + .slider {
-        background: var(--brand);
+
+    input:checked + .slider {
+        background-color: var(--brand);
     }
-    .toggle input:checked + .slider::before {
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px var(--brand);
+    }
+
+    input:checked + .slider:before {
         transform: translateX(20px);
     }
-    .profile-footer {
-        text-align: center;
-        padding: 2rem;
-        color: var(--text-muted);
-        font-size: 0.875rem;
+
+    /* Logout & Footer */
+    .logout-section {
+        margin-top: 2rem;
     }
-    .profile-footer p {
+
+    .btn-logout {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        border-radius: var(--radius);
+        background: rgba(255, 39, 39, 0.1);
+        color: #ff2727;
+        border: 1px solid rgba(255, 39, 39, 0.2);
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-logout:hover {
+        background: rgba(255, 39, 39, 0.15);
+        transform: translateY(-1px);
+    }
+
+    .version-footer {
+        text-align: center;
+        margin-top: 2rem;
+        color: var(--muted);
+        font-size: 0.85rem;
+    }
+
+    .version-footer p {
         margin: 0.25rem 0;
     }
 </style>

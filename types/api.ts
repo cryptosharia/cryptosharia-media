@@ -12,7 +12,10 @@ import type { components } from '../src/lib/api/api';
 export type Post = components['schemas']['PostsGetItem'];
 export type PostDetail = components['schemas']['PostsGetData'];
 export type Token = components['schemas']['TokensGetItem'];
-export type TokenDetail = components['schemas']['TokensGetData'];
+export type TokenDetail = components['schemas']['TokensGetData'] & {
+  category?: string;
+  excerpt?: string;
+};
 export type TokenQuote = components['schemas']['TokensQuotesGetItem'];
 export type Message = components['schemas']['MessagesGetItem'];
 export type InsertMessage = components['schemas']['MessagesPostBody'];
