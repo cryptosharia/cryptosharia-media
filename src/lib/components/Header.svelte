@@ -21,7 +21,12 @@
     <div class="container nav">
         <a href="/" class="brand">
             <div class="logo"></div>
-            <span class="title">CryptoSharia</span>
+            <div>
+                <div class="title">CryptoSharia</div>
+                <div class="muted" style="font-size: 0.85rem">
+                    News & Education
+                </div>
+            </div>
         </a>
         <div class="search">
             <svg

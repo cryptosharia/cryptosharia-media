@@ -77,23 +77,6 @@
     />
 </svelte:head>
 
-<header>
-    <nav class="menu">
-        <a href="/">News</a>
-        <a href="/education">Education</a>
-        <a href="/research">Research</a>
-        <a href="/community" class="active">Premium</a>
-        <a href="/profile">Profile</a>
-    </nav>
-    <div class="container nav">
-        <a href="/" class="brand">
-            <div class="logo"></div>
-            <span class="title">CryptoSharia</span>
-            <span class="pill">Premium</span>
-        </a>
-    </div>
-</header>
-
 <main class="container">
     <!-- Hero Section -->
     <section class="hero">

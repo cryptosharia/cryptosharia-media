@@ -227,12 +227,14 @@
         align-items: center;
         gap: 0.5rem;
         padding: 0.5rem 1rem;
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         background: var(--elev);
+        color: var(--text); /* Explicitly set text color */
         border-radius: 20px;
         cursor: pointer;
         font-size: 0.9rem;
         white-space: nowrap;
+        transition: all 0.2s; /* Add transition for smoothness */
     }
     .filter-btn:hover {
         background: var(--bg-hover);
