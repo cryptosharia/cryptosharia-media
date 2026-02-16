@@ -195,7 +195,7 @@ export async function getTokens(params?: ListTokensParams): Promise<{ data: Toke
 /**
  * Mock: Fetch a single token by slug
  */
-export async function getToken(slug: string): Promise<{ data: TokenResponse }> {
+export async function getToken(slug: string): Promise<{ data: TokenResponse; error?: any }> {
     await delay();
 
     const token = MOCK_TOKENS.find((t) => t.slug === slug) ?? null;
@@ -216,5 +216,6 @@ export async function getToken(slug: string): Promise<{ data: TokenResponse }> {
             message: 'Token found (mock)',
             data: token,
         },
+        error: undefined,
     };
 }

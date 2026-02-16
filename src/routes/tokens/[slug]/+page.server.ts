@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getToken } from '$lib/api/client';
+import { getToken } from '$lib/api';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {

@@ -33,6 +33,12 @@
             window.location.href = url.toString();
         }
     }
+    // Cast tokens to TokenDetail[] because mock data includes content/category
+    // which are missing in the strict generated TokensGetItem type
+    let tokens = $derived(data.tokens as unknown as TokenDetail[]);
+
+    // Filter logic
+    // ... (rest of logic handles client-side filtering if needed, but we rely on server load)
 </script>
 
 <svelte:head>
@@ -124,11 +130,11 @@
     <!-- Coin Grid -->
     <section class="section">
         <h3 style="margin-bottom: 1.5rem;">
-            {data.tokens.length} Coin Ditampilkan
+            {tokens.length} Coin Ditampilkan
         </h3>
 
         <div class="coin-grid">
-            {#each data.tokens as coin}
+            {#each tokens as coin}
                 <article class="coin-card" data-status={coin.shariaStatus}>
                     <div class="coin-header">
                         <img
@@ -155,17 +161,11 @@
                         <p class="coin-notes">{coin.excerpt}</p>
                     {/if}
 
-                    <details class="coin-details">
-                        <summary>Lihat Detail</summary>
-                        <p style="margin-top: 1rem; color: var(--text);">
-                            {coin.content}
-                        </p>
-                        {#if coin.slug}
-                            <a href="/tokens/{coin.slug}" class="detail-link"
-                                >Baca selengkapnya →</a
-                            >
-                        {/if}
-                    </details>
+                    {#if coin.slug}
+                        <a href="/tokens/{coin.slug}" class="detail-link"
+                            >► Lihat Detail</a
+                        >
+                    {/if}
                 </article>
             {:else}
                 <div class="empty-state">
@@ -354,12 +354,6 @@
         margin-bottom: 1rem;
     }
 
-    .coin-details summary {
-        cursor: pointer;
-        color: var(--brand);
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
     .detail-link {
         display: inline-block;
         margin-top: 0.5rem;

@@ -12,9 +12,192 @@ export const SCREENING_DATA: TokenDetail[] = [
         logo: { id: "logo-btc", url: "https://cryptologos.cc/logos/bitcoin-btc-logo.png", filename: "btc.png", size: 1024 },
         category: "Store of Value",
         excerpt: "Aset digital terdesentralisasi pertama. Tidak mengandung riba, gharar rendah karena mekanisme jelas, dan tidak ada unsur maisir.",
-        content: "Bitcoin menggunakan Proof of Work yang merupakan usaha nyata (ju'alah). Kepemilikan jelas dan transparan di blockchain. Dapat dikategorikan sebagai māl i'tibārī.",
+        content: `
+<h3>Tujuan Proyek</h3>
+<p><strong>Bitcoin (BTC)</strong> adalah aset kripto pertama yang dirancang sebagai <em>peer-to-peer electronic cash system</em> untuk memungkinkan pembayaran online langsung tanpa perantara, sekaligus berkembang menjadi <strong>store of value</strong> berbasis kelangkaan digital <strong>21 juta BTC</strong>.</p>
+<p>Bitcoin dikembangkan oleh <strong>Satoshi Nakamoto</strong> pada 2008–2009 untuk menyelesaikan masalah <em>double spending</em> dan ketergantungan pada lembaga keuangan terpusat.</p>
+<p>Bitcoin bertujuan menyediakan:</p>
+<ul>
+<li>Uang elektronik peer-to-peer yang <strong>tahan sensor</strong></li>
+<li><strong>Tidak bisa dipalsukan</strong></li>
+<li><strong>Tidak dikendalikan pemerintah atau bank sentral</strong></li>
+<li>Sistem moneter global yang <em>permissionless</em> dan tahan inflasi</li>
+<li>Fungsi ganda: alat pembayaran + <strong>emas digital (store of value)</strong></li>
+</ul>
+<p>Saat ini Bitcoin menguasai ±45–50% kapitalisasi pasar kripto.</p>
+
+<h3>Produk / Layanan</h3>
+<p><strong>Settlement Layer (Layer 1 – PoW)</strong></p>
+<ul>
+<li>Blockchain Proof-of-Work dengan keamanan berbasis algoritma SHA-256</li>
+<li>Rata-rata waktu blok 10 menit</li>
+<li>Diamankan oleh ribuan node dan miner global</li>
+</ul>
+
+<p><strong>Layer 2 & Skalabilitas</strong></p>
+<ul>
+<li><strong>Lightning Network:</strong> pembayaran mikro instan, biaya sangat rendah</li>
+<li><strong>Sidechain/Layer 2:</strong> Liquid, Rootstock — enabling DeFi & smart contract</li>
+</ul>
+
+<p><strong>Ekosistem Pembayaran</strong></p>
+<ul>
+<li>Digunakan oleh payment processor, merchant online/offline, ATM Bitcoin, dan remittance service</li>
+<li>Di El Salvador, Bitcoin diakui sebagai legal tender</li>
+<li>Semua kode inti open-source dan diaudit komunitas global (Bitcoin Core).</li>
+</ul>
+
+<h3>Tokenomics</h3>
+<ul>
+<li><strong>Token utama:</strong> BTC</li>
+<li><strong>Maksimum suplai:</strong> 21 juta BTC</li>
+<li><strong>Suplai beredar (akhir 2025):</strong> ±19,95 juta BTC (~95%)</li>
+<li><strong>Market cap (akhir 2025):</strong> ±1,7 triliun USD</li>
+</ul>
+
+<p><strong>Halving & Distribusi</strong></p>
+<ul>
+<li>Reward awal: 50 BTC/blok (2009)</li>
+<li>Setelah halving 2024: 3,125 BTC/blok</li>
+<li>Halving setiap 210.000 blok (~4 tahun) hingga reward mendekati nol ≈2140</li>
+</ul>
+
+<p><strong>Reward Miner (bukan bunga)</strong></p>
+<ul>
+<li>Block reward</li>
+<li>Biaya transaksi (tx fee)</li>
+</ul>
+<p>Reward ini adalah kompensasi penggunaan listrik & hardware, <strong>bukan riba</strong>, karena nilainya ditentukan pasar melalui harga BTC + kompetisi hashrate.</p>
+
+<p><strong>Fair Launch</strong></p>
+<ul>
+<li>Tanpa pre-mine</li>
+<li>Tanpa alokasi khusus untuk tim / VC</li>
+<li>Distribusi murni dari PoW sejak genesis</li>
+</ul>
+
+<h3>Underlying Asset</h3>
+<p>Bitcoin tidak memiliki underlying fisik, tetapi nilainya ditopang oleh:</p>
+<ul>
+<li><strong>Kelangkaan matematis:</strong> suplai tetap 21 juta</li>
+<li><strong>Biaya produksi & keamanan:</strong> energi + hardware penambangan</li>
+<li><strong>Network effect:</strong> adopsi global, likuiditas tinggi, dan reputasi sebagai kripto pertama</li>
+</ul>
+<p>Fungsi utama:</p>
+<ul>
+<li>Store of value (emas digital)</li>
+<li>Alat tukar lintas negara</li>
+<li>Unit of account dalam ekosistem kripto (collateral, denominasi harga)</li>
+</ul>
+<p>Nilai BTC bertumpu pada kepercayaan, kelangkaan, dan keamanan PoW.</p>
+
+<h3>Trading Mekanisme</h3>
+<p>Protokol Bitcoin bersifat netral dan hanya menyediakan ledger transfer BTC — <strong>tidak ada margin/leverage/derivatif pada layer dasar</strong>.</p>
+<p>Namun BTC diperdagangkan di hampir semua exchange global, dalam bentuk:</p>
+<ul>
+<li><strong>Spot trading:</strong> jual-beli langsung BTC terhadap fiat/kripto lain</li>
+<li><strong>Derivatif:</strong> futures, perpetual, options (CME & exchange kripto)</li>
+</ul>
+<p>Aktivitas derivatif ini berpotensi mengandung riba dan gharar jika melibatkan:</p>
+<ul>
+<li>Pinjaman berbunga</li>
+<li>Funding rate</li>
+<li>Spekulasi berlebihan tanpa serah terima aset</li>
+</ul>
+<p>Bitcoin sebagai protokol tidak mendorong aktivitas tersebut, tetapi infrastruktur pasar membuat spekulasi ekstrem sangat mungkin terjadi.</p>
+
+<h3>Gharar / Spekulasi</h3>
+<p><strong>Transparansi Tinggi</strong></p>
+<ul>
+<li>Semua data suplai, halving, transaksi publik & auditabel melalui blockchain</li>
+</ul>
+<p><strong>Likuiditas & Volatilitas</strong></p>
+<ul>
+<li>Volume harian puluhan miliar USD</li>
+<li>Volatilitas tinggi → risiko spekulasi signifikan</li>
+</ul>
+<p><strong>Minim Gharar pada Protokol</strong></p>
+<ul>
+<li>PoW + suplai tetap → aturan transparan & tidak dapat diubah sepihak</li>
+<li>Tidak ada Ponzi bawaan</li>
+</ul>
+<p>Risiko gharar berasal dari exchange, lending platform, derivatif, dll. Perdagangan leverage, futures, dan produk turunan kompleks sering masuk kategori gharar & maisir.</p>
+
+<h3>Tim & Governance</h3>
+<p>Bitcoin tidak memiliki tim pusat atau perusahaan resmi.</p>
+<ul>
+<li><strong>Bitcoin Core Developers:</strong> Developer sukarela yang memelihara implementasi referensi</li>
+<li><strong>Miner & Node Operator:</strong> Menjalankan konsensus PoW, menerima/menolak upgrade melalui signalling dan penggunaan software</li>
+<li><strong>Komunitas Global:</strong> Wallet provider, exchange, perusahaan pembayaran, pengguna — membentuk social consensus</li>
+</ul>
+<p><strong>Governance (BIP)</strong></p>
+<ul>
+<li>Upgrade besar (SegWit 2017, Taproot 2021) diaktifkan setelah tercapai konsensus sosial + teknis</li>
+<li>Tidak ada <em>one coin, one vote</em></li>
+<li>Risiko: konsentrasi hashrate pada mining pool besar</li>
+</ul>
+
+<h3>Kesimpulan</h3>
+<div class="summary-box">
+<span class="status-badge halal">Halal</span>
+<p>Secara prinsip, Bitcoin (BTC) dikategorikan sebagai <strong>māl mutaqawwam</strong> — aset digital yang dapat dimiliki, dipindahtangankan, dan diwariskan, dengan sejumlah indikator kepatuhan syariah yang positif.</p>
+</div>
+
+<p><strong>Indikator Pro-Halal (Secara Teknis):</strong></p>
+<ul>
+<li>BTC adalah aset digital nyata secara fiqh: dapat dimiliki & dipindahkan secara penuh</li>
+<li>Tidak ada riba bawaan (tidak ada bunga tetap)</li>
+<li>Aturan protokol (PoW, suplai tetap, halving) transparan & terverifikasi on-chain → meminimalkan gharar</li>
+<li>Tidak ada skema Ponzi bawaan; reward miner berasal dari kerja komputasi nyata</li>
+<li>Memiliki manfaat riil: remitansi, pembayaran lintas negara, lindung nilai inflasi</li>
+<li>Fair launch, tanpa pre-mine & tanpa alokasi VC</li>
+</ul>
+
+<p><strong>Pandangan Fikih:</strong></p>
+<ul>
+<li>Kelompok yang mengharamkan menyoroti volatilitas ekstrem, potensi penyalahgunaan, dan aktivitas pasar derivatif yang penuh gharar.</li>
+<li>Kelompok yang membolehkan menilai bahwa Bitcoin adalah <em>māl digital</em> yang halal dimiliki dan diperjualbelikan jika:
+<ul>
+<li>Spot trading (qabdh langsung)</li>
+<li>Tanpa margin/futures berbunga</li>
+<li>Tidak untuk aktivitas haram</li>
+</ul>
+</li>
+</ul>
+
+<p><strong>Rekomendasi Umum untuk Muslim:</strong></p>
+<ul>
+<li>Perlakukan BTC sebagai aset halal bersyarat untuk investasi jangka menengah–panjang</li>
+<li>Hindari margin, futures, options berleverage</li>
+<li>Gunakan BTC untuk aktivitas yang mubah: tabungan, pembayaran halal, remitansi</li>
+</ul>
+
+<h3>Sumber Status</h3>
+<div class="sources-table">
+<table>
+<thead>
+<tr>
+<th>Sumber</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Sharlife</td><td>Halal ✅</td></tr>
+<tr><td>Cryptoummah</td><td>Halal ✅</td></tr>
+<tr><td>islamicfinanceguru</td><td>Halal ✅</td></tr>
+<tr><td>Crypto Islam</td><td>Halal ✅</td></tr>
+</tbody>
+</table>
+</div>
+        `,
         website: "https://bitcoin.org",
-        tradingviewSymbol: null,
+        tradingviewSymbol: "BINANCE:BTCUSDT",
+        price: 68566,
+        priceChange24h: -0.59,
+        marketCap: 1370670187321,
+        marketCapDominance: 58.24,
+        maxSupply: 21000000,
+        circulatingSupply: 19990525,
         publishedAt: "2024-01-01T00:00:00Z",
         createdAt: "2024-01-01T00:00:00Z",
         updatedAt: null,
@@ -32,7 +215,40 @@ export const SCREENING_DATA: TokenDetail[] = [
         logo: { id: "logo-eth", url: "https://cryptologos.cc/logos/ethereum-eth-logo.png", filename: "eth.png", size: 1024 },
         category: "Smart Contract Platform",
         excerpt: "Blockchain generasi kedua yang berfungsi sebagai 'komputer dunia'. ETH termasuk māl i'tibārī yang sah, boleh diperjualbelikan selama digunakan untuk aktivitas halal.",
-        content: "Hukum asal muamalah adalah boleh. ETH dapat dimiliki secara pribadi, diakui nilainya, dan dapat digunakan sebagai alat tukar. Yang perlu dihindari adalah praktik haram di atas ekosistem Ethereum (seperti lending ribawi), bukan teknologi koinnya.",
+        content: `
+<h3>Tujuan Proyek</h3>
+<p><strong>Ethereum (ETH)</strong> adalah platform blockchain <em>open-source</em> terdesentralisasi yang menjalankan <em>smart contracts</em>. Ethereum memungkinkan developer untuk membangun aplikasi terdesentralisasi (dApps) yang berjalan di atasnya.</p>
+<p>Ether (ETH) adalah aset kripto asli jaringan ini, digunakan untuk membayar biaya transaksi (gas) dan layanan komputasi.</p>
+
+<h3>Produk / Layanan</h3>
+<ul>
+<li><strong>Smart Contract Platform:</strong> Memungkinkan pemrograman uang dan aplikasi tanpa perantara.</li>
+<li><strong>DeFi Ecosystem:</strong> Basis utama untuk lending, borrowing, dan exchange terdesentralisasi.</li>
+<li><strong>NFTs:</strong> Platform utama untuk seni digital dan tokenisasi aset.</li>
+</ul>
+
+<h3>Kesimpulan</h3>
+<div class="summary-box">
+<span class="status-badge halal">Halal</span>
+<p>Hukum asal muamalah adalah boleh. ETH dapat dimiliki secara pribadi, diakui nilainya sesama pengguna, dan dapat digunakan sebagai alat tukar.</p>
+</div>
+
+<p><strong>Catatan:</strong> Yang perlu dihindari adalah terlibat dalam aktivitas haram (seperti protocol lending ribawi) yang dibangun di atas ekosistem Ethereum, bukan teknologi koin ETH itu sendiri.</p>
+
+<h3>Sumber Status</h3>
+<div class="sources-table">
+<table>
+<thead>
+<tr><th>Sumber</th><th>Status</th></tr>
+</thead>
+<tbody>
+<tr><td>Sharlife</td><td>Halal ✅</td></tr>
+<tr><td>CryptoUmmah</td><td>Halal ✅</td></tr>
+<tr><td>Islamic Finance Guru</td><td>Halal ✅</td></tr>
+</tbody>
+</table>
+</div>
+        `,
         website: "https://ethereum.org",
         tradingviewSymbol: null,
         publishedAt: "2024-01-01T00:00:00Z",
@@ -52,7 +268,36 @@ export const SCREENING_DATA: TokenDetail[] = [
         logo: { id: "logo-usdt", url: "https://cryptologos.cc/logos/tether-usdt-logo.png", filename: "usdt.png", size: 1024 },
         category: "Stablecoin",
         excerpt: "Stablecoin terbesar yang dipatok ke USD. Digunakan sebagai alat tukar digital yang stabil.",
-        content: "USDT banyak digunakan sebagai jembatan transaksi kripto dan telah dinilai halal oleh tim CryptoSharia.",
+        content: `
+<h3>Tujuan Proyek</h3>
+<p><strong>Tether (USDT)</strong> adalah <em>stablecoin</em> yang nilainya dipatok (pegged) 1:1 terhadap Dolar AS (USD). Tujuannya adalah menggabungkan keunggulan transaksi instan kripto dengan stabilitas nilai mata uang fiat.</p>
+
+<h3>Produk / Layanan</h3>
+<ul>
+<li><strong>Stabilitas Nilai:</strong> Meminimalisir volatilitas pasar kripto.</li>
+<li><strong>Alat Tukar Global:</strong> Memudahkan transfer nilai lintas batas dan lintas exchange.</li>
+<li><strong>Pairing Utama:</strong> Menjadi pasangan trading utama di hampir semua exchange kripto.</li>
+</ul>
+
+<h3>Kesimpulan</h3>
+<div class="summary-box">
+<span class="status-badge halal">Halal</span>
+<p>USDT dinilai halal karena berfungsi sebagai alat tukar dan penyimpan nilai (store of value) sementara yang didukung oleh aset cadangan (reserves).</p>
+</div>
+
+<h3>Sumber Status</h3>
+<div class="sources-table">
+<table>
+<thead>
+<tr><th>Sumber</th><th>Status</th></tr>
+</thead>
+<tbody>
+<tr><td>CryptoSharia Team</td><td>Halal ✅</td></tr>
+<tr><td>Sharlife</td><td>Halal ✅</td></tr>
+</tbody>
+</table>
+</div>
+        `,
         website: "https://tether.to",
         tradingviewSymbol: null,
         publishedAt: "2024-01-01T00:00:00Z",
@@ -92,7 +337,44 @@ export const SCREENING_DATA: TokenDetail[] = [
         logo: { id: "logo-bnb", url: "https://cryptologos.cc/logos/bnb-bnb-logo.png", filename: "bnb.png", size: 1024 },
         category: "Exchange Token",
         excerpt: "Token utilitas Binance untuk fee trading dan ekosistem BNB Chain. Status syubhat karena perbedaan pendapat ulama.",
-        content: "PIF & Sharlife menilai halal karena fungsi utilitasnya. Namun CryptoHalal.cc menilai tidak halal karena keterikatan kuat dengan Binance yang menyediakan produk non-syariah (margin, futures, derivatif). Pengguna harus menghindari layanan Binance yang tidak sesuai syariah.",
+        content: `
+<h3>Tujuan Proyek</h3>
+<p><strong>Binance Coin (BNB)</strong> adalah aset kripto asli dari ekosistem Binance dan BNB Chain. Awalnya diterbitkan sebagai token ERC-20, sekarang berjalan di blockchain sendiri.</p>
+
+<h3>Kegunaan</h3>
+<ul>
+<li>Membayar biaya transaksi di BNB Chain (BSC).</li>
+<li>Mendapatkan diskon biaya trading di exchange Binance.</li>
+<li>Partisipasi dalam token sale di Binance Launchpad.</li>
+</ul>
+
+<h3>Kesimpulan</h3>
+<div class="summary-box">
+<span class="status-badge syubhat">Syubhat</span>
+<p>Terdapat perbedaan pendapat (khilafiyah) mengenai status BNB.</p>
+</div>
+
+<p><strong>Pandangan:</strong></p>
+<ul>
+<li><strong>Pro-Halal:</strong> Dilihat dari fungsi utilitasnya untuk diskon fee dan gas fee blockchain.</li>
+<li><strong>Kontra (Haram/Syubhat):</strong> Keterikatan kuat dengan Binance sebagai entitas yang memfasilitasi perdagangan derivatif, margin, dan futures yang mengandung riba/gharar.</li>
+</ul>
+<p>Disarankan untuk berhati-hati (wara').</p>
+
+<h3>Sumber Status</h3>
+<div class="sources-table">
+<table>
+<thead>
+<tr><th>Sumber</th><th>Status</th></tr>
+</thead>
+<tbody>
+<tr><td>Sharlife</td><td>Halal ✅</td></tr>
+<tr><td>CryptoHalal.cc</td><td>Haram ❌</td></tr>
+<tr><td>CryptoSharia Team</td><td>Syubhat ⚠️</td></tr>
+</tbody>
+</table>
+</div>
+        `,
         website: "https://www.bnbchain.org",
         tradingviewSymbol: null,
         publishedAt: "2024-01-01T00:00:00Z",
@@ -112,7 +394,38 @@ export const SCREENING_DATA: TokenDetail[] = [
         logo: { id: "logo-sol", url: "https://cryptologos.cc/logos/solana-sol-logo.png", filename: "sol.png", size: 1024 },
         category: "Smart Contract Platform",
         excerpt: "Blockchain cepat dengan biaya rendah dan throughput tinggi. Memiliki utilitas jelas sebagai infrastruktur dApps.",
-        content: "Solana dinilai halal oleh tim CryptoSharia. Perlu kehati-hatian terhadap penggunaan produk turunan di ekosistemnya yang mungkin tidak sesuai syariah.",
+        content: `
+<h3>Tujuan Proyek</h3>
+<p><strong>Solana (SOL)</strong> adalah blockchain berkinerja tinggi yang dirancang untuk mendukung aplikasi terdesentralisasi (dApps) dengan skala global. Solana menggunakan mekanisme konsensus unik yang disebut <em>Proof of History</em> (PoH).</p>
+
+<h3>Keunggulan Utama</h3>
+<ul>
+<li><strong>Throughput Tinggi:</strong> Mampu memproses ribuan transaksi per detik (TPS).</li>
+<li><strong>Biaya Rendah:</strong> Biaya transaksi rata-rata sangat murah (kurang dari $0.01).</li>
+<li><strong>Ekosistem Pertumbuhan Cepat:</strong> Mendukung NFT, DeFi, dan Web3 gaming.</li>
+</ul>
+
+<h3>Kesimpulan</h3>
+<div class="summary-box">
+<span class="status-badge halal">Halal</span>
+<p>Solana dinilai halal karena fungsi utilitasnya yang jelas sebagai infrastruktur blockchain. Aset SOL digunakan untuk membayar biaya jaringan dan staking.</p>
+</div>
+
+<p><strong>Catatan:</strong> Seperti blockchain lain, hindari penggunaan dApps di atas Solana yang melanggar syariah (misalnya protokol pinjam-meminjam dengan bunga).</p>
+
+<h3>Sumber Status</h3>
+<div class="sources-table">
+<table>
+<thead>
+<tr><th>Sumber</th><th>Status</th></tr>
+</thead>
+<tbody>
+<tr><td>CryptoSharia Team</td><td>Halal ✅</td></tr>
+<tr><td>Sharlife</td><td>Halal ✅</td></tr>
+</tbody>
+</table>
+</div>
+        `,
         website: "https://solana.com",
         tradingviewSymbol: null,
         publishedAt: "2024-01-01T00:00:00Z",

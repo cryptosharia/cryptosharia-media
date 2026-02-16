@@ -15,6 +15,12 @@ export type Token = components['schemas']['TokensGetItem'];
 export type TokenDetail = components['schemas']['TokensGetData'] & {
   category?: string;
   excerpt?: string;
+  price?: number;
+  marketCap?: number;
+  marketCapDominance?: number;
+  maxSupply?: number;
+  circulatingSupply?: number;
+  priceChange24h?: number;
 };
 export type TokenQuote = components['schemas']['TokensQuotesGetItem'];
 export type Message = components['schemas']['MessagesGetItem'];
