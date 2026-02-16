@@ -1,5 +1,6 @@
 <script lang="ts">
     import { getTokenLogoUrl } from "$lib/utils/assets";
+    import TradingViewWidget from "$lib/components/TradingViewWidget.svelte";
     import type { PageData } from "./$types";
 
     interface Props {
@@ -21,7 +22,7 @@
 <main class="container">
     <div class="token-header">
         <img
-            src={getTokenLogoUrl(token.logo?.id)}
+            src={getTokenLogoUrl(token.logo)}
             alt={token.name}
             class="token-logo"
         />
@@ -50,13 +51,10 @@
                     rel="noopener noreferrer">{token.website}</a
                 >
             </div>
-            {#if token.tradingviewSymbol}
-                <div class="detail-item">
-                    <span class="label">TradingView</span>
-                    <span>{token.tradingviewSymbol}</span>
-                </div>
-            {/if}
         </div>
+
+        <!-- TradingView Chart -->
+        <TradingViewWidget symbol={token.tradingviewSymbol || token.ticker} />
 
         {#if token.content}
             <div class="markdown-body">

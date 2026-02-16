@@ -132,7 +132,7 @@
                 <article class="coin-card" data-status={coin.shariaStatus}>
                     <div class="coin-header">
                         <img
-                            src={getTokenLogoUrl(coin.logo?.id)}
+                            src={getTokenLogoUrl(coin.logo)}
                             alt={coin.name}
                             class="coin-logo"
                         />
@@ -248,7 +248,7 @@
     .search-box input {
         padding: 0.5rem 1rem;
         border-radius: 20px;
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         background: var(--elev);
         min-width: 200px;
     }
@@ -259,7 +259,7 @@
     }
     .legend-card {
         background: var(--elev);
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         border-radius: var(--radius);
         padding: 1.5rem;
     }
@@ -284,7 +284,7 @@
     }
     .coin-card {
         background: var(--elev);
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         border-radius: var(--radius);
         padding: 1.5rem;
         transition: transform 0.2s;
@@ -341,7 +341,7 @@
     }
     .tag {
         background: var(--bg);
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         padding: 0.25rem 0.5rem;
         border-radius: 4px;
         font-size: 0.75rem;

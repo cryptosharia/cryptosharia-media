@@ -84,7 +84,13 @@ export function getPostCoverUrl(coverImageId: string | null | undefined): string
  * Get logo URL for a token
  * Uses a crypto-themed placeholder
  */
-export function getTokenLogoUrl(logoId: string | null | undefined): string {
+export function getTokenLogoUrl(logo: { filename?: string; id?: string } | string | null | undefined): string {
+    if (typeof logo === 'object' && logo?.filename) {
+        return `/tokens/${logo.filename}`;
+    }
+
+    const logoId = typeof logo === 'string' ? logo : logo?.id;
+
     return getAssetUrlWithFallback(
         logoId,
         'https://placehold.co/200x200/1a1a2e/ffffff?text=Token'

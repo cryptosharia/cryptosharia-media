@@ -34,7 +34,7 @@
     <header class="token-header">
         <div class="identity">
             <img
-                src={getTokenLogoUrl(token.logo?.id)}
+                src={getTokenLogoUrl(token.logo)}
                 alt="{token.name} logo"
                 class="logo"
             />
@@ -94,9 +94,11 @@
                     <li>
                         <span>Screening Date</span>
                         <span
-                            >{new Date(
-                                token.publishedAt,
-                            ).toLocaleDateString()}</span
+                            >{token.publishedAt
+                                ? new Date(
+                                      token.publishedAt,
+                                  ).toLocaleDateString()
+                                : "-"}</span
                         >
                     </li>
                 </ul>
