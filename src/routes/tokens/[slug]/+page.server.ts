@@ -1,20 +1,27 @@
 import { error } from '@sveltejs/kit';
-import { getToken } from '$lib/api';
+import { getToken, getTokenQuotes } from '$lib/api';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
     const { slug } = params;
 
     try {
-        const { data, error: apiError } = await getToken(slug);
+        const [tokenRes, quotesRes] = await Promise.all([
+            getToken(slug),
+            getTokenQuotes(slug)
+        ]);
 
-        if (apiError || !data) {
-            console.error('Error fetching token:', apiError);
+        if (tokenRes.error || !tokenRes.data) {
+            console.error('Error fetching token:', tokenRes.error);
             throw error(404, 'Token not found');
         }
+        
+        // Find the quote for this specific slug
+        const quote = quotesRes.data?.data?.find((q: any) => q.slug === slug);
 
         return {
-            token: data.data,
+            token: tokenRes.data.data,
+            quote: quote || null,
         };
     } catch (err) {
         console.error('Error loading token:', err);

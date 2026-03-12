@@ -115,6 +115,62 @@ export async function sendMessage(message: NonNullable<paths['/messages']['post'
 }
 
 // =============================================================================
+// Auth Functions
+// =============================================================================
+
+/**
+ * Sign in a user
+ */
+export async function signIn(credentials: NonNullable<paths['/auth/signin']['post']['requestBody']>['content']['application/json']) {
+    return api.POST('/auth/signin', {
+        body: credentials,
+    });
+}
+
+/**
+ * Sign out the current user
+ */
+export async function signOut(token: string) {
+    return api.POST('/auth/signout', {
+        headers: { Authorization: `Bearer ${token}` } as any
+    });
+}
+
+/**
+ * Get the current authenticated user profile
+ */
+export async function getMe(token: string) {
+    return api.GET('/auth/me', {
+        headers: { Authorization: `Bearer ${token}` } as any
+    });
+}
+
+/**
+ * Upload an avatar image to ImgBB
+ */
+export async function uploadAvatar(token: string, imageFile: File) {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+
+    // Using native fetch for multipart/form-data since openapi-fetch typing for it can be complex
+    const res = await fetch(`${API_BASE_URL}/imgbb`, {
+        method: 'POST',
+        headers: {
+            'Api-Key': apiKey,
+            'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+    });
+
+    if (!res.ok) {
+        return { data: undefined, error: { message: 'Failed to upload image' } };
+    }
+
+    const data = await res.json();
+    return { data, error: undefined };
+}
+
+// =============================================================================
 // Export Types
 // =============================================================================
 

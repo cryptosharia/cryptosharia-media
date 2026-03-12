@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ params }) => {
             sections: [post.section as 'news' | 'education' | 'research' | 'activity'],
             limit: 3,
         });
-        relatedPosts = (relatedResponse.data?.data?.items ?? []).filter((p) => p.slug !== slug);
+        relatedPosts = (relatedResponse.data?.data?.items ?? []).filter((p: any) => p.slug !== slug);
     }
 
     return {

@@ -14,7 +14,7 @@
     let { data }: Props = $props();
 
     const categories = [
-        { id: "sharia", name: "Sharia", icon: "📿" },
+        { id: "sharia", name: "Sharia", icon: "🕋" },
         { id: "blockchain", name: "Blockchain", icon: "🔗" },
         { id: "crypto", name: "Crypto", icon: "💰" },
     ];
@@ -28,22 +28,6 @@
     />
 </svelte:head>
 
-<header>
-    <nav class="menu">
-        <a href="/">News</a>
-        <a href="/education" class="active">Education</a>
-        <a href="/research">Research</a>
-        <a href="/community">Premium</a>
-        <a href="/profile">Profile</a>
-    </nav>
-    <div class="container nav">
-        <a href="/" class="brand">
-            <div class="logo"></div>
-            <span class="title">CryptoSharia</span>
-            <span class="pill">Education</span>
-        </a>
-    </div>
-</header>
 
 <main class="container">
     <!-- Featured Webinar -->

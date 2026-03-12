@@ -195,17 +195,17 @@ export async function getTokens(params?: ListTokensParams): Promise<{ data: Toke
 /**
  * Mock: Fetch a single token by slug
  */
-export async function getToken(slug: string): Promise<{ data: TokenResponse }> {
+export async function getToken(slug: string): Promise<any> {
     await delay();
 
     const token = MOCK_TOKENS.find((t) => t.slug === slug) ?? null;
 
     if (!token) {
         return {
-            data: {
+            data: undefined,
+            error: {
                 success: false,
                 message: 'Token not found',
-                data: null as any,
             }
         }
     }
@@ -216,13 +216,14 @@ export async function getToken(slug: string): Promise<{ data: TokenResponse }> {
             message: 'Token found (mock)',
             data: token,
         },
+        error: undefined,
     };
 }
 
 /**
  * Mock: Fetch token price quotes
  */
-export async function getTokenQuotes(slug: string) {
+export async function getTokenQuotes(slug: string): Promise<any> {
     await delay();
 
     return {
@@ -243,13 +244,14 @@ export async function getTokenQuotes(slug: string) {
                 },
             ],
         },
+        error: undefined,
     };
 }
 
 /**
  * Mock: Send a contact/feedback message
  */
-export async function sendMessage(message: { name: string; email: string; message: string }) {
+export async function sendMessage(message: { name: string; email: string; message: string }): Promise<any> {
     await delay();
 
     return {
@@ -264,5 +266,75 @@ export async function sendMessage(message: { name: string; email: string; messag
                 createdAt: new Date().toISOString(),
             },
         },
+        error: undefined,
+    };
+}
+
+// =============================================================================
+// Mock Auth Functions
+// =============================================================================
+
+export async function signIn(credentials: any): Promise<any> {
+    await delay();
+
+    if (credentials.email === 'admin@cryptosharia.id' && credentials.password === 'password') {
+        return {
+            data: {
+                success: true,
+                message: 'Login successful (mock)',
+                data: {
+                    user: {
+                        id: 'mock-user-1',
+                        name: 'Naufal Nabila (Mock)',
+                        email: 'admin@cryptosharia.id',
+                        role: 'admin',
+                    },
+                    access_token: 'mock-access-token-12345',
+                    refresh_token: 'mock-refresh-token-67890',
+                }
+            },
+            error: undefined
+        };
+    }
+
+    return {
+        data: undefined,
+        error: {
+            success: false,
+            message: 'Invalid credentials',
+        }
+    };
+}
+
+export async function signOut(token: string): Promise<any> {
+    await delay();
+    return {
+        data: { success: true, message: 'Signed out (mock)' },
+        error: undefined
+    };
+}
+
+export async function getMe(token: string): Promise<any> {
+    await delay();
+    
+    if (token !== 'mock-access-token-12345') {
+        return {
+            data: undefined,
+            error: { success: false, message: 'Unauthorized' }
+        };
+    }
+
+    return {
+        data: {
+            success: true,
+            data: {
+                id: 'mock-user-1',
+                name: 'Naufal Nabila (Mock)',
+                email: 'admin@cryptosharia.id',
+                role: 'admin',
+                avatar: null,
+            }
+        },
+        error: undefined
     };
 }

@@ -1,18 +1,19 @@
 <script lang="ts">
     import { theme } from "$lib/stores/theme";
     import "../../app.css";
+    import type { PageData, ActionData } from './$types';
+
+    interface Props {
+        data: PageData;
+        form?: ActionData;
+    }
+
+    let { data, form }: Props = $props();
+    let user = $derived(data.user);
 
     // Use the store directly for darkMode
     let pushNotification = $state(true);
     let newsletter = $state(false);
-
-    const user = {
-        name: "Naufal Nabila",
-        email: "naufal@cryptosharia.id",
-        joinDate: "2024-01-15",
-        membershipType: "Premium",
-        avatar: "https://images.squarespace-cdn.com/content/v1/5d016c1ba9f2e7000120c08c/1560579210527-7LDCZH62S91OLOJIKAE9/AdobeStock_87517185.jpeg?format=1500w",
-    };
 </script>
 
 <svelte:head>
@@ -25,26 +26,26 @@
 
 <main class="container">
     <div class="profile-page">
-        <a href="#" class="profile-header">
-            <img src={user.avatar} alt="Avatar" class="avatar" />
+        <div class="profile-header">
+            <img src={form?.avatarUrl || user.avatar || 'https://images.squarespace-cdn.com/content/v1/5d016c1ba9f2e7000120c08c/1560579210527-7LDCZH62S91OLOJIKAE9/AdobeStock_87517185.jpeg?format=1500w'} alt="Avatar" class="avatar" />
             <div class="info">
                 <span class="welcome">Welcome</span>
                 <span class="name">{user.name}</span>
             </div>
-            <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-            >
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-        </a>
+        </div>
+
+        <div class="avatar-upload-section">
+            <form method="POST" action="?/uploadAvatar" enctype="multipart/form-data" class="upload-form">
+                <label for="avatarFile" class="btn secondary btn-sm">Ganti Avatar</label>
+                <input type="file" id="avatarFile" name="avatar" accept="image/*" class="sr-only" onchange={(e) => e.currentTarget.form?.submit()} />
+            </form>
+            {#if form?.error}
+                <p class="text-sm error-text mt-1">{form.error}</p>
+            {/if}
+            {#if form?.uploadSuccess}
+                <p class="text-sm success-text mt-1">Avatar berhasil diperbarui!</p>
+            {/if}
+        </div>
 
         <div class="profile-section">
             <ul class="profile-list">
@@ -310,23 +311,25 @@
         </div>
 
         <div class="logout-section">
-            <button class="btn-logout">
-                <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                    <polyline points="16 17 21 12 16 7"></polyline>
-                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-                <span>Log Out</span>
-            </button>
+            <form method="POST" action="?/logout">
+                <button type="submit" class="btn-logout">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Log Out</span>
+                </button>
+            </form>
         </div>
 
         <div class="version-footer">
@@ -380,6 +383,36 @@
         display: flex;
         flex-direction: column;
     }
+
+    .avatar-upload-section {
+        margin-top: -1rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+    }
+
+    .btn-sm {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: inline-block;
+    }
+
+    .error-text { color: #ef4444; }
+    .success-text { color: #10b981; }
+    .text-sm { font-size: 0.875rem; }
+    .mt-1 { margin-top: 0.5rem; }
 
     .profile-header .welcome {
         font-size: 0.85rem;

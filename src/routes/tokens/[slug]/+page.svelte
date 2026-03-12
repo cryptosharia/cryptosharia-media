@@ -41,6 +41,40 @@
             <p class="excerpt">{token.excerpt}</p>
         {/if}
 
+        {#if data.quote}
+            <div class="market-stats">
+                <div class="stat-box">
+                    <span class="label">Harga Saat Ini</span>
+                    <span class="value">
+                        ${data.quote.priceUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
+                    </span>
+                    <span class="change {data.quote.percentChange24h >= 0 ? 'positive' : 'negative'}">
+                        {data.quote.percentChange24h >= 0 ? '▲' : '▼'} {Math.abs(data.quote.percentChange24h).toFixed(2)}% (24h)
+                    </span>
+                </div>
+                <div class="stat-box">
+                    <span class="label">Market Cap</span>
+                    <span class="value">
+                        ${data.quote.marketCapUsd.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </span>
+                    <span class="subtext">
+                        Dominance: {data.quote.marketCapDominance.toFixed(2)}%
+                    </span>
+                </div>
+                <div class="stat-box">
+                    <span class="label">Circulating Supply</span>
+                    <span class="value">
+                        {data.quote.circulatingSupply.toLocaleString()} {token.ticker}
+                    </span>
+                    {#if data.quote.maxSupply}
+                        <span class="subtext">
+                            Max: {data.quote.maxSupply.toLocaleString()}
+                        </span>
+                    {/if}
+                </div>
+            </div>
+        {/if}
+
         <div class="details">
             <div class="detail-item">
                 <span class="label">Website</span>
@@ -142,6 +176,63 @@
         color: var(--text-secondary);
         line-height: 1.6;
         margin-bottom: 2rem;
+    }
+
+    .market-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-box {
+        background: var(--elev);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .stat-box .label {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .stat-box .value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text);
+    }
+    
+    .stat-box .subtext {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+    }
+
+    .change {
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .change.positive {
+        color: #10b981;
+    }
+    
+    .change.negative {
+        color: #ef4444;
+    }
+
+    @media (max-width: 768px) {
+        .market-stats {
+            grid-template-columns: 1fr;
+        }
     }
 
     .details {

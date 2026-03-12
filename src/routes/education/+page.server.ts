@@ -21,10 +21,10 @@ export const load: PageServerLoad = async () => {
 
     // Split webinars into upcoming and past
     const upcomingWebinars = webinars.filter(
-        (w) => w.eventDate && new Date(w.eventDate) >= now
+        (w: any) => w.eventDate && new Date(w.eventDate) >= now
     );
     const pastWebinars = webinars.filter(
-        (w) => !w.eventDate || new Date(w.eventDate) < now
+        (w: any) => !w.eventDate || new Date(w.eventDate) < now
     );
 
     return {

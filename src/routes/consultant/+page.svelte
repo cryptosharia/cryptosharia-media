@@ -1,5 +1,12 @@
 <script lang="ts">
     import "../../app.css";
+    import type { ActionData } from './$types';
+
+    interface Props {
+        form: ActionData;
+    }
+
+    let { form }: Props = $props();
 
     const services = [
         {
@@ -110,6 +117,38 @@
                 <span>Garansi kepuasan 100%</span>
             </div>
         </div>
+    </section>
+
+    <section class="contact-form">
+        <h3>✉️ Kirim Pesan / Pertanyaan Umum</h3>
+        <p class="muted">Punya pertanyaan lain? Jangan ragu untuk menghubungi kami.</p>
+        
+        {#if form?.success}
+            <div class="alert success">
+                Pesan Anda berhasil terkirim! Tim kami akan segera membalas ke email Anda.
+            </div>
+        {:else}
+            {#if form?.error}
+                <div class="alert error">
+                    {form.error}
+                </div>
+            {/if}
+            <form method="POST" action="?/contact">
+                <div class="form-group">
+                    <label for="name">Nama Lengkap</label>
+                    <input type="text" id="name" name="name" required value={form?.values?.name ?? ''} />
+                </div>
+                <div class="form-group">
+                    <label for="email">Alamat Email</label>
+                    <input type="email" id="email" name="email" required value={form?.values?.email ?? ''} />
+                </div>
+                <div class="form-group">
+                    <label for="message">Pesan Anda</label>
+                    <textarea id="message" name="message" rows="5" required>{form?.values?.message ?? ''}</textarea>
+                </div>
+                <button type="submit" class="btn primary">Kirim Pesan</button>
+            </form>
+        {/if}
     </section>
 
     <a href="/community" class="back-link">← Kembali ke Premium</a>
