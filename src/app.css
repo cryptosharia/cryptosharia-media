@@ -488,7 +488,7 @@ body.light-mode .menu a:hover {
 @media (max-width: 900px) {
   .bottom-nav {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 0.15rem;
   }
   .bottom-nav .tab {
