@@ -11,7 +11,7 @@ import { env } from '$env/dynamic/public';
 const USE_MOCK = env.PUBLIC_USE_MOCK_API === 'true';
 
 // Conditionally export from mock or real client
-export const { getPosts, getPost, getTokens, getToken } = USE_MOCK
+export const { getPosts, getPost, getTokens, getToken, getTokenQuotes, sendMessage } = USE_MOCK
     ? await import('./mock')
     : await import('./client');
 

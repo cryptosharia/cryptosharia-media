@@ -218,3 +218,51 @@ export async function getToken(slug: string): Promise<{ data: TokenResponse }> {
         },
     };
 }
+
+/**
+ * Mock: Fetch token price quotes
+ */
+export async function getTokenQuotes(slug: string) {
+    await delay();
+
+    return {
+        data: {
+            success: true,
+            message: 'Token quotes fetched (mock)',
+            data: [
+                {
+                    slug,
+                    rank: 1,
+                    infiniteSupply: false,
+                    maxSupply: 21000000,
+                    circulatingSupply: 19500000,
+                    priceUsd: 0,
+                    marketCapUsd: 0,
+                    marketCapDominance: 0,
+                    percentChange24h: 0,
+                },
+            ],
+        },
+    };
+}
+
+/**
+ * Mock: Send a contact/feedback message
+ */
+export async function sendMessage(message: { name: string; email: string; message: string }) {
+    await delay();
+
+    return {
+        data: {
+            success: true,
+            message: 'Message sent successfully (mock)',
+            data: {
+                id: 'mock-msg-' + Date.now(),
+                name: message.name,
+                email: message.email,
+                message: message.message,
+                createdAt: new Date().toISOString(),
+            },
+        },
+    };
+}
