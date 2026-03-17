@@ -101,6 +101,82 @@
             {/each}
         </div>
     </section>
+
+    <!-- Upcoming Webinars -->
+    {#if data.upcomingWebinars.length > 0}
+        <div class="divider"></div>
+        <section class="section">
+            <h3>Webinar Akan Datang</h3>
+            <div class="grid">
+                {#each data.upcomingWebinars as webinar}
+                    <a
+                        href="/article/{webinar.slug}"
+                        style="display: block; text-decoration: none; color: inherit; grid-column: span 12;"
+                        class="post-link"
+                    >
+                        <article class="card">
+                            <img
+                                src={webinar.coverImage?.url ??
+                                    getPostCoverUrl(webinar.coverImage?.id)}
+                                alt={webinar.title}
+                                loading="lazy"
+                            />
+                            <div class="body">
+                                <span class="kicker">{webinar.section}</span>
+                                <h4>{webinar.title}</h4>
+                                {#if webinar.eventDate}
+                                    <p class="muted" style="margin-bottom: 0.5rem; font-weight: 500;">
+                                        🗓️ {new Date(webinar.eventDate).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })} WIB
+                                    </p>
+                                {/if}
+                                {#if webinar.excerpt}
+                                    <p>{webinar.excerpt}</p>
+                                {/if}
+                            </div>
+                        </article>
+                    </a>
+                {/each}
+            </div>
+        </section>
+    {/if}
+
+    <!-- Past Webinars -->
+    {#if data.pastWebinars.length > 0}
+        <div class="divider"></div>
+        <section class="section">
+            <h3>Webinar Sebelumnya</h3>
+            <div class="grid">
+                {#each data.pastWebinars as webinar}
+                    <a
+                        href="/article/{webinar.slug}"
+                        style="display: block; text-decoration: none; color: inherit; grid-column: span 12;"
+                        class="post-link"
+                    >
+                        <article class="card">
+                            <img
+                                src={webinar.coverImage?.url ??
+                                    getPostCoverUrl(webinar.coverImage?.id)}
+                                alt={webinar.title}
+                                loading="lazy"
+                            />
+                            <div class="body">
+                                <span class="kicker" style="background: var(--border-color); color: var(--text);">{webinar.section}</span>
+                                <h4>{webinar.title}</h4>
+                                {#if webinar.eventDate}
+                                    <p class="muted" style="margin-bottom: 0.5rem;">
+                                        Rekaman dari: {new Date(webinar.eventDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                    </p>
+                                {/if}
+                                {#if webinar.excerpt}
+                                    <p>{webinar.excerpt}</p>
+                                {/if}
+                            </div>
+                        </article>
+                    </a>
+                {/each}
+            </div>
+        </section>
+    {/if}
 </main>
 
 <style>
