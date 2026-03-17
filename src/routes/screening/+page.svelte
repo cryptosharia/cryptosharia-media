@@ -1,7 +1,7 @@
 <script lang="ts">
     import "../../app.css";
     import { getTokenLogoUrl } from "$lib/utils/assets";
-    import type { TokenDetail } from "$types/api"; // Ensure TokenDetail is used if needed
+    import { goto } from "$app/navigation";
 
     // Props
     let { data } = $props();
@@ -10,29 +10,40 @@
     let searchQuery = $state(data.params.search);
     let currentFilter = $state(data.params.status);
 
-    // Derived
-    // We are doing client-side filtering for immediate feedback if data is small enough,
-    // OR we can rely on server-side reloading.
-    // The previous implementation used client-side filtering on a full dataset.
-    // Since we fetch 100 items, let's assume we can filter client-side or use form submission.
-    // Let's use form submission (GET) for robust server-side filtering as implemented in +page.server.ts.
-
     function handleFilter(status: string) {
         currentFilter = status;
         const url = new URL(window.location.href);
         url.searchParams.set("status", status);
         if (status === "all") url.searchParams.delete("status");
-        window.location.href = url.toString();
+        goto(url.toString(), {
+            keepFocus: true,
+            noScroll: true,
+            replaceState: true,
+        });
     }
 
-    function handleSearch(e: Event) {
-        if ((e as KeyboardEvent).key === "Enter") {
+    let searchTimeout: ReturnType<typeof setTimeout>;
+
+    function handleSearchInput() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
             const url = new URL(window.location.href);
             if (searchQuery) url.searchParams.set("q", searchQuery);
             else url.searchParams.delete("q");
-            window.location.href = url.toString();
-        }
+            goto(url.toString(), {
+                keepFocus: true,
+                noScroll: true,
+                replaceState: true,
+            });
+        }, 300);
     }
+
+    const filterOptions = [
+        { value: "all",      icon: "🪙", label: "Semua" },
+        { value: "halal",    icon: "✅", label: "Halal" },
+        { value: "syubhat",  icon: "⚠️", label: "Syubhat" },
+        { value: "haram",    icon: "❌", label: "Haram" },
+    ];
 </script>
 
 <svelte:head>
@@ -44,359 +55,540 @@
 </svelte:head>
 
 <main class="container screening-page">
-    <div class="header-section">
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+        <div class="hero-glow"></div>
         <h1>Screening <span class="text-brand">Syariah</span></h1>
-        <p class="muted">Penilaian crypto berdasarkan prinsip syariah</p>
-    </div>
+        <p class="hero-sub">Penilaian crypto berdasarkan prinsip syariah oleh tim CryptoSharia</p>
 
-    <!-- Filter Bar -->
-    <section class="filter-section">
-        <div class="filter-bar">
-            <button
-                class="filter-btn"
-                class:active={currentFilter === "all"}
-                onclick={() => handleFilter("all")}
-            >
-                <span class="filter-icon">🔍</span> Semua
-            </button>
-            <button
-                class="filter-btn"
-                class:active={currentFilter === "halal"}
-                onclick={() => handleFilter("halal")}
-            >
-                <span class="filter-icon">✅</span> Halal
-            </button>
-            <button
-                class="filter-btn"
-                class:active={currentFilter === "syubhat"}
-                onclick={() => handleFilter("syubhat")}
-            >
-                <span class="filter-icon">⚠️</span> Syubhat
-            </button>
-            <button
-                class="filter-btn"
-                class:active={currentFilter === "haram"}
-                onclick={() => handleFilter("haram")}
-            >
-                <span class="filter-icon">❌</span> Haram
-            </button>
-        </div>
-        <div class="search-box">
+        <!-- Search -->
+        <div class="search-wrapper">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+            </svg>
             <input
                 type="text"
-                placeholder="Cari coin..."
+                class="search-input"
+                placeholder="Cari nama atau ticker coin..."
                 bind:value={searchQuery}
-                onkeydown={handleSearch}
+                oninput={handleSearchInput}
             />
         </div>
     </section>
 
+    <!-- Filter Pills -->
+    <section class="filter-section">
+        {#each filterOptions as opt}
+            <button
+                class="filter-pill"
+                class:active={currentFilter === opt.value}
+                onclick={() => handleFilter(opt.value)}
+            >
+                <span class="pill-icon">{opt.icon}</span>
+                <span>{opt.label}</span>
+            </button>
+        {/each}
+    </section>
+
     <!-- Legend -->
-    <section class="legend-section">
-        <div class="legend-card">
-            <h4>Kriteria Penilaian Syariah</h4>
-            <div class="legend-grid">
-                <div class="legend-item">
-                    <span class="status-badge halal">Halal</span>
-                    <p>
-                        Tidak mengandung unsur riba, gharar berlebihan, atau
-                        maisir
-                    </p>
-                </div>
-                <div class="legend-item">
-                    <span class="status-badge syubhat">Syubhat</span>
-                    <p>
-                        Ada perbedaan pendapat ulama, perlu kehati-hatian dalam
-                        penggunaannya
-                    </p>
-                </div>
-                <div class="legend-item">
-                    <span class="status-badge haram">Haram</span>
-                    <p>
-                        Mengandung unsur yang jelas bertentangan dengan prinsip
-                        syariah
-                    </p>
-                </div>
-            </div>
+    <section class="legend-strip">
+        <div class="legend-item halal">
+            <span class="legend-dot"></span>
+            <strong>Halal</strong>
+            <span class="legend-desc">– Tidak mengandung riba, gharar, atau maisir</span>
+        </div>
+        <div class="legend-item syubhat">
+            <span class="legend-dot"></span>
+            <strong>Syubhat</strong>
+            <span class="legend-desc">– Perbedaan pendapat ulama, perlu kehati-hatian</span>
+        </div>
+        <div class="legend-item haram">
+            <span class="legend-dot"></span>
+            <strong>Haram</strong>
+            <span class="legend-desc">– Bertentangan dengan prinsip syariah</span>
         </div>
     </section>
 
-    <!-- Coin Grid -->
-    <section class="section">
-        <h3 style="margin-bottom: 1.5rem;">
-            {data.tokens.length} Coin Ditampilkan
-        </h3>
+    <!-- Results count -->
+    <div class="results-bar">
+        <span class="results-count">{data.tokens.length} coin ditampilkan</span>
+    </div>
 
-        <div class="coin-grid">
-            {#each data.tokens as coin}
-                <article class="coin-card" data-status={coin.shariaStatus}>
+    <!-- Coin Grid -->
+    <div class="coin-grid">
+        {#each data.tokens as coin}
+            <article class="coin-card" data-status={coin.shariaStatus}>
+                <div class="card-accent {coin.shariaStatus}"></div>
+                <div class="card-body">
                     <div class="coin-header">
-                        <img
-                            src={coin.logo?.url ?? getTokenLogoUrl(coin.logo?.id)}
-                            alt={coin.name}
-                            class="coin-logo"
-                        />
-                        <div class="coin-info">
+                        <div class="coin-avatar">
+                            <img
+                                src={coin.logo?.url ?? getTokenLogoUrl(coin.logo?.id)}
+                                alt={coin.name}
+                                class="coin-logo"
+                            />
+                        </div>
+                        <div class="coin-meta">
                             <h4 class="coin-name">{coin.name}</h4>
                             <span class="coin-ticker">{coin.ticker}</span>
                         </div>
-                        <span class="status-badge {coin.shariaStatus}"
-                            >{coin.shariaStatus}</span
-                        >
+                        <span class="status-badge {coin.shariaStatus}">{coin.shariaStatus}</span>
                     </div>
 
                     {#if coin.category && coin.category !== "Uncategorized"}
-                        <div class="coin-category">
-                            <span class="tag">{coin.category}</span>
+                        <div class="coin-tags">
+                            <span class="coin-tag">{coin.category}</span>
                         </div>
                     {/if}
 
                     {#if coin.excerpt}
-                        <p class="coin-notes">{coin.excerpt}</p>
+                        <p class="coin-excerpt">{coin.excerpt}</p>
                     {/if}
 
-                    <div style="margin-top: 1rem;">
-                        {#if coin.slug}
-                            <a href="/tokens/{coin.slug}" class="btn primary btn-sm" style="display: inline-block; padding: 0.5rem 1rem; border-radius: 6px; background: var(--brand); color: #000; font-weight: 500;">
-                                Lihat Detail
-                            </a>
-                        {/if}
-                    </div>
-                </article>
-            {:else}
-                <div class="empty-state">
-                    <p>Tidak ada coin yang ditemukan.</p>
-                    <button class="btn" onclick={() => handleFilter("all")}
-                        >Reset Filter</button
-                    >
+                    {#if coin.slug}
+                        <a href="/tokens/{coin.slug}" class="detail-btn">
+                            Lihat Detail
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M5 12h14m-7-7 7 7-7 7"/>
+                            </svg>
+                        </a>
+                    {/if}
                 </div>
-            {/each}
-        </div>
-    </section>
-
-    <!-- Disclaimer -->
-    <section class="disclaimer-section">
-        <div class="disclaimer-card">
-            <h4>⚠️ Disclaimer</h4>
-            <p>
-                Penilaian ini bersifat edukatif dan berdasarkan analisis tim
-                CryptoSharia. <strong>Bukan fatwa resmi.</strong> Untuk keputusan
-                investasi, konsultasikan dengan ulama atau lembaga fatwa terpercaya.
-            </p>
-        </div>
-    </section>
+            </article>
+        {:else}
+            <div class="empty-state">
+                <div class="empty-icon">🔍</div>
+                <h3>Tidak ada coin ditemukan</h3>
+                <p>Coba ubah kata kunci atau reset filter</p>
+                <button class="reset-btn" onclick={() => handleFilter("all")}>Reset Filter</button>
+            </div>
+        {/each}
+    </div>
 </main>
 
 <style>
+    /* ===== Page ===== */
     .screening-page {
         padding-bottom: 100px;
     }
-    .header-section {
+
+    /* ===== Hero Banner ===== */
+    .hero-banner {
+        position: relative;
         text-align: center;
-        margin: 2rem 0 3rem;
-    }
-    .header-section h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-    }
-    .text-brand {
-        color: var(--brand);
+        padding: 3.5rem 2rem 2.5rem;
+        margin-bottom: 2rem;
+        border-radius: 24px;
+        background: linear-gradient(135deg, rgba(252, 192, 0, 0.06) 0%, rgba(245, 102, 10, 0.06) 100%);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
     }
 
-    /* Filter Bar */
-    .filter-section {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
+    .hero-glow {
+        position: absolute;
+        top: -60%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(252, 192, 0, 0.12) 0%, transparent 70%);
+        pointer-events: none;
     }
-    .filter-bar {
-        display: flex;
-        gap: 0.5rem;
-        overflow-x: auto;
-        padding-bottom: 0.5rem;
+
+    .hero-banner h1 {
+        font-size: 2.75rem;
+        font-weight: 800;
+        margin: 0 0 0.5rem;
+        letter-spacing: -0.5px;
+        position: relative;
     }
-    .filter-btn {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
+
+    .text-brand {
+        background: linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-sub {
+        color: var(--muted);
+        font-size: 1.05rem;
+        margin: 0 0 2rem;
+        position: relative;
+    }
+
+    /* ===== Search ===== */
+    .search-wrapper {
+        position: relative;
+        max-width: 480px;
+        margin: 0 auto;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 1.1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+        pointer-events: none;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 0.85rem 1.25rem 0.85rem 3rem;
+        border-radius: 14px;
         border: 1px solid var(--border-color);
         background: var(--elev);
         color: var(--text);
-        border-radius: 20px;
+        font-size: 0.95rem;
+        transition: border-color 0.25s, box-shadow 0.25s;
+        outline: none;
+    }
+
+    .search-input::placeholder {
+        color: var(--muted);
+    }
+
+    .search-input:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px rgba(252, 192, 0, 0.15);
+    }
+
+    /* ===== Filter Pills ===== */
+    .filter-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .filter-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.55rem 1.15rem;
+        border-radius: 999px;
+        border: 1px solid var(--border-color);
+        background: var(--elev);
+        color: var(--text);
         cursor: pointer;
-        font-size: 0.9rem;
+        font-size: 0.88rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
         white-space: nowrap;
     }
-    .filter-btn:hover {
-        background: var(--bg-hover);
-    }
-    .filter-btn.active {
-        background: var(--brand);
-        color: white;
-        border-color: var(--brand);
+
+    .filter-pill:hover {
+        border-color: rgba(252, 192, 0, 0.4);
+        background: rgba(252, 192, 0, 0.06);
     }
 
-    .search-box input {
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        border: 1px solid var(--border-color);
-        background: var(--elev);
-        min-width: 200px;
+    .filter-pill.active {
+        background: linear-gradient(135deg, var(--brand), var(--accent));
+        color: #000;
+        border-color: transparent;
+        font-weight: 700;
+        box-shadow: 0 2px 12px rgba(252, 192, 0, 0.3);
     }
 
-    /* Legend */
-    .legend-section {
-        margin-bottom: 3rem;
+    .pill-icon {
+        font-size: 1rem;
     }
-    .legend-card {
-        background: var(--elev);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius);
-        padding: 1.5rem;
-    }
-    .legend-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+    /* ===== Legend Strip ===== */
+    .legend-strip {
+        display: flex;
+        flex-wrap: wrap;
         gap: 1.5rem;
-        margin-top: 1rem;
-    }
-    .legend-item p {
-        font-size: 0.85rem;
-        color: var(--text-muted);
-        margin-top: 0.5rem;
-        line-height: 1.4;
+        justify-content: center;
+        padding: 1.25rem 1.5rem;
+        background: var(--elev);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        margin-bottom: 2.5rem;
     }
 
-    /* Coin Grid */
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.85rem;
+        color: var(--text);
+    }
+
+    .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .legend-item.halal .legend-dot { background: #10b981; }
+    .legend-item.syubhat .legend-dot { background: #f59e0b; }
+    .legend-item.haram .legend-dot { background: #ef4444; }
+
+    .legend-desc {
+        color: var(--muted);
+        font-weight: 400;
+    }
+
+    /* ===== Results Bar ===== */
+    .results-bar {
+        margin-bottom: 1.25rem;
+    }
+
+    .results-count {
+        font-size: 0.9rem;
+        color: var(--muted);
+        font-weight: 500;
+    }
+
+    /* ===== Coin Grid ===== */
     .coin-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.25rem;
     }
+
+    /* ===== Coin Card ===== */
     .coin-card {
+        display: flex;
+        border-radius: 16px;
         background: var(--elev);
         border: 1px solid var(--border-color);
-        border-radius: var(--radius);
-        padding: 1.5rem;
-        transition: transform 0.2s;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
+
     .coin-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        border-color: rgba(252, 192, 0, 0.2);
     }
+
+    .card-accent {
+        width: 4px;
+        flex-shrink: 0;
+    }
+
+    .card-accent.halal { background: linear-gradient(180deg, #10b981, #059669); }
+    .card-accent.syubhat { background: linear-gradient(180deg, #f59e0b, #d97706); }
+    .card-accent.haram { background: linear-gradient(180deg, #ef4444, #dc2626); }
+
+    .card-body {
+        flex: 1;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
     .coin-header {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        margin-bottom: 1rem;
+        gap: 0.85rem;
+        margin-bottom: 0.75rem;
     }
+
+    .coin-avatar {
+        position: relative;
+    }
+
     .coin-logo {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--border-color);
+        background: var(--bg);
     }
-    .coin-info {
+
+    .coin-meta {
         flex: 1;
+        min-width: 0;
     }
+
     .coin-name {
         margin: 0;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
+        font-weight: 700;
+        line-height: 1.3;
     }
+
     .coin-ticker {
-        font-size: 0.85rem;
-        color: var(--text-muted);
-    }
-
-    .status-badge {
-        padding: 0.25rem 0.75rem;
-        border-radius: 12px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: capitalize;
-    }
-    .status-badge.halal {
-        background: rgba(16, 185, 129, 0.1);
-        color: #10b981;
-    }
-    .status-badge.syubhat {
-        background: rgba(245, 158, 11, 0.1);
-        color: #f59e0b;
-    }
-    .status-badge.haram {
-        background: rgba(239, 68, 68, 0.1);
-        color: #ef4444;
-    }
-
-    .coin-category {
-        margin-bottom: 1rem;
-    }
-    .tag {
-        background: var(--bg);
-        border: 1px solid var(--border);
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.75rem;
-        color: var(--text-muted);
-    }
-
-    .coin-notes {
-        font-size: 0.9rem;
-        line-height: 1.5;
-        margin-bottom: 1rem;
-    }
-
-    .coin-details summary {
-        cursor: pointer;
-        color: var(--brand);
-        font-size: 0.9rem;
+        font-size: 0.8rem;
+        color: var(--muted);
         font-weight: 500;
-    }
-    .detail-link {
-        display: inline-block;
-        margin-top: 0.5rem;
-        font-size: 0.9rem;
-        color: var(--brand);
-        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    /* Disclaimer */
-    .disclaimer-section {
-        margin-top: 4rem;
+    /* ===== Status Badge ===== */
+    .status-badge {
+        padding: 0.3rem 0.85rem;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: capitalize;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
     }
-    .disclaimer-card {
-        background: rgba(245, 158, 11, 0.1);
-        border: 1px solid rgba(245, 158, 11, 0.2);
-        padding: 1.5rem;
-        border-radius: var(--radius);
-        text-align: center;
+
+    .status-badge.halal {
+        background: rgba(16, 185, 129, 0.12);
+        color: #10b981;
+        border: 1px solid rgba(16, 185, 129, 0.25);
     }
-    .disclaimer-card h4 {
+
+    .status-badge.syubhat {
+        background: rgba(245, 158, 11, 0.12);
         color: #f59e0b;
-        margin-bottom: 0.5rem;
-    }
-    .disclaimer-card p {
-        font-size: 0.9rem;
-        color: var(--text-muted);
+        border: 1px solid rgba(245, 158, 11, 0.25);
     }
 
+    .status-badge.haram {
+        background: rgba(239, 68, 68, 0.12);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    /* ===== Tags ===== */
+    .coin-tags {
+        margin-bottom: 0.65rem;
+    }
+
+    .coin-tag {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border-color);
+    }
+
+    /* ===== Excerpt ===== */
+    .coin-excerpt {
+        font-size: 0.88rem;
+        color: var(--muted);
+        line-height: 1.55;
+        margin: 0 0 0.75rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* ===== Detail Button ===== */
+    .detail-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: auto;
+        padding: 0.55rem 1.1rem;
+        border-radius: 10px;
+        background: rgba(252, 192, 0, 0.1);
+        color: var(--brand);
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        width: fit-content;
+    }
+
+    .detail-btn:hover {
+        background: rgba(252, 192, 0, 0.2);
+        transform: translateX(2px);
+    }
+
+    .detail-btn svg {
+        transition: transform 0.2s ease;
+    }
+
+    .detail-btn:hover svg {
+        transform: translateX(3px);
+    }
+
+    /* ===== Empty State ===== */
     .empty-state {
         grid-column: 1 / -1;
         text-align: center;
-        padding: 4rem;
+        padding: 4rem 2rem;
         background: var(--elev);
-        border-radius: var(--radius);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
     }
-    .empty-state .btn {
-        margin-top: 1rem;
-        padding: 0.5rem 1rem;
-        background: var(--brand);
-        color: white;
+
+    .empty-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .empty-state p {
+        color: var(--muted);
+        margin: 0 0 1.5rem;
+    }
+
+    .reset-btn {
+        padding: 0.65rem 1.5rem;
+        background: linear-gradient(135deg, var(--brand), var(--accent));
+        color: #000;
         border: none;
-        border-radius: 8px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.9rem;
         cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .reset-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(252, 192, 0, 0.3);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+        .hero-banner {
+            padding: 2.5rem 1.25rem 2rem;
+        }
+
+        .hero-banner h1 {
+            font-size: 2rem;
+        }
+
+        .legend-strip {
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .coin-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-banner h1 {
+            font-size: 1.75rem;
+        }
+
+        .filter-section {
+            justify-content: flex-start;
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            padding-bottom: 0.5rem;
+        }
+
+        .filter-pill {
+            flex-shrink: 0;
+        }
     }
 </style>
+

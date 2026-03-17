@@ -27,7 +27,6 @@
         <a href="/research" class:active={isActive("/research")}>Research</a>
         <a href="/screening" class:active={isActive("/screening")}>Screening</a>
         <a href="/community" class:active={isActive("/community")}>Premium</a>
-        <a href="/profile" class:active={isActive("/profile")}>Profile</a>
     </nav>
     <div class="container nav">
         {#if !["/community", "/", "/education", "/research", "/screening"].includes($page.url.pathname) && !$page.url.pathname.startsWith('/article') && !$page.url.pathname.startsWith('/tokens/')}

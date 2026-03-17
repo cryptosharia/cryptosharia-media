@@ -12,7 +12,6 @@
         <a href="/education">Education</a>
         <a href="/research">Research</a>
         <a href="/community" class="active">Premium</a>
-        <a href="/profile">Profile</a>
     </nav>
     <div class="container nav">
         <a href="/" class="brand">
