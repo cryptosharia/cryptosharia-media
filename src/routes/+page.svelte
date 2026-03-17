@@ -12,8 +12,23 @@
 
   let { data }: Props = $props();
 
-  const carouselPosts = $derived(data.posts.slice(0, 3));
-  const gridPosts = $derived(data.posts.slice(3));
+  // Filter only 'news' section for top featured spots
+  const filteredNews = $derived(data.posts.filter((p) => p.section?.toLowerCase() === "news" || p.section?.toLowerCase() === "berita"));
+  
+  // Pad the array if we have at least 1 post but less than 7 total required slots
+  const newsPosts = $derived.by(() => {
+    let posts = [...filteredNews];
+    if (posts.length > 0 && posts.length < 7) {
+      while (posts.length < 7) {
+        posts = [...posts, ...filteredNews].slice(0, 7);
+      }
+    }
+    return posts;
+  });
+
+  const carouselPosts = $derived(newsPosts.slice(0, 3));
+  const breakingNewsPost = $derived(newsPosts[3]); // 4th news item overall
+  const gridPosts = $derived(newsPosts.slice(4, 7)); // Show 3 items in grid to balance the layout
 
   let currentSlide = $state(0);
   let autoplayInterval: ReturnType<typeof setInterval>;
@@ -113,6 +128,40 @@
       </section>
     {/if}
 
+    <!-- Featured Breaking News Card -->
+    {#if breakingNewsPost}
+      <section class="section breaking-news" style="margin-top: 2rem;">
+        <h3>Breaking News</h3>
+        <a href="/article/{breakingNewsPost.slug}" style="text-decoration: none; color: inherit; display: block;">
+          <div class="breaking-card">
+            <img 
+              src={breakingNewsPost.coverImage?.url ?? getPostCoverUrl(null)} 
+              alt={breakingNewsPost.title}
+              loading="lazy"
+            >
+            <div class="body">
+              <span class="kicker">{breakingNewsPost.section}</span>
+              <h4>{breakingNewsPost.title}</h4>
+              <div class="row">
+                <span>
+                  {#if breakingNewsPost.publishedAt}
+                    {new Date(breakingNewsPost.publishedAt).toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  {/if}
+                </span>
+              </div>
+              {#if breakingNewsPost.excerpt}
+                <p>{breakingNewsPost.excerpt}</p>
+              {/if}
+            </div>
+          </div>
+        </a>
+      </section>
+    {/if}
+
     <!-- Regular Grid -->
     <div class="grid" style="margin-top: 2rem;">
       {#each gridPosts as post}
@@ -154,35 +203,6 @@
   </section>
 
   <div class="divider"></div>
-
-  <!-- Token Screening Section -->
-  <section class="section">
-    <h3>Token Screening</h3>
-    <p class="muted">
-      Daftar token cryptocurrency dengan status kehalalan berdasarkan analisis
-      syariah.
-    </p>
-    <div class="token-grid">
-      {#each data.tokens as token}
-        <a href="/tokens/{token.slug}" class="token-card">
-          <img
-            src={token.logo?.url ?? getTokenLogoUrl(token.logo?.id)}
-            alt={token.name}
-            class="token-logo"
-          />
-          <div class="token-info">
-            <span class="token-ticker">{token.ticker}</span>
-            <span class="token-name">{token.name}</span>
-          </div>
-          <span class="token-status {token.shariaStatus}"
-            >{token.shariaStatus}</span
-          >
-        </a>
-      {:else}
-        <p class="muted">Belum ada token.</p>
-      {/each}
-    </div>
-  </section>
 </main>
 
 <style>
@@ -250,8 +270,20 @@
     align-items: center;
     height: 100%;
     /* Fade out the ends slightly to make the scroll look cleaner */
-    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 1rem, black calc(100% - 1rem), transparent);
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 5%,
+      black 95%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 1rem,
+      black calc(100% - 1rem),
+      transparent
+    );
   }
 
   .breaking .track {
@@ -294,6 +326,81 @@
       /* Translate exactly half of the double-appended content to loop smoothly */
       transform: translateX(-50%);
     }
+  }
+
+  /* Featured Breaking News Card Styles */
+  .breaking-news h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .breaking-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    background: var(--elev);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .breaking-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .breaking-card img {
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    object-fit: cover;
+  }
+
+  .breaking-card .body {
+    padding: 2rem 2rem 2rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .breaking-card .kicker {
+    display: inline-block;
+    background: #e11d48;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    width: fit-content;
+    margin-bottom: 1rem;
+  }
+
+  .breaking-card h4 {
+    font-size: 1.5rem;
+    margin: 0 0 1rem 0;
+    line-height: 1.3;
+  }
+
+  .breaking-card .row {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .breaking-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .carousel-slide::after {
@@ -389,6 +496,12 @@
     }
     .indicator {
       width: 24px;
+    }
+    .breaking-card {
+      grid-template-columns: 1fr;
+    }
+    .breaking-card .body {
+      padding: 1.5rem;
     }
   }
 </style>

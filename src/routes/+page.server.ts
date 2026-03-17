@@ -4,10 +4,10 @@ import { getPosts, getTokens } from '$lib/api';
 
 
 export const load: PageServerLoad = async () => {
-    // Fetch posts excluding 'activity' section
+    // Fetch ONLY 'news' section for the homepage
     const postsResponse = await getPosts({
-        sections: ['news', 'education', 'research'],
-        limit: 9,
+        sections: ['news'],
+        limit: 15,
     });
 
     // Fetch tokens for screening
