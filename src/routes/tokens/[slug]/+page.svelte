@@ -15,6 +15,7 @@
     let token = $derived(data.token);
 
     let tvScriptLoaded = $state(false);
+    let showChart = $state(false);
 
     onMount(() => {
         if (!browser) return;
@@ -26,23 +27,26 @@
     });
 
     $effect(() => {
-        if (tvScriptLoaded && token.tradingviewSymbol && (window as any).TradingView) {
-            new (window as any).TradingView.widget({
-                "autosize": true,
-                "symbol": token.tradingviewSymbol,
-                "interval": "D",
-                "timezone": "Etc/UTC",
-                "theme": document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light',
-                "style": "1",
-                "locale": "en",
-                "enable_publishing": false,
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "gridColor": "rgba(42, 46, 57, 0.06)",
-                "hide_top_toolbar": false,
-                "hide_legend": false,
-                "save_image": false,
-                "container_id": `tradingview_${token.tradingviewSymbol}`
-            });
+        if (showChart && tvScriptLoaded && token.tradingviewSymbol && (window as any).TradingView) {
+            // Give the DOM a tiny moment to render the container before injecting
+            setTimeout(() => {
+                new (window as any).TradingView.widget({
+                    "autosize": true,
+                    "symbol": token.tradingviewSymbol,
+                    "interval": "D",
+                    "timezone": "Etc/UTC",
+                    "theme": document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light',
+                    "style": "1",
+                    "locale": "en",
+                    "enable_publishing": false,
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "gridColor": "rgba(42, 46, 57, 0.06)",
+                    "hide_top_toolbar": false,
+                    "hide_legend": false,
+                    "save_image": false,
+                    "container_id": `tradingview_${token.tradingviewSymbol}`
+                });
+            }, 50);
         }
     });
 
@@ -149,35 +153,36 @@
             </div>
         {/if}
 
-        <div class="details">
-            <div class="detail-item">
-                <span class="label">Website</span>
-                <a
-                    href={token.website}
-                    target="_blank"
-                    class="btn primary btn-sm"
-                    style="display: inline-block; padding: 0.5rem 1rem; border-radius: 6px; background: var(--brand); color: #000; font-weight: 500; text-decoration: none;"
-                    rel="noopener noreferrer">Kunjungi Website</a
-                >
-            </div>
+        <div class="action-buttons">
             {#if token.tradingviewSymbol}
-                <div class="detail-item">
-                    <span class="label">TradingView</span>
-                    <span>{token.tradingviewSymbol}</span>
-                </div>
+                <button 
+                    class="btn btn-chart {showChart ? 'active' : ''}" 
+                    onclick={() => showChart = !showChart}
+                >Grafik</button>
+            {/if}
+            {#if token.website}
+                <a href={token.website} target="_blank" rel="noopener noreferrer" class="btn btn-website">Website</a>
             {/if}
         </div>
+
+        {#if showChart && token.tradingviewSymbol}
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <div class="modal-overlay" onclick={() => showChart = false}>
+                <div class="modal-content" onclick={(e) => e.stopPropagation()}>
+                    <button class="modal-close" onclick={() => showChart = false}>&times;</button>
+                    <h2>Grafik: {token.name}</h2>
+                    <div class="tradingview-widget-container" style="height: 500px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color);">
+                        <div id="tradingview_{token.tradingviewSymbol}" style="height: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        {/if}
 
         {#if token.content}
             <div class="markdown-body" style="margin-top: 2rem; line-height: 1.6;">
                 <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                 {@html parsedContent}
-            </div>
-        {/if}
-
-        {#if token.tradingviewSymbol}
-            <div class="tradingview-widget-container" style="margin-top: 3rem; height: 500px;">
-                <div id="tradingview_{token.tradingviewSymbol}" style="height: 100%;"></div>
             </div>
         {/if}
     </div>
@@ -325,31 +330,92 @@
         }
     }
 
-    .details {
-        display: grid;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        padding: 1.5rem;
-        background-color: var(--bg-surface);
-        border-radius: 0.75rem;
-        border: 1px solid var(--border-color);
-    }
-
-    .detail-item {
+    .action-buttons {
         display: flex;
-        justify-content: space-between;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid var(--border-color);
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    .action-buttons .btn {
+        padding: 0.4rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+    .action-buttons .btn:hover {
+        opacity: 0.9;
+    }
+    .btn-chart {
+        background: var(--text);
+        color: var(--bg);
+    }
+    .btn-website {
+        background: #0ea5e9;
+        color: white;
     }
 
-    .detail-item:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        padding: 1rem;
     }
 
-    .label {
-        font-weight: 500;
-        color: var(--text-secondary);
+    .modal-content {
+        background: var(--bg-surface);
+        width: 100%;
+        max-width: 900px;
+        border-radius: 16px;
+        padding: 1.5rem;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        animation: modalFadeIn 0.2s ease-out forwards;
+    }
+
+    .modal-content h2 {
+        margin: 0 0 1rem 0;
+        font-size: 1.3rem;
+        padding-right: 2rem;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1.25rem;
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        line-height: 1;
+        cursor: pointer;
+        color: var(--text-muted);
+        transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+        color: var(--text);
+    }
+
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
     }
 
     .back-link {
