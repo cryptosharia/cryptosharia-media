@@ -27,10 +27,11 @@
     <h3>Berita Terkini</h3>
     <div class="grid">
       {#each data.posts as post}
-        <article class="card">
-          <img
-            src={post.coverImage?.url ?? getPostCoverUrl(null)}
-            alt={post.title}
+        <a href="/article/{post.slug}" style="display: block; text-decoration: none; color: inherit; grid-column: span 12;" class="post-link">
+          <article class="card">
+            <img
+              src={post.coverImage?.url ?? getPostCoverUrl(null)}
+              alt={post.title}
             loading="lazy"
           />
           <div class="body">
@@ -50,6 +51,7 @@
             </div>
           </div>
         </article>
+      </a>
       {:else}
         <p class="muted">Belum ada berita.</p>
       {/each}
@@ -69,7 +71,7 @@
       {#each data.tokens as token}
         <a href="/tokens/{token.slug}" class="token-card">
           <img
-            src={getTokenLogoUrl(token.logo?.id)}
+            src={token.logo?.url ?? getTokenLogoUrl(token.logo?.id)}
             alt={token.name}
             class="token-logo"
           />

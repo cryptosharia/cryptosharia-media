@@ -14,10 +14,22 @@
     let { data }: Props = $props();
 
     const categories = [
-        { id: "sharia", name: "Sharia", icon: "🕋" },
-        { id: "blockchain", name: "Blockchain", icon: "🔗" },
-        { id: "crypto", name: "Crypto", icon: "💰" },
+        { id: "news", name: "News", icon: "📰" },
+        { id: "education", name: "Education", icon: "📚" },
+        { id: "research", name: "Research", icon: "🔍" },
+        { id: "activity", name: "Activity", icon: "🎯" }
     ];
+
+    let searchQuery = $state("");
+    
+    function handleSearch(e: Event) {
+        if ((e as KeyboardEvent).key === "Enter") {
+            const url = new URL(window.location.href);
+            if (searchQuery) url.searchParams.set("q", searchQuery);
+            else url.searchParams.delete("q");
+            window.location.href = url.toString();
+        }
+    }
 </script>
 
 <svelte:head>
@@ -56,7 +68,18 @@
 
     <!-- Categories -->
     <section class="section">
-        <h3>Kategori Edukasi</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+            <h3 style="margin: 0;">Kategori Konten</h3>
+            <div class="search-box">
+                <input
+                    type="text"
+                    placeholder="Cari edukasi..."
+                    bind:value={searchQuery}
+                    onkeydown={handleSearch}
+                    style="padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--elev); color: var(--text);"
+                />
+            </div>
+        </div>
         <div class="category-grid">
             {#each categories as cat}
                 <a href="/education?category={cat.id}" class="category-card">
@@ -143,20 +166,22 @@
         <h3>Artikel Edukasi</h3>
         <div class="grid">
             {#each data.posts as post}
-                <article class="card">
-                    <img
-                        src={getPostCoverUrl(post.coverImage?.id)}
-                        alt={post.title}
-                        loading="lazy"
-                    />
-                    <div class="body">
-                        <span class="kicker">{post.section}</span>
-                        <h4>{post.title}</h4>
-                        {#if post.excerpt}
-                            <p>{post.excerpt}</p>
-                        {/if}
-                    </div>
-                </article>
+                <a href="/article/{post.slug}" style="display: block; text-decoration: none; color: inherit; grid-column: span 12;" class="post-link">
+                    <article class="card">
+                        <img
+                            src={post.coverImage?.url ?? getPostCoverUrl(post.coverImage?.id)}
+                            alt={post.title}
+                            loading="lazy"
+                        />
+                        <div class="body">
+                            <span class="kicker">{post.section}</span>
+                            <h4>{post.title}</h4>
+                            {#if post.excerpt}
+                                <p>{post.excerpt}</p>
+                            {/if}
+                        </div>
+                    </article>
+                </a>
             {:else}
                 <p class="muted">Belum ada artikel edukasi.</p>
             {/each}

@@ -1,5 +1,6 @@
 <script lang="ts">
-    import "../app.css";
+    import "../../app.css";
+    import { page } from "$app/stores";
     import type { ActionData } from './$types';
 
     interface Props {
@@ -7,6 +8,7 @@
     }
 
     let { form }: Props = $props();
+    let urlError = $derived($page.url.searchParams.get('error'));
 </script>
 
 <svelte:head>

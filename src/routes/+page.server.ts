@@ -16,7 +16,7 @@ export const load: PageServerLoad = async () => {
     });
 
     return {
-        posts: postsResponse.data?.data ?? [],
-        tokens: tokensResponse.data?.data ?? [],
+        posts: postsResponse.data?.data?.items ?? [],
+        tokens: tokensResponse.data?.data?.items ?? [],
     };
 };

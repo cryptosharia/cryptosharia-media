@@ -6,8 +6,67 @@
         data: PageData;
     }
 
+
+
+    import { browser } from '$app/environment';
+    import { onMount } from 'svelte';
+
     let { data }: Props = $props();
     let token = $derived(data.token);
+
+    let tvScriptLoaded = $state(false);
+
+    onMount(() => {
+        if (!browser) return;
+        const script = document.createElement('script');
+        script.src = 'https://s3.tradingview.com/tv.js';
+        script.async = true;
+        script.onload = () => { tvScriptLoaded = true; };
+        document.head.appendChild(script);
+    });
+
+    $effect(() => {
+        if (tvScriptLoaded && token.tradingviewSymbol && (window as any).TradingView) {
+            new (window as any).TradingView.widget({
+                "autosize": true,
+                "symbol": token.tradingviewSymbol,
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light',
+                "style": "1",
+                "locale": "en",
+                "enable_publishing": false,
+                "backgroundColor": "rgba(0, 0, 0, 0)",
+                "gridColor": "rgba(42, 46, 57, 0.06)",
+                "hide_top_toolbar": false,
+                "hide_legend": false,
+                "save_image": false,
+                "container_id": `tradingview_${token.tradingviewSymbol}`
+            });
+        }
+    });
+
+    let parsedContent = $state('');
+
+    $effect(() => {
+        if (!token.content) {
+            parsedContent = '';
+            return;
+        }
+        
+        if (browser) {
+            Promise.all([
+                import('marked'),
+                import('dompurify')
+            ]).then(([{ marked }, { default: DOMPurify }]) => {
+                const rawHtml = marked.parse(token.content);
+                parsedContent = DOMPurify.sanitize(rawHtml as string);
+            }).catch(console.error);
+        } else {
+            // Very naive fallback for SSR
+            parsedContent = token.content;
+        }
+    });
 </script>
 
 <svelte:head>
@@ -21,7 +80,7 @@
 <main class="container">
     <div class="token-header">
         <img
-            src={getTokenLogoUrl(token.logo?.id)}
+            src={token.logo?.url ?? getTokenLogoUrl(token.logo?.id)}
             alt={token.name}
             class="token-logo"
         />
@@ -81,7 +140,9 @@
                 <a
                     href={token.website}
                     target="_blank"
-                    rel="noopener noreferrer">{token.website}</a
+                    class="btn primary btn-sm"
+                    style="display: inline-block; padding: 0.5rem 1rem; border-radius: 6px; background: var(--brand); color: #000; font-weight: 500; text-decoration: none;"
+                    rel="noopener noreferrer">Kunjungi Website</a
                 >
             </div>
             {#if token.tradingviewSymbol}
@@ -93,13 +154,20 @@
         </div>
 
         {#if token.content}
-            <div class="markdown-body">
-                {@html token.content}
+            <div class="markdown-body" style="margin-top: 2rem; line-height: 1.6;">
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html parsedContent}
+            </div>
+        {/if}
+
+        {#if token.tradingviewSymbol}
+            <div class="tradingview-widget-container" style="margin-top: 3rem; height: 500px;">
+                <div id="tradingview_{token.tradingviewSymbol}" style="height: 100%;"></div>
             </div>
         {/if}
     </div>
 
-    <a href="/" class="back-link">← Kembali ke Beranda</a>
+    <a href="/screening" class="back-link">← Kembali ke Screening</a>
 </main>
 
 <style>

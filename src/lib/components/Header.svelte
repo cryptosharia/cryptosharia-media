@@ -1,6 +1,8 @@
 <script lang="ts">
     import { page } from "$app/stores";
 
+    let searchQuery = $state("");
+
     function isActive(path: string) {
         if (path === "/") {
             return $page.url.pathname === "/";
@@ -20,22 +22,35 @@
     </nav>
     <div class="container nav">
         <a href="/" class="brand">
-            <div class="logo"></div>
+            <div class="logo">
+                <img
+                    src="/logo.png"
+                    alt="CryptoSharia Logo"
+                    style="width: 100%; height: 100%; object-fit: contain;"
+                />
+            </div>
             <span class="title">CryptoSharia</span>
         </a>
-        <div class="search">
-            <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-            >
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.35-4.35" />
-            </svg>
-            <input type="text" placeholder="Cari berita..." />
-        </div>
+        {#if $page.url.pathname !== "/community"}
+            <form action="/screening" method="get" class="search">
+                <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Cari koin..."
+                    bind:value={searchQuery}
+                />
+            </form>
+        {/if}
     </div>
 </header>

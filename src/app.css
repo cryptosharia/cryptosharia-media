@@ -136,6 +136,10 @@ header {
   color: var(--text);
 }
 
+.search input::placeholder {
+  color: var(--muted);
+}
+
 /* Menu */
 .menu {
   display: flex;
@@ -260,8 +264,8 @@ body.light-mode .menu a:hover {
 }
 
 @media (min-width: 680px) {
-  .card {
-    grid-column: span 6;
+  .post-link, .card {
+    grid-column: span 6 !important;
   }
   .card img {
     height: 200px;
@@ -269,8 +273,8 @@ body.light-mode .menu a:hover {
 }
 
 @media (min-width: 980px) {
-  .card {
-    grid-column: span 4;
+  .post-link, .card {
+    grid-column: span 4 !important;
   }
 }
 
