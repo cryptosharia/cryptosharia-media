@@ -1,302 +1,342 @@
 <script lang="ts">
     import "../../app.css";
-
-    const discordBenefits = [
-        {
-            title: "Signal Coin (Spot Only)",
-            icon: "📈",
-            desc: "Signal trading real-time untuk spot (tanpa leverage). Entry point, target profit, stop loss, dan risk analysis.",
-        },
-        {
-            title: "Diskusi Trader Harian 24/7",
-            icon: "💬",
-            desc: "Komunitas trader aktif saling berbagi insight, analisis teknikal, dan fundamental.",
-        },
-        {
-            title: "Arbitrage CEX-CEX",
-            icon: "⚡",
-            desc: "Notifikasi real-time untuk peluang arbitrase antar exchange dengan profit potential 1-3%.",
-        },
-        {
-            title: "Airdrop & Testnet Kurasi",
-            icon: "🎁",
-            desc: "Project-project legitimate yang sudah dikurasi, lengkap dengan guide dan deadline tracker.",
-        },
-    ];
-
-    const membershipPlans = [
-        {
-            name: "Bulanan",
-            price: "Rp 299.000",
-            period: "/bulan",
-            popular: false,
-        },
-        {
-            name: "3 Bulan",
-            price: "Rp 799.000",
-            period: "/3 bulan",
-            popular: true,
-        },
-        {
-            name: "Tahunan",
-            price: "Rp 2.499.000",
-            period: "/tahun",
-            popular: false,
-        },
-    ];
-
-    const consultantServices = [
-        {
-            icon: "🎯",
-            title: "Portfolio Review",
-            desc: "Analisis portfolio crypto Anda dari perspektif syariah",
-        },
-        {
-            icon: "📊",
-            title: "Investment Strategy",
-            desc: "Strategi investasi yang sesuai dengan profil risiko Anda",
-        },
-        {
-            icon: "🔍",
-            title: "Token Analysis",
-            desc: "Riset mendalam tentang token tertentu",
-        },
-        {
-            icon: "📈",
-            title: "Trading Mentorship",
-            desc: "Bimbingan trading 1-on-1 dengan trader berpengalaman",
-        },
-    ];
 </script>
 
 <svelte:head>
     <title>Premium Community · CryptoSharia</title>
     <meta
         name="description"
-        content="Bergabung dengan komunitas premium CryptoSharia untuk akses eksklusif signal, diskusi, dan konsultasi."
+        content="Bergabung dengan komunitas premium CryptoSharia untuk akses eksklusif signal, diskusi, dan materi premium."
     />
 </svelte:head>
 
-
-
 <main class="container">
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Kenapa Bergabung dengan Discord Premium?</h1>
-        <p>
-            Akses eksklusif ke signal, diskusi, dan tools untuk trader crypto
-            syariah.
-        </p>
-    </section>
-
-    <!-- Benefits -->
-    <section class="section">
-        <h3>Apa yang Kalian Dapatkan?</h3>
-        <div class="benefits-grid">
-            {#each discordBenefits as benefit}
-                <div class="benefit-card">
-                    <span class="icon">{benefit.icon}</span>
-                    <h4>{benefit.title}</h4>
-                    <p>{benefit.desc}</p>
+    <section class="discord-hero">
+        <div class="hero-top">
+            <div class="hero-left">
+                <h1>
+                    Kenapa Bergabung dengan <br/>
+                    <span class="gradient-text">Discord Premium</span>?
+                </h1>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">1000+</div>
+                        <div class="stat-label">Active Members</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Live Discussion</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Signals per Month</div>
+                    </div>
                 </div>
-            {/each}
-        </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- Membership Plans -->
-    <section class="section">
-        <h3>Pilih Paket Membership</h3>
-        <div class="pricing-grid">
-            {#each membershipPlans as plan}
-                <div class="pricing-card" class:popular={plan.popular}>
-                    {#if plan.popular}
-                        <span class="badge">Popular</span>
-                    {/if}
-                    <h4>{plan.name}</h4>
-                    <div class="price">{plan.price}</div>
-                    <span class="period">{plan.period}</span>
-                    <a href="/discord" class="btn">Pilih Paket</a>
+                
+                <div class="cta-wrapper">
+                    <a href="https://berbagi.link/cryptosharia/" class="cta-button" target="_blank" rel="noopener noreferrer">Bergabung Sekarang</a>
                 </div>
-            {/each}
-        </div>
-    </section>
 
-    <div class="divider"></div>
+                <ul class="features-list-left">
+                    <li class="highlighted">
+                        <span class="check-icon">✓</span>
+                        <span>Trading Strategies & Tutorials</span>
+                    </li>
+                    <li class="highlighted">
+                        <span class="check-icon">✓</span>
+                        <span>Daily market updates</span>
+                    </li>
+                </ul>
+            </div>
 
-    <!-- Consultant Section -->
-    <section class="section" id="consultant">
-        <h3>🎓 Consultant Crypto Sharia</h3>
-        <p class="muted">
-            Butuh bimbingan lebih personal? Konsultasikan langsung dengan ahli
-            kami.
-        </p>
-        <div class="services-grid">
-            {#each consultantServices as service}
-                <div class="service-card">
-                    <span class="icon">{service.icon}</span>
-                    <h4>{service.title}</h4>
-                    <p>{service.desc}</p>
+            <div class="hero-right">
+                <div class="hero-visual">
+                    <img src="/discord-preview.png" alt="Discord Community" class="promo-image">
                 </div>
-            {/each}
-        </div>
-        <div class="cta-center">
-            <a href="/consultant" class="btn primary">Jadwalkan Konsultasi</a>
+
+                <ul class="features-list">
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <span>Beginner & Advanced education modules</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <span>Shariah-based crypto modules + fatwa</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <span>Exclusive Crypto Outlook & Trade Insights</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <span>Global Macro Market Analysis</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <span>Private 2-way discussions</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <span>Weekly Live Sessions (Members Only)</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <span>Access to Paid Research</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <span>Daily Portfolio Updates</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <span>All Access Free Members</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </section>
 </main>
 
 <style>
-    .hero {
-        text-align: center;
-        padding: 3rem 1rem;
-        background: linear-gradient(
-            135deg,
-            var(--brand) 0%,
-            var(--accent) 100%
-        );
-        border-radius: var(--radius);
-        margin-bottom: 2rem;
-        color: var(--bg);
-    }
-    .hero h1 {
-        margin: 0 0 1rem;
-        font-size: 2rem;
-    }
-    .hero p {
-        margin: 0;
-        opacity: 0.9;
-    }
-    .benefits-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-    }
-    .benefit-card {
+    .discord-hero {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
         background: var(--elev);
         border: 1px solid var(--border-color);
-        border-radius: var(--radius);
-        padding: 1.5rem;
-    }
-    .benefit-card .icon {
-        font-size: 2rem;
-        display: block;
-        margin-bottom: 1rem;
-    }
-    .benefit-card h4 {
-        margin: 0 0 0.5rem;
-        color: var(--brand);
-    }
-    .benefit-card p {
-        margin: 0;
-        color: var(--text-muted);
-        font-size: 0.9rem;
-    }
-    .pricing-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-        margin-top: 1.5rem;
-    }
-    .pricing-card {
-        background: var(--elev);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius);
-        padding: 2rem;
-        text-align: center;
+        border-radius: 24px;
+        padding: 4rem 5rem;
         position: relative;
+        overflow: hidden;
+        margin: 2rem 0;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
     }
-    .pricing-card.popular {
-        border-color: var(--brand);
-        transform: scale(1.05);
+    
+    .hero-top {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 3rem;
+        z-index: 1;
     }
-    .pricing-card .badge {
+
+    .hero-left {
+        flex: 1;
+        max-width: 650px;
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .hero-left h1 {
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0;
+        letter-spacing: -1px;
+    }
+
+    .hero-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        max-width: 580px;
+    }
+
+    .cta-wrapper {
+        text-align: left;
+        margin-top: 1rem;
+    }
+    
+    /* Decorative radial gradient behind the text */
+    .discord-hero::before {
+        content: '';
         position: absolute;
-        top: -12px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--brand);
-        color: var(--bg);
-        padding: 0.25rem 1rem;
-        border-radius: 12px;
-        font-size: 0.75rem;
-        font-weight: 600;
+        top: -50%;
+        left: -50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(249, 115, 22, 0.1) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: 0;
     }
-    .pricing-card h4 {
-        margin: 0 0 1rem;
+
+    .gradient-text {
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 800;
     }
-    .pricing-card .price {
+
+    /* Decorative radial gradient behind the text */
+
+    .hero-stats {
+        display: flex;
+        gap: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .stat-number {
         font-size: 1.75rem;
-        font-weight: 700;
-        color: var(--brand);
+        font-weight: 800;
+        color: var(--text);
     }
-    .pricing-card .period {
+
+    .stat-label {
+        font-size: 0.85rem;
         color: var(--text-muted);
-        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
-    .pricing-card .btn {
-        display: block;
-        margin-top: 1.5rem;
-        background: var(--brand);
-        color: var(--bg);
-        padding: 0.75rem;
-        border-radius: 8px;
+
+    .cta-button {
+        display: inline-block;
+        background: #f97316;
+        color: white;
         text-decoration: none;
-        font-weight: 600;
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border-radius: 12px;
+        transition: all 0.2s;
+        box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+        margin-top: 1rem;
     }
-    .services-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
+
+    .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+        background: #ea580c;
+    }
+
+    .hero-visual {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 16px;
+    }
+
+    .promo-image {
+        width: 100%;
+        height: auto;
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s ease;
+    }
+
+    .promo-image:hover {
+        transform: translateY(-5px) scale(1.02);
+    }
+
+    /* Features List Inline */
+    .features-list,
+    .features-list-left {
+        display: flex;
+        flex-direction: column;
         gap: 1rem;
-        margin-top: 1.5rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
-    .service-card {
-        background: var(--elev);
+
+    .features-list-left {
+        margin-top: 1rem; /* spacing from cta button */
+    }
+
+    .features-list li,
+    .features-list-left li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: var(--bg);
+        border-radius: 12px;
         border: 1px solid var(--border-color);
-        border-radius: var(--radius);
-        padding: 1.5rem;
-        text-align: center;
+        transition: transform 0.2s, background 0.2s;
+        font-size: 0.95rem;
+        line-height: 1.3;
     }
-    .service-card .icon {
-        font-size: 2rem;
-        display: block;
-        margin-bottom: 0.75rem;
+
+    .features-list li:hover,
+    .features-list-left li:hover {
+        transform: translateY(-2px);
+        background: var(--elev);
+        border-color: #0ea5e9;
     }
-    .service-card h4 {
-        margin: 0 0 0.5rem;
+
+    .features-list-left li.highlighted {
+        font-weight: 700;
+        border-color: rgba(249, 115, 22, 0.3);
+    }
+
+    .features-list-left li.highlighted:hover {
+        border-color: #f97316;
+    }
+
+    .check-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #0ea5e9;
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        min-width: 24px;
+        height: 24px;
+        font-weight: bold;
         font-size: 0.9rem;
     }
-    .service-card p {
-        margin: 0;
-        font-size: 0.8rem;
-        color: var(--text-muted);
+
+    .features-list-left li.highlighted .check-icon {
+        background: #f97316;
     }
-    .cta-center {
-        text-align: center;
-        margin-top: 2rem;
-    }
-    .btn.primary {
-        background: var(--brand);
-        color: var(--bg);
-        padding: 1rem 2rem;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        display: inline-block;
-    }
-    @media (max-width: 900px) {
-        .benefits-grid {
+
+    @media (max-width: 992px) {
+        .discord-hero {
+            padding: 2.5rem;
+        }
+
+        .hero-top {
+            flex-direction: column;
+            text-align: center;
+            gap: 3rem;
+        }
+        
+        .hero-left {
+            text-align: center;
+            max-width: 100%;
+        }
+        
+        .hero-left h1 {
+            font-size: 2.5rem;
+        }
+
+        .hero-stats {
+            justify-content: center;
+        }
+
+        .features-list {
             grid-template-columns: 1fr;
         }
-        .pricing-grid {
-            grid-template-columns: 1fr;
-        }
-        .pricing-card.popular {
-            transform: none;
-        }
-        .services-grid {
-            grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 600px) {
+        .hero-stats {
+            flex-direction: column;
+            gap: 1.5rem;
         }
     }
 </style>

@@ -6,8 +6,71 @@
         data: PageData;
     }
 
+
+
+    import { browser } from '$app/environment';
+    import { onMount } from 'svelte';
+
     let { data }: Props = $props();
     let token = $derived(data.token);
+
+    let tvScriptLoaded = $state(false);
+    let showChart = $state(false);
+
+    onMount(() => {
+        if (!browser) return;
+        const script = document.createElement('script');
+        script.src = 'https://s3.tradingview.com/tv.js';
+        script.async = true;
+        script.onload = () => { tvScriptLoaded = true; };
+        document.head.appendChild(script);
+    });
+
+    $effect(() => {
+        if (showChart && tvScriptLoaded && token.tradingviewSymbol && (window as any).TradingView) {
+            // Give the DOM a tiny moment to render the container before injecting
+            setTimeout(() => {
+                new (window as any).TradingView.widget({
+                    "autosize": true,
+                    "symbol": token.tradingviewSymbol,
+                    "interval": "D",
+                    "timezone": "Etc/UTC",
+                    "theme": document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light',
+                    "style": "1",
+                    "locale": "en",
+                    "enable_publishing": false,
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "gridColor": "rgba(42, 46, 57, 0.06)",
+                    "hide_top_toolbar": false,
+                    "hide_legend": false,
+                    "save_image": false,
+                    "container_id": `tradingview_${token.tradingviewSymbol}`
+                });
+            }, 50);
+        }
+    });
+
+    let parsedContent = $state('');
+
+    $effect(() => {
+        if (!token.content) {
+            parsedContent = '';
+            return;
+        }
+        
+        if (browser) {
+            Promise.all([
+                import('marked'),
+                import('dompurify')
+            ]).then(([{ marked }, { default: DOMPurify }]) => {
+                const rawHtml = marked.parse(token.content);
+                parsedContent = DOMPurify.sanitize(rawHtml as string);
+            }).catch(console.error);
+        } else {
+            // Very naive fallback for SSR
+            parsedContent = token.content;
+        }
+    });
 </script>
 
 <svelte:head>
@@ -21,7 +84,7 @@
 <main class="container">
     <div class="token-header">
         <img
-            src={getTokenLogoUrl(token.logo?.id)}
+            src={token.logo?.url ?? getTokenLogoUrl(token.logo?.id)}
             alt={token.name}
             class="token-logo"
         />
@@ -44,62 +107,87 @@
         {#if data.quote}
             <div class="market-stats">
                 <div class="stat-box">
-                    <span class="label">Harga Saat Ini</span>
-                    <span class="value">
-                        ${data.quote.priceUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
-                    </span>
-                    <span class="change {data.quote.percentChange24h >= 0 ? 'positive' : 'negative'}">
-                        {data.quote.percentChange24h >= 0 ? '▲' : '▼'} {Math.abs(data.quote.percentChange24h).toFixed(2)}% (24h)
-                    </span>
+                    <span class="label">Peringkat</span>
+                    <span class="value">#{token.rank}</span>
                 </div>
                 <div class="stat-box">
-                    <span class="label">Market Cap</span>
+                    <span class="label">Harga per Token</span>
+                    <div class="value-row">
+                        <span class="value">
+                            ${data.quote.priceUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
+                        </span>
+                        <span class="separator">|</span>
+                        <span class="change {data.quote.percentChange24h >= 0 ? 'positive' : 'negative'}">
+                            {data.quote.percentChange24h >= 0 ? '+' : ''}{data.quote.percentChange24h.toFixed(2)}%
+                        </span>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="label">Kapitalisasi Pasar</span>
                     <span class="value">
                         ${data.quote.marketCapUsd.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                     </span>
-                    <span class="subtext">
-                        Dominance: {data.quote.marketCapDominance.toFixed(2)}%
+                </div>
+                <div class="stat-box">
+                    <span class="label">Dominasi Pasar</span>
+                    <span class="value">
+                        {data.quote.marketCapDominance.toFixed(2)}%
                     </span>
                 </div>
                 <div class="stat-box">
-                    <span class="label">Circulating Supply</span>
+                    <span class="label"><em>Supply</em> Maksimum</span>
                     <span class="value">
-                        {data.quote.circulatingSupply.toLocaleString()} {token.ticker}
+                        {#if data.quote.maxSupply}
+                            {data.quote.maxSupply.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                        {:else}
+                            <i>Unlimited</i>
+                        {/if}
                     </span>
-                    {#if data.quote.maxSupply}
-                        <span class="subtext">
-                            Max: {data.quote.maxSupply.toLocaleString()}
-                        </span>
-                    {/if}
+                </div>
+                <div class="stat-box">
+                    <span class="label"><em>Supply</em> Beredar</span>
+                    <span class="value">
+                        {data.quote.circulatingSupply.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </span>
                 </div>
             </div>
         {/if}
 
-        <div class="details">
-            <div class="detail-item">
-                <span class="label">Website</span>
-                <a
-                    href={token.website}
-                    target="_blank"
-                    rel="noopener noreferrer">{token.website}</a
-                >
-            </div>
+        <div class="action-buttons">
             {#if token.tradingviewSymbol}
-                <div class="detail-item">
-                    <span class="label">TradingView</span>
-                    <span>{token.tradingviewSymbol}</span>
-                </div>
+                <button 
+                    class="btn btn-chart {showChart ? 'active' : ''}" 
+                    onclick={() => showChart = !showChart}
+                >Grafik</button>
+            {/if}
+            {#if token.website}
+                <a href={token.website} target="_blank" rel="noopener noreferrer" class="btn btn-website">Website</a>
             {/if}
         </div>
 
+        {#if showChart && token.tradingviewSymbol}
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <div class="modal-overlay" onclick={() => showChart = false}>
+                <div class="modal-content" onclick={(e) => e.stopPropagation()}>
+                    <button class="modal-close" onclick={() => showChart = false}>&times;</button>
+                    <h2>Grafik: {token.name}</h2>
+                    <div class="tradingview-widget-container" style="height: 500px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color);">
+                        <div id="tradingview_{token.tradingviewSymbol}" style="height: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        {/if}
+
         {#if token.content}
-            <div class="markdown-body">
-                {@html token.content}
+            <div class="markdown-body" style="margin-top: 2rem; line-height: 1.6;">
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html parsedContent}
             </div>
         {/if}
     </div>
 
-    <a href="/" class="back-link">← Kembali ke Beranda</a>
+    <a href="/screening" class="back-link">← Kembali ke Screening</a>
 </main>
 
 <style>
@@ -179,46 +267,53 @@
     }
 
     .market-stats {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 1rem 0.5rem;
         margin-bottom: 2rem;
+        padding: 1rem 0;
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
     }
 
     .stat-box {
-        background: var(--elev);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius);
-        padding: 1.5rem;
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.25rem;
+        flex: 1;
+        min-width: max-content;
     }
     
     .stat-box .label {
-        font-size: 0.875rem;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        letter-spacing: 0;
+        text-transform: none;
     }
 
     .stat-box .value {
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: 1rem;
+        font-weight: 600;
         color: var(--text);
     }
-    
-    .stat-box .subtext {
-        font-size: 0.875rem;
-        color: var(--text-muted);
+
+    .value-row {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .separator {
+        color: var(--border-color);
     }
 
     .change {
-        font-size: 0.875rem;
+        font-size: 0.95rem;
         font-weight: 600;
         display: flex;
         align-items: center;
-        gap: 0.25rem;
     }
     
     .change.positive {
@@ -235,31 +330,92 @@
         }
     }
 
-    .details {
-        display: grid;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        padding: 1.5rem;
-        background-color: var(--bg-surface);
-        border-radius: 0.75rem;
-        border: 1px solid var(--border-color);
-    }
-
-    .detail-item {
+    .action-buttons {
         display: flex;
-        justify-content: space-between;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid var(--border-color);
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    .action-buttons .btn {
+        padding: 0.4rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+    .action-buttons .btn:hover {
+        opacity: 0.9;
+    }
+    .btn-chart {
+        background: var(--text);
+        color: var(--bg);
+    }
+    .btn-website {
+        background: #0ea5e9;
+        color: white;
     }
 
-    .detail-item:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        padding: 1rem;
     }
 
-    .label {
-        font-weight: 500;
-        color: var(--text-secondary);
+    .modal-content {
+        background: var(--bg-surface);
+        width: 100%;
+        max-width: 900px;
+        border-radius: 16px;
+        padding: 1.5rem;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        animation: modalFadeIn 0.2s ease-out forwards;
+    }
+
+    .modal-content h2 {
+        margin: 0 0 1rem 0;
+        font-size: 1.3rem;
+        padding-right: 2rem;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1.25rem;
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        line-height: 1;
+        cursor: pointer;
+        color: var(--text-muted);
+        transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+        color: var(--text);
+    }
+
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
     }
 
     .back-link {

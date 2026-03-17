@@ -1,0 +1,330 @@
+{
+	"info": {
+		"_postman_id": "b78b87a8-39e7-4b68-b3d5-1c39c8eb01fe",
+		"name": "CryptoSharia API",
+		"description": "Koleksi endpoint API resmi untuk CryptoSharia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345678"
+	},
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{api_key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Api-Key",
+				"type": "string"
+			},
+			{
+				"key": "in",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "Posts & Articles",
+			"item": [
+				{
+					"name": "Get All Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/posts?limit=10&page=1&sections=news&types=article",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Pagination limit"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Pagination page"
+								},
+								{
+									"key": "sections",
+									"value": "news",
+									"description": "List of post sections to filter by. Example: news, education, research, activity"
+								},
+								{
+									"key": "types",
+									"value": "article",
+									"description": "List of post types to filter by. Example: article, webinar, video, headline"
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Free text search across titles and excerpts",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Post by Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/posts/:slug",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items",
+								"posts",
+								":slug"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "bitcoin-tembus-100k-pandangan-syariah"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tokens & Screening",
+			"item": [
+				{
+					"name": "Get All Tokens",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tokens?limit=10&page=1&sharia_statuses=halal",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items",
+								"tokens"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "sharia_statuses",
+									"value": "halal",
+									"description": "List of sharia compliance statuses. Example: halal, haram, syubhat"
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Search across token name and ticker",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Token by Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tokens/:slug",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items",
+								"tokens",
+								":slug"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "bitcoin"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Token Quotes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tokens/:slug/quotes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items",
+								"tokens",
+								":slug",
+								"quotes"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "bitcoin"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Public / System",
+			"item": [
+				{
+					"name": "Send Message (Contact/Consultant)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"message\": \"Saya ingin bertanya mengenai layanan premium.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/messages",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"messages"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication (Need Credentials)",
+			"item": [
+				{
+					"name": "Sign In",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@cryptosharia.id\",\n  \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://preview.api.cryptosharia.id",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "ISI_DENGAN_TOKEN_SETELAH_LOGIN",
+			"type": "string"
+		},
+		{
+			"key": "api_key",
+			"value": "fc8599fcdec30a9c7783b73eece592ab2fe7e1e2b0b1bba59f4fe12123f74b42",
+			"type": "string"
+		}
+	]
+}

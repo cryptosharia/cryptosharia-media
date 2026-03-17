@@ -1,5 +1,6 @@
 <script lang="ts">
     import "../../app.css";
+    import Header from "$lib/components/Header.svelte";
     import type { ActionData } from './$types';
 
     interface Props {
@@ -48,21 +49,7 @@
     />
 </svelte:head>
 
-<header>
-    <nav class="menu">
-        <a href="/">News</a>
-        <a href="/education">Education</a>
-        <a href="/research">Research</a>
-        <a href="/community" class="active">Premium</a>
-        <a href="/profile">Profile</a>
-    </nav>
-    <div class="container nav">
-        <a href="/" class="brand">
-            <div class="logo"></div>
-            <span class="title">CryptoSharia</span>
-        </a>
-    </div>
-</header>
+<Header />
 
 <main class="container consultant-page">
     <section class="hero">

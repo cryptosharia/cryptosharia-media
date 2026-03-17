@@ -98,12 +98,15 @@ header {
   gap: 0.65rem;
 }
 
+.menu .brand {
+  margin-right: auto;
+}
+
 .logo {
   width: 36px;
   aspect-ratio: 1;
   border-radius: 12px;
-  background: conic-gradient(from 200deg, var(--brand), var(--accent));
-  box-shadow: 0 4px 18px rgba(252, 192, 0, 0.3);
+  background: transparent;
 }
 
 .title {
@@ -134,6 +137,10 @@ header {
   all: unset;
   flex: 1;
   color: var(--text);
+}
+
+.search input::placeholder {
+  color: var(--muted);
 }
 
 /* Menu */
@@ -260,8 +267,8 @@ body.light-mode .menu a:hover {
 }
 
 @media (min-width: 680px) {
-  .card {
-    grid-column: span 6;
+  .post-link, .card {
+    grid-column: span 6 !important;
   }
   .card img {
     height: 200px;
@@ -269,8 +276,8 @@ body.light-mode .menu a:hover {
 }
 
 @media (min-width: 980px) {
-  .card {
-    grid-column: span 4;
+  .post-link, .card {
+    grid-column: span 4 !important;
   }
 }
 
@@ -412,7 +419,7 @@ body.light-mode .menu a:hover {
 .footer-brand p {
   color: var(--muted);
   font-size: 0.9rem;
-  margin: 0.5rem 0 0;
+  margin: 0;
 }
 
 .social-links {

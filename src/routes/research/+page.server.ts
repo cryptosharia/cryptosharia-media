@@ -10,13 +10,7 @@ export const load: PageServerLoad = async () => {
 
     const posts = postsResponse.data?.data?.items ?? [];
 
-    // Categorize posts (in real API this would be done via tags/categories)
-    // For mock, we'll split evenly
-    const third = Math.ceil(posts.length / 3);
-
     return {
-        fatwa: posts.slice(0, third),
-        teknologi: posts.slice(third, third * 2),
-        studiKasus: posts.slice(third * 2),
+        posts,
     };
 };

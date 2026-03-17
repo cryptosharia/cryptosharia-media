@@ -9,6 +9,13 @@ export const load: PageServerLoad = async () => {
         limit: 12,
     });
 
+    // Fetch latest video for Hero
+    const videoResponse = await getPosts({
+        types: ['video'],
+        limit: 1,
+    });
+    const heroVideo = videoResponse.data?.data?.items?.[0] || null;
+
     // Fetch webinars
     const webinarsResponse = await getPosts({
         sections: ['education'],
@@ -29,6 +36,7 @@ export const load: PageServerLoad = async () => {
 
     return {
         posts: postsResponse.data?.data?.items ?? [],
+        heroVideo,
         upcomingWebinars,
         pastWebinars,
     };

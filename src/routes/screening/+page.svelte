@@ -132,7 +132,7 @@
                 <article class="coin-card" data-status={coin.shariaStatus}>
                     <div class="coin-header">
                         <img
-                            src={getTokenLogoUrl(coin.logo?.id)}
+                            src={coin.logo?.url ?? getTokenLogoUrl(coin.logo?.id)}
                             alt={coin.name}
                             class="coin-logo"
                         />
@@ -145,27 +145,23 @@
                         >
                     </div>
 
-                    <div class="coin-category">
-                        <span class="tag"
-                            >{coin.category ?? "Uncategorized"}</span
-                        >
-                    </div>
+                    {#if coin.category && coin.category !== "Uncategorized"}
+                        <div class="coin-category">
+                            <span class="tag">{coin.category}</span>
+                        </div>
+                    {/if}
 
                     {#if coin.excerpt}
                         <p class="coin-notes">{coin.excerpt}</p>
                     {/if}
 
-                    <details class="coin-details">
-                        <summary>Lihat Detail</summary>
-                        <p style="margin-top: 1rem; color: var(--text);">
-                            {coin.content}
-                        </p>
+                    <div style="margin-top: 1rem;">
                         {#if coin.slug}
-                            <a href="/tokens/{coin.slug}" class="detail-link"
-                                >Baca selengkapnya →</a
-                            >
+                            <a href="/tokens/{coin.slug}" class="btn primary btn-sm" style="display: inline-block; padding: 0.5rem 1rem; border-radius: 6px; background: var(--brand); color: #000; font-weight: 500;">
+                                Lihat Detail
+                            </a>
                         {/if}
-                    </details>
+                    </div>
                 </article>
             {:else}
                 <div class="empty-state">
@@ -227,8 +223,9 @@
         align-items: center;
         gap: 0.5rem;
         padding: 0.5rem 1rem;
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         background: var(--elev);
+        color: var(--text);
         border-radius: 20px;
         cursor: pointer;
         font-size: 0.9rem;
@@ -246,7 +243,7 @@
     .search-box input {
         padding: 0.5rem 1rem;
         border-radius: 20px;
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         background: var(--elev);
         min-width: 200px;
     }
@@ -257,7 +254,7 @@
     }
     .legend-card {
         background: var(--elev);
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         border-radius: var(--radius);
         padding: 1.5rem;
     }
@@ -282,7 +279,7 @@
     }
     .coin-card {
         background: var(--elev);
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         border-radius: var(--radius);
         padding: 1.5rem;
         transition: transform 0.2s;

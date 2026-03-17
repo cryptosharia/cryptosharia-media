@@ -50,7 +50,7 @@
         <div class="profile-section">
             <ul class="profile-list">
                 <li>
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <svg
                             width="22"
                             height="22"
@@ -172,7 +172,7 @@
         <div class="profile-section">
             <ul class="profile-list">
                 <li>
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <svg
                             width="22"
                             height="22"
@@ -205,7 +205,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <svg
                             width="22"
                             height="22"
@@ -238,7 +238,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <svg
                             width="22"
                             height="22"
@@ -275,7 +275,7 @@
         <div class="profile-section">
             <ul class="profile-list">
                 <li class="danger-zone">
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <svg
                             width="22"
                             height="22"

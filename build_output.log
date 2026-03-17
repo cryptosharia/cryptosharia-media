@@ -1,0 +1,81 @@
+
+> cryptosharia-media@0.0.1 build
+> vite build
+
+[36mvite v7.3.1 [32mbuilding ssr environment for production...[36m[39m
+transforming...
+21.20.59 [vite-plugin-svelte] src/routes/screening/+page.svelte:10:29 This reference only captures the initial value of `data`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally
+ 8: 
+ 9:     // State
+10:     let searchQuery = $state(data.params.search);
+                                     ^
+11:     let currentFilter = $state(data.params.status);
+12: 
+21.20.59 [vite-plugin-svelte] src/routes/screening/+page.svelte:11:31 This reference only captures the initial value of `data`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally
+ 9:     // State
+10:     let searchQuery = $state(data.params.search);
+11:     let currentFilter = $state(data.params.status);
+                                       ^
+12: 
+13:     // Derived
+21.20.59 [vite-plugin-svelte] src/routes/screening/+page.svelte:351:4 Unused CSS selector ".coin-details summary"
+https://svelte.dev/e/css_unused_selector
+349:     }
+350: 
+351:     .coin-details summary {
+                              ^
+352:         cursor: pointer;
+353:         color: var(--brand);
+21.20.59 [vite-plugin-svelte] src/routes/profile/+page.svelte:53:23 '#' is not a valid href attribute
+https://svelte.dev/e/a11y_invalid_attribute
+51:             <ul class="profile-list">
+52:                 <li>
+53:                     <a href="#">
+                                   ^
+54:                         <svg
+55:                             width="22"
+21.20.59 [vite-plugin-svelte] src/routes/profile/+page.svelte:175:23 '#' is not a valid href attribute
+https://svelte.dev/e/a11y_invalid_attribute
+173:             <ul class="profile-list">
+174:                 <li>
+175:                     <a href="#">
+                                    ^
+176:                         <svg
+177:                             width="22"
+21.20.59 [vite-plugin-svelte] src/routes/profile/+page.svelte:208:23 '#' is not a valid href attribute
+https://svelte.dev/e/a11y_invalid_attribute
+206:                 </li>
+207:                 <li>
+208:                     <a href="#">
+                                    ^
+209:                         <svg
+210:                             width="22"
+21.20.59 [vite-plugin-svelte] src/routes/profile/+page.svelte:241:23 '#' is not a valid href attribute
+https://svelte.dev/e/a11y_invalid_attribute
+239:                 </li>
+240:                 <li>
+241:                     <a href="#">
+                                    ^
+242:                         <svg
+243:                             width="22"
+21.20.59 [vite-plugin-svelte] src/routes/profile/+page.svelte:278:23 '#' is not a valid href attribute
+https://svelte.dev/e/a11y_invalid_attribute
+276:             <ul class="profile-list">
+277:                 <li class="danger-zone">
+278:                     <a href="#">
+                                    ^
+279:                         <svg
+280:                             width="22"
+[32m✓[39m 144 modules transformed.
+[31m✗[39m Build failed in 595ms
+[31merror during build:
+[31m[vite:asset] Could not load C:\Users\Naska Jaladewa\Documents\naufal\cs\cryptosharia-media\src\lib/assets/favicon.png (imported by src/lib/components/Header.svelte): ENOENT: no such file or directory, open 'C:\Users\Naska Jaladewa\Documents\naufal\cs\cryptosharia-media\src\lib\assets\favicon.png'[31m
+    at async open (node:internal/fs/promises:636:25)
+    at async Object.readFile (node:internal/fs/promises:1273:14)
+    at async fileToBuiltUrl (file:///C:/Users/Naska%20Jaladewa/Documents/naufal/cs/cryptosharia-media/node_modules/vite/dist/node/chunks/config.js:8777:18)
+    at async Object.handler (file:///C:/Users/Naska%20Jaladewa/Documents/naufal/cs/cryptosharia-media/node_modules/vite/dist/node/chunks/config.js:8671:17)
+    at async PluginDriver.hookFirstAndGetPlugin (file:///C:/Users/Naska%20Jaladewa/Documents/naufal/cs/cryptosharia-media/node_modules/rollup/dist/es/shared/node-entry.js:22430:28)
+    at async file:///C:/Users/Naska%20Jaladewa/Documents/naufal/cs/cryptosharia-media/node_modules/rollup/dist/es/shared/node-entry.js:21422:33
+    at async Queue.work (file:///C:/Users/Naska%20Jaladewa/Documents/naufal/cs/cryptosharia-media/node_modules/rollup/dist/es/shared/node-entry.js:22658:32)[39m
