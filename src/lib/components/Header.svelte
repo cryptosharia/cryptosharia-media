@@ -30,7 +30,7 @@
         <a href="/profile" class:active={isActive("/profile")}>Profile</a>
     </nav>
     <div class="container nav">
-        {#if !["/community", "/", "/education", "/research", "/screening"].includes($page.url.pathname)}
+        {#if !["/community", "/", "/education", "/research", "/screening"].includes($page.url.pathname) && !$page.url.pathname.startsWith('/article')}
             <form action="/screening" method="get" class="search">
                 <svg
                     width="18"
