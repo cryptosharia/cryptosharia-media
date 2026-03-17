@@ -33,11 +33,11 @@
                     </div>
                 </div>
                 
-                <div class="cta-wrapper">
-                    <a href="https://berbagi.link/cryptosharia/" class="cta-button" target="_blank" rel="noopener noreferrer">Bergabung Sekarang</a>
-                </div>
-
                 <ul class="features-list-left">
+                    <li class="highlighted">
+                        <span class="check-icon">✓</span>
+                        <span>Beginner & Advanced education modules</span>
+                    </li>
                     <li class="highlighted">
                         <span class="check-icon">✓</span>
                         <span>Trading Strategies & Tutorials</span>
@@ -45,6 +45,10 @@
                     <li class="highlighted">
                         <span class="check-icon">✓</span>
                         <span>Daily market updates</span>
+                    </li>
+                    <li class="highlighted">
+                        <span class="check-icon">✓</span>
+                        <span>Shariah-based crypto modules + fatwa</span>
                     </li>
                 </ul>
             </div>
@@ -55,14 +59,6 @@
                 </div>
 
                 <ul class="features-list">
-                    <li>
-                        <span class="check-icon">✓</span>
-                        <span>Beginner & Advanced education modules</span>
-                    </li>
-                    <li>
-                        <span class="check-icon">✓</span>
-                        <span>Shariah-based crypto modules + fatwa</span>
-                    </li>
                     <li>
                         <span class="check-icon">✓</span>
                         <span>Exclusive Crypto Outlook & Trade Insights</span>
@@ -93,6 +89,10 @@
                     </li>
                 </ul>
             </div>
+        </div>
+
+        <div class="cta-wrapper">
+            <a href="https://berbagi.link/cryptosharia/" class="cta-button" target="_blank" rel="noopener noreferrer">Bergabung Sekarang</a>
         </div>
     </section>
 </main>
@@ -147,8 +147,11 @@
     }
 
     .cta-wrapper {
-        text-align: left;
-        margin-top: 1rem;
+        text-align: center;
+        margin-top: 2rem;
+        width: 100%;
+        border-top: 1px solid var(--border-color);
+        padding-top: 3rem;
     }
     
     /* Decorative radial gradient behind the text */
@@ -201,17 +204,19 @@
     }
 
     .cta-button {
-        display: inline-block;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
         background: #f97316;
         color: white;
         text-decoration: none;
-        padding: 1rem 2.5rem;
-        font-size: 1.1rem;
-        font-weight: 700;
+        padding: 1.25rem 2.5rem;
+        font-size: 1.25rem;
+        font-weight: 800;
         border-radius: 12px;
         transition: all 0.2s;
         box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
-        margin-top: 1rem;
     }
 
     .cta-button:hover {
@@ -253,7 +258,8 @@
     }
 
     .features-list-left {
-        margin-top: 1rem; /* spacing from cta button */
+        margin-top: 1rem;
+        margin-bottom: 2rem;
     }
 
     .features-list li,
