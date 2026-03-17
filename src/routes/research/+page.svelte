@@ -20,21 +20,21 @@
     />
 </svelte:head>
 
-
-
 <main class="container">
     <!-- Research Articles -->
     <section class="section">
-        <h3>🔍 Artikel Riset</h3>
-        <p class="muted">
-            Kajian hukum syariah, analisis teknis, dan studi kasus pasar.
-        </p>
+        <h3>Artikel Riset</h3>
         <div class="grid">
             {#each data.posts as post}
-                <a href="/article/{post.slug}" style="display: block; text-decoration: none; color: inherit; grid-column: span 12;" class="post-link">
+                <a
+                    href="/article/{post.slug}"
+                    style="display: block; text-decoration: none; color: inherit; grid-column: span 12;"
+                    class="post-link"
+                >
                     <article class="card">
                         <img
-                            src={post.coverImage?.url ?? getPostCoverUrl(post.coverImage?.id)}
+                            src={post.coverImage?.url ??
+                                getPostCoverUrl(post.coverImage?.id)}
                             alt={post.title}
                             loading="lazy"
                         />

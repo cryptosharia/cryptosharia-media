@@ -103,33 +103,48 @@
         {#if data.quote}
             <div class="market-stats">
                 <div class="stat-box">
-                    <span class="label">Harga Saat Ini</span>
-                    <span class="value">
-                        ${data.quote.priceUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
-                    </span>
-                    <span class="change {data.quote.percentChange24h >= 0 ? 'positive' : 'negative'}">
-                        {data.quote.percentChange24h >= 0 ? '▲' : '▼'} {Math.abs(data.quote.percentChange24h).toFixed(2)}% (24h)
-                    </span>
+                    <span class="label">Peringkat</span>
+                    <span class="value">#{token.rank}</span>
                 </div>
                 <div class="stat-box">
-                    <span class="label">Market Cap</span>
+                    <span class="label">Harga per Token</span>
+                    <div class="value-row">
+                        <span class="value">
+                            ${data.quote.priceUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
+                        </span>
+                        <span class="separator">|</span>
+                        <span class="change {data.quote.percentChange24h >= 0 ? 'positive' : 'negative'}">
+                            {data.quote.percentChange24h >= 0 ? '+' : ''}{data.quote.percentChange24h.toFixed(2)}%
+                        </span>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="label">Kapitalisasi Pasar</span>
                     <span class="value">
                         ${data.quote.marketCapUsd.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                     </span>
-                    <span class="subtext">
-                        Dominance: {data.quote.marketCapDominance.toFixed(2)}%
+                </div>
+                <div class="stat-box">
+                    <span class="label">Dominasi Pasar</span>
+                    <span class="value">
+                        {data.quote.marketCapDominance.toFixed(2)}%
                     </span>
                 </div>
                 <div class="stat-box">
-                    <span class="label">Circulating Supply</span>
+                    <span class="label"><em>Supply</em> Maksimum</span>
                     <span class="value">
-                        {data.quote.circulatingSupply.toLocaleString()} {token.ticker}
+                        {#if data.quote.maxSupply}
+                            {data.quote.maxSupply.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                        {:else}
+                            <i>Unlimited</i>
+                        {/if}
                     </span>
-                    {#if data.quote.maxSupply}
-                        <span class="subtext">
-                            Max: {data.quote.maxSupply.toLocaleString()}
-                        </span>
-                    {/if}
+                </div>
+                <div class="stat-box">
+                    <span class="label"><em>Supply</em> Beredar</span>
+                    <span class="value">
+                        {data.quote.circulatingSupply.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </span>
                 </div>
             </div>
         {/if}
@@ -247,46 +262,53 @@
     }
 
     .market-stats {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 1rem 0.5rem;
         margin-bottom: 2rem;
+        padding: 1rem 0;
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
     }
 
     .stat-box {
-        background: var(--elev);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius);
-        padding: 1.5rem;
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.25rem;
+        flex: 1;
+        min-width: max-content;
     }
     
     .stat-box .label {
-        font-size: 0.875rem;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        letter-spacing: 0;
+        text-transform: none;
     }
 
     .stat-box .value {
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: 1rem;
+        font-weight: 600;
         color: var(--text);
     }
-    
-    .stat-box .subtext {
-        font-size: 0.875rem;
-        color: var(--text-muted);
+
+    .value-row {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .separator {
+        color: var(--border-color);
     }
 
     .change {
-        font-size: 0.875rem;
+        font-size: 0.95rem;
         font-weight: 600;
         display: flex;
         align-items: center;
-        gap: 0.25rem;
     }
     
     .change.positive {
