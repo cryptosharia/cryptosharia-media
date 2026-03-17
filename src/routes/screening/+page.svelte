@@ -39,10 +39,10 @@
     }
 
     const filterOptions = [
-        { value: "all",      icon: "🪙", label: "Semua" },
-        { value: "halal",    icon: "✅", label: "Halal" },
-        { value: "syubhat",  icon: "⚠️", label: "Syubhat" },
-        { value: "haram",    icon: "❌", label: "Haram" },
+        { value: "all", icon: "🪙", label: "Semua" },
+        { value: "halal", icon: "✅", label: "Halal" },
+        { value: "syubhat", icon: "⚠️", label: "Syubhat" },
+        { value: "haram", icon: "❌", label: "Haram" },
     ];
 </script>
 
@@ -59,11 +59,21 @@
     <section class="hero-banner">
         <div class="hero-glow"></div>
         <h1>Screening <span class="text-brand">Syariah</span></h1>
-        <p class="hero-sub">Penilaian crypto berdasarkan prinsip syariah oleh tim CryptoSharia</p>
+        <p class="hero-sub">
+            Penilaian crypto berdasarkan prinsip syariah oleh tim CryptoSharia
+        </p>
 
         <!-- Search -->
         <div class="search-wrapper">
-            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+                class="search-icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
                 <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
             </svg>
             <input
@@ -95,17 +105,23 @@
         <div class="legend-item halal">
             <span class="legend-dot"></span>
             <strong>Halal</strong>
-            <span class="legend-desc">– Tidak mengandung riba, gharar, atau maisir</span>
+            <span class="legend-desc"
+                >– Tidak mengandung riba, gharar, atau maisir</span
+            >
         </div>
         <div class="legend-item syubhat">
             <span class="legend-dot"></span>
             <strong>Syubhat</strong>
-            <span class="legend-desc">– Perbedaan pendapat ulama, perlu kehati-hatian</span>
+            <span class="legend-desc"
+                >– Perbedaan pendapat ulama, perlu kehati-hatian</span
+            >
         </div>
         <div class="legend-item haram">
             <span class="legend-dot"></span>
             <strong>Haram</strong>
-            <span class="legend-desc">– Bertentangan dengan prinsip syariah</span>
+            <span class="legend-desc"
+                >– Bertentangan dengan prinsip syariah</span
+            >
         </div>
     </section>
 
@@ -123,7 +139,8 @@
                     <div class="coin-header">
                         <div class="coin-avatar">
                             <img
-                                src={coin.logo?.url ?? getTokenLogoUrl(coin.logo?.id)}
+                                src={coin.logo?.url ??
+                                    getTokenLogoUrl(coin.logo?.id)}
                                 alt={coin.name}
                                 class="coin-logo"
                             />
@@ -132,7 +149,9 @@
                             <h4 class="coin-name">{coin.name}</h4>
                             <span class="coin-ticker">{coin.ticker}</span>
                         </div>
-                        <span class="status-badge {coin.shariaStatus}">{coin.shariaStatus}</span>
+                        <span class="status-badge {coin.shariaStatus}"
+                            >{coin.shariaStatus}</span
+                        >
                     </div>
 
                     {#if coin.category && coin.category !== "Uncategorized"}
@@ -148,8 +167,15 @@
                     {#if coin.slug}
                         <a href="/tokens/{coin.slug}" class="detail-btn">
                             Lihat Detail
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <path d="M5 12h14m-7-7 7 7-7 7"/>
+                            <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.5"
+                            >
+                                <path d="M5 12h14m-7-7 7 7-7 7" />
                             </svg>
                         </a>
                     {/if}
@@ -160,7 +186,9 @@
                 <div class="empty-icon">🔍</div>
                 <h3>Tidak ada coin ditemukan</h3>
                 <p>Coba ubah kata kunci atau reset filter</p>
-                <button class="reset-btn" onclick={() => handleFilter("all")}>Reset Filter</button>
+                <button class="reset-btn" onclick={() => handleFilter("all")}
+                    >Reset Filter</button
+                >
             </div>
         {/each}
     </div>
@@ -179,7 +207,11 @@
         padding: 3.5rem 2rem 2.5rem;
         margin-bottom: 2rem;
         border-radius: 24px;
-        background: linear-gradient(135deg, rgba(252, 192, 0, 0.06) 0%, rgba(245, 102, 10, 0.06) 100%);
+        background: linear-gradient(
+            135deg,
+            rgba(252, 192, 0, 0.06) 0%,
+            rgba(245, 102, 10, 0.06) 100%
+        );
         border: 1px solid var(--border-color);
         overflow: hidden;
     }
@@ -191,7 +223,11 @@
         transform: translateX(-50%);
         width: 500px;
         height: 500px;
-        background: radial-gradient(circle, rgba(252, 192, 0, 0.12) 0%, transparent 70%);
+        background: radial-gradient(
+            circle,
+            rgba(252, 192, 0, 0.12) 0%,
+            transparent 70%
+        );
         pointer-events: none;
     }
 
@@ -204,7 +240,11 @@
     }
 
     .text-brand {
-        background: linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
+        background: linear-gradient(
+            135deg,
+            var(--brand) 0%,
+            var(--accent) 100%
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -241,7 +281,9 @@
         background: var(--elev);
         color: var(--text);
         font-size: 0.95rem;
-        transition: border-color 0.25s, box-shadow 0.25s;
+        transition:
+            border-color 0.25s,
+            box-shadow 0.25s;
         outline: none;
     }
 
@@ -324,9 +366,15 @@
         flex-shrink: 0;
     }
 
-    .legend-item.halal .legend-dot { background: #10b981; }
-    .legend-item.syubhat .legend-dot { background: #f59e0b; }
-    .legend-item.haram .legend-dot { background: #ef4444; }
+    .legend-item.halal .legend-dot {
+        background: #10b981;
+    }
+    .legend-item.syubhat .legend-dot {
+        background: #f59e0b;
+    }
+    .legend-item.haram .legend-dot {
+        background: #ef4444;
+    }
 
     .legend-desc {
         color: var(--muted);
@@ -358,7 +406,10 @@
         background: var(--elev);
         border: 1px solid var(--border-color);
         overflow: hidden;
-        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease,
+            border-color 0.25s ease;
     }
 
     .coin-card:hover {
@@ -372,9 +423,15 @@
         flex-shrink: 0;
     }
 
-    .card-accent.halal { background: linear-gradient(180deg, #10b981, #059669); }
-    .card-accent.syubhat { background: linear-gradient(180deg, #f59e0b, #d97706); }
-    .card-accent.haram { background: linear-gradient(180deg, #ef4444, #dc2626); }
+    .card-accent.halal {
+        background: linear-gradient(180deg, #10b981, #059669);
+    }
+    .card-accent.syubhat {
+        background: linear-gradient(180deg, #f59e0b, #d97706);
+    }
+    .card-accent.haram {
+        background: linear-gradient(180deg, #ef4444, #dc2626);
+    }
 
     .card-body {
         flex: 1;
@@ -545,7 +602,9 @@
         font-weight: 700;
         font-size: 0.9rem;
         cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s;
     }
 
     .reset-btn:hover {
@@ -591,4 +650,3 @@
         }
     }
 </style>
-
