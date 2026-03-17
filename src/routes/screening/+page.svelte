@@ -223,8 +223,9 @@
         align-items: center;
         gap: 0.5rem;
         padding: 0.5rem 1rem;
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         background: var(--elev);
+        color: var(--text);
         border-radius: 20px;
         cursor: pointer;
         font-size: 0.9rem;
@@ -242,7 +243,7 @@
     .search-box input {
         padding: 0.5rem 1rem;
         border-radius: 20px;
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         background: var(--elev);
         min-width: 200px;
     }
@@ -253,7 +254,7 @@
     }
     .legend-card {
         background: var(--elev);
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         border-radius: var(--radius);
         padding: 1.5rem;
     }
@@ -278,7 +279,7 @@
     }
     .coin-card {
         background: var(--elev);
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-color);
         border-radius: var(--radius);
         padding: 1.5rem;
         transition: transform 0.2s;

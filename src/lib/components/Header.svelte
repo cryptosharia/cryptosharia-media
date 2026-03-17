@@ -13,14 +13,6 @@
 
 <header>
     <nav class="menu">
-        <a href="/" class:active={isActive("/")}>News</a>
-        <a href="/education" class:active={isActive("/education")}>Education</a>
-        <a href="/research" class:active={isActive("/research")}>Research</a>
-        <a href="/screening" class:active={isActive("/screening")}>Screening</a>
-        <a href="/community" class:active={isActive("/community")}>Premium</a>
-        <a href="/profile" class:active={isActive("/profile")}>Profile</a>
-    </nav>
-    <div class="container nav">
         <a href="/" class="brand">
             <div class="logo">
                 <img
@@ -29,9 +21,16 @@
                     style="width: 100%; height: 100%; object-fit: contain;"
                 />
             </div>
-            <span class="title">CryptoSharia</span>
         </a>
-        {#if !['/community', '/', '/education', '/research', '/screening'].includes($page.url.pathname)}
+        <a href="/" class:active={isActive("/")}>News</a>
+        <a href="/education" class:active={isActive("/education")}>Education</a>
+        <a href="/research" class:active={isActive("/research")}>Research</a>
+        <a href="/screening" class:active={isActive("/screening")}>Screening</a>
+        <a href="/community" class:active={isActive("/community")}>Premium</a>
+        <a href="/profile" class:active={isActive("/profile")}>Profile</a>
+    </nav>
+    <div class="container nav">
+        {#if !["/community", "/", "/education", "/research", "/screening"].includes($page.url.pathname)}
             <form action="/screening" method="get" class="search">
                 <svg
                     width="18"

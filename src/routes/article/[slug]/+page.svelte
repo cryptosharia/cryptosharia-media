@@ -11,6 +11,20 @@
     }
 
     let { data }: Props = $props();
+
+    let parsedContent = $state("");
+
+    $effect(() => {
+        if (data.post?.content) {
+            Promise.all([
+                import("marked").then((m) => m.marked),
+                import("dompurify").then((m) => m.default),
+            ]).then(([marked, DOMPurify]) => {
+                const rawHtml = marked.parse(data.post!.content);
+                parsedContent = DOMPurify.sanitize(rawHtml as string);
+            });
+        }
+    });
 </script>
 
 <svelte:head>
@@ -63,13 +77,14 @@
 
             <img
                 class="cover"
-                src={getPostCoverUrl(data.post.coverImage?.id)}
+                src={data.post.coverImage?.url ?? getPostCoverUrl(data.post.coverImage?.id)}
                 alt={data.post.title}
             />
 
-            <div class="article-content">
+            <div class="article-content markdown-body">
                 {#if data.post.content}
-                    {@html data.post.content}
+                    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                    {@html parsedContent}
                 {:else}
                     <p class="excerpt">{data.post.excerpt}</p>
                     <p class="muted">
@@ -86,7 +101,7 @@
                     {#each data.relatedPosts as post}
                         <a href="/article/{post.slug}" class="related-card">
                             <img
-                                src={getPostCoverUrl(post.coverImage?.id)}
+                                src={post.coverImage?.url ?? getPostCoverUrl(post.coverImage?.id)}
                                 alt={post.title}
                             />
                             <div class="info">

@@ -10,13 +10,12 @@
                             style="width: 100%; height: 100%; object-fit: contain;"
                         />
                     </div>
-                    <span class="title">CryptoSharia</span>
+                    <p>News & education crypto berperspektif syariah.</p>
                 </div>
-                <p>News & education crypto berperspektif syariah.</p>
             </div>
             <div
                 class="social-links"
-                style="display: flex; gap: 1rem; align-items: center;"
+                style="display: flex; gap: 1rem; align-items: center; justify-content: flex-end;"
             >
                 <a
                     href="https://t.me/cryptosharia"

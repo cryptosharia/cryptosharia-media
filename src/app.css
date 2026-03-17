@@ -98,6 +98,10 @@ header {
   gap: 0.65rem;
 }
 
+.menu .brand {
+  margin-right: auto;
+}
+
 .logo {
   width: 36px;
   aspect-ratio: 1;
@@ -415,7 +419,7 @@ body.light-mode .menu a:hover {
 .footer-brand p {
   color: var(--muted);
   font-size: 0.9rem;
-  margin: 0.5rem 0 0;
+  margin: 0;
 }
 
 .social-links {
