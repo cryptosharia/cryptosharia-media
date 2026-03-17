@@ -49,12 +49,13 @@
 <main class="container">
   <!-- Berita Terkini Section -->
   <section class="section">
-    <h3>Berita Terkini</h3>
-    
     <!-- Carousel Section -->
     {#if carouselPosts.length > 0}
       <div class="carousel-container">
-        <div class="carousel-track" style="transform: translateX(-{currentSlide * 100}%)">
+        <div
+          class="carousel-track"
+          style="transform: translateX(-{currentSlide * 100}%)"
+        >
           {#each carouselPosts as post}
             <a href="/article/{post.slug}" class="carousel-slide">
               <img
@@ -78,12 +79,12 @@
             </a>
           {/each}
         </div>
-        
+
         {#if carouselPosts.length > 1}
           <div class="carousel-indicators">
             {#each carouselPosts as _, i}
-              <button 
-                class="indicator {i === currentSlide ? 'active' : ''}" 
+              <button
+                class="indicator {i === currentSlide ? 'active' : ''}"
                 onclick={() => goToSlide(i)}
                 aria-label="Go to slide {i + 1}"
               ></button>
@@ -93,34 +94,57 @@
       </div>
     {/if}
 
+    <!-- Breaking News Ticker -->
+    {#if carouselPosts.length > 0}
+      <section class="breaking" aria-label="Breaking News">
+        <span class="label">Breaking</span>
+        <div class="ticker" aria-live="polite" aria-atomic="true">
+          <div class="track">
+            <!-- Render the list twice to create a seamless infinite scroll effect -->
+            {#each [1, 2] as _}
+              {#each carouselPosts as post}
+                <span class="item">
+                  • <a href="/article/{post.slug}">{post.title}</a>
+                </span>
+              {/each}
+            {/each}
+          </div>
+        </div>
+      </section>
+    {/if}
+
     <!-- Regular Grid -->
     <div class="grid" style="margin-top: 2rem;">
       {#each gridPosts as post}
-        <a href="/article/{post.slug}" style="display: block; text-decoration: none; color: inherit; grid-column: span 12;" class="post-link">
+        <a
+          href="/article/{post.slug}"
+          style="display: block; text-decoration: none; color: inherit; grid-column: span 12;"
+          class="post-link"
+        >
           <article class="card">
             <img
               src={post.coverImage?.url ?? getPostCoverUrl(null)}
               alt={post.title}
-            loading="lazy"
-          />
-          <div class="body">
-            <span class="kicker">{post.section}</span>
-            <h4>{post.title}</h4>
-            {#if post.excerpt}
-              <p>{post.excerpt}</p>
-            {/if}
-            <div class="meta">
-              {#if post.publishedAt}
-                {new Date(post.publishedAt).toLocaleDateString("id-ID", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
+              loading="lazy"
+            />
+            <div class="body">
+              <span class="kicker">{post.section}</span>
+              <h4>{post.title}</h4>
+              {#if post.excerpt}
+                <p>{post.excerpt}</p>
               {/if}
+              <div class="meta">
+                {#if post.publishedAt}
+                  {new Date(post.publishedAt).toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                {/if}
+              </div>
             </div>
-          </div>
-        </article>
-      </a>
+          </article>
+        </a>
       {:else}
         {#if carouselPosts.length === 0}
           <p class="muted">Belum ada berita.</p>
@@ -171,13 +195,13 @@
     background: var(--elev);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }
-  
+
   .carousel-track {
     display: flex;
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     height: 400px;
   }
-  
+
   .carousel-slide {
     min-width: 100%;
     height: 100%;
@@ -186,20 +210,104 @@
     text-decoration: none;
     color: white;
   }
-  
+
   .carousel-slide img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  
+
+  /* Breaking News Ticker Styles */
+  .breaking {
+    display: flex;
+    align-items: center;
+    background: var(--elev);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .breaking .label {
+    background: #e11d48;
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    padding: 0.75rem 1.25rem;
+    white-space: nowrap;
+    z-index: 2;
+  }
+
+  .breaking .ticker {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    /* Fade out the ends slightly to make the scroll look cleaner */
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 1rem, black calc(100% - 1rem), transparent);
+  }
+
+  .breaking .track {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: ticker-scroll 30s linear infinite;
+  }
+
+  /* Pause the animation on hover so users can read the links */
+  .breaking .track:hover {
+    animation-play-state: paused;
+  }
+
+  .breaking .item {
+    font-size: 0.95rem;
+    color: var(--text);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .breaking .item a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .breaking .item a:hover {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+
+  @keyframes ticker-scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      /* Translate exactly half of the double-appended content to loop smoothly */
+      transform: translateX(-50%);
+    }
+  }
+
   .carousel-slide::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0.4) 50%,
+      transparent 100%
+    );
   }
-  
+
   .carousel-overlay {
     position: absolute;
     bottom: 0;
@@ -208,7 +316,7 @@
     padding: 2.5rem;
     z-index: 10;
   }
-  
+
   .carousel-kicker {
     display: inline-block;
     background: var(--brand);
@@ -221,22 +329,22 @@
     letter-spacing: 0.5px;
     margin-bottom: 1rem;
   }
-  
+
   .carousel-overlay h2 {
     font-size: 2.2rem;
     margin: 0 0 0.75rem 0;
     line-height: 1.2;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   }
-  
+
   .carousel-meta {
     font-size: 0.95rem;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.8);
     display: flex;
     gap: 1rem;
     align-items: center;
   }
-  
+
   .carousel-indicators {
     position: absolute;
     bottom: 1.5rem;
@@ -245,7 +353,7 @@
     gap: 0.5rem;
     z-index: 20;
   }
-  
+
   .indicator {
     width: 32px;
     height: 4px;
@@ -256,11 +364,11 @@
     transition: all 0.3s ease;
     padding: 0;
   }
-  
+
   .indicator:hover {
     background: rgba(255, 255, 255, 0.6);
   }
-  
+
   .indicator.active {
     background: var(--brand);
   }
