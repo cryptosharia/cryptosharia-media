@@ -102,8 +102,7 @@ header {
   width: 36px;
   aspect-ratio: 1;
   border-radius: 12px;
-  background: conic-gradient(from 200deg, var(--brand), var(--accent));
-  box-shadow: 0 4px 18px rgba(252, 192, 0, 0.3);
+  background: transparent;
 }
 
 .title {

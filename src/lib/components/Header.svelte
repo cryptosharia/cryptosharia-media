@@ -31,7 +31,7 @@
             </div>
             <span class="title">CryptoSharia</span>
         </a>
-        {#if $page.url.pathname !== "/community"}
+        {#if !['/community', '/', '/education', '/research', '/screening'].includes($page.url.pathname)}
             <form action="/screening" method="get" class="search">
                 <svg
                     width="18"
