@@ -2,6 +2,7 @@
     import "../../app.css";
     import { getTokenLogoUrl } from "$lib/utils/assets";
     import { goto } from "$app/navigation";
+    import Seo from "$lib/components/Seo.svelte";
 
     // Props
     let { data } = $props();
@@ -46,13 +47,10 @@
     ];
 </script>
 
-<svelte:head>
-    <title>Screening Crypto Syariah | CryptoSharia</title>
-    <meta
-        name="description"
-        content="Daftar token yang sudah di-screening oleh tim CryptoSharia. Status: Halal, Syubhat, atau Haram."
-    />
-</svelte:head>
+<Seo 
+    title="Screening Crypto Syariah | CryptoSharia"
+    description="Daftar token yang sudah di-screening oleh tim CryptoSharia. Status: Halal, Syubhat, atau Haram."
+/>
 
 <main class="container screening-page">
     <!-- Hero Banner -->

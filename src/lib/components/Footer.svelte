@@ -136,10 +136,6 @@
             <span
                 >© {new Date().getFullYear()} CryptoSharia. All rights reserved.</span
             >
-            <div>
-                <a href="/privacy">Privacy Policy</a> ·
-                <a href="/disclaimer">Disclaimer</a>
-            </div>
         </div>
     </div>
 </footer>
