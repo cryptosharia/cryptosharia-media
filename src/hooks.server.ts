@@ -32,5 +32,16 @@ export const handle: Handle = async ({ event, resolve }) => {
 
     // Process the request
     const response = await resolve(event);
+
+    // Add client-side caching (browser only) for GET requests to improve UX during navigation
+    // Excluding paths that contains sensitive/frequently changing user data
+    if (event.request.method === 'GET' && !response.headers.has('cache-control')) {
+        const path = event.url.pathname;
+        if (!path.startsWith('/profile') && !path.startsWith('/login')) {
+            // Cache in the browser for 60 seconds
+            response.headers.set('cache-control', 'private, max-age=60');
+        }
+    }
+
     return response;
 };
