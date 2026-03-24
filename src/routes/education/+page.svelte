@@ -5,10 +5,14 @@
 
     interface Props {
         data: {
-            posts: Post[];
-            heroVideo?: Post | null;
-            upcomingWebinars: Post[];
-            pastWebinars: Post[];
+            streamed: {
+                posts: Promise<Post[]>;
+                heroVideo: Promise<Post | null>;
+                webinars: Promise<{
+                    upcoming: Post[];
+                    past: Post[];
+                }>;
+            };
         };
     }
 
@@ -57,64 +61,75 @@
     </div>
 
     <!-- Hero Video -->
-    {#if data.heroVideo}
+    {#await data.streamed.heroVideo}
         <div class="container">
             <section class="video-hero">
                 <div class="video-card">
-                    <div class="video-frame">
-                        {#if data.heroVideo.externalLink}
-                            <iframe 
-                                src={getYoutubeEmbedUrl(data.heroVideo.externalLink)} 
-                                title={data.heroVideo.title} 
-                                allowfullscreen 
-                                loading="lazy"
-                            ></iframe>
-                        {:else}
-                            <img src={data.heroVideo.coverImage?.url ?? getPostCoverUrl(data.heroVideo.coverImage?.id)} alt={data.heroVideo.title} />
-                        {/if}
-                    </div>
-                    <div class="video-info">
-                        <span class="video-badge">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                <polygon points="5,3 19,12 5,21"/>
-                            </svg>
-                            Video Terbaru
-                        </span>
-                        <h2>{data.heroVideo.title}</h2>
-                        <p class="video-date">
-                            {#if data.heroVideo.publishedAt}
-                                {new Date(data.heroVideo.publishedAt).toLocaleDateString("id-ID", {
-                                    weekday: "short",
-                                    day: "numeric",
-                                    month: "long",
-                                    year: "numeric",
-                                })}
-                            {/if}
-                        </p>
-                        {#if data.heroVideo.excerpt}
-                            <p class="video-excerpt">{data.heroVideo.excerpt}</p>
-                        {/if}
-                        <div class="video-actions">
-                            {#if data.heroVideo.externalLink}
-                                <a href={data.heroVideo.externalLink} target="_blank" rel="noopener noreferrer" class="btn-watch">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                        <polygon points="5,3 19,12 5,21"/>
-                                    </svg>
-                                    Tonton Sekarang
-                                </a>
-                            {/if}
-                            <a href="/article/{data.heroVideo.slug}" class="btn-detail">
-                                Lihat Detail
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <path d="M5 12h14m-7-7 7 7-7 7"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
+                    <div class="video-frame skeleton"></div>
+                    <div class="video-info skeleton" style="opacity: 0.5;"></div>
                 </div>
             </section>
         </div>
-    {/if}
+    {:then heroVideo}
+        {#if heroVideo}
+            <div class="container">
+                <section class="video-hero">
+                    <div class="video-card">
+                        <div class="video-frame">
+                            {#if heroVideo.externalLink}
+                                <iframe 
+                                    src={getYoutubeEmbedUrl(heroVideo.externalLink)} 
+                                    title={heroVideo.title} 
+                                    allowfullscreen 
+                                    loading="lazy"
+                                ></iframe>
+                            {:else}
+                                <img src={heroVideo.coverImage?.url ?? getPostCoverUrl(heroVideo.coverImage?.id)} alt={heroVideo.title} />
+                            {/if}
+                        </div>
+                        <div class="video-info">
+                            <span class="video-badge">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5,3 19,12 5,21"/>
+                                </svg>
+                                Video Terbaru
+                            </span>
+                            <h2>{heroVideo.title}</h2>
+                            <p class="video-date">
+                                {#if heroVideo.publishedAt}
+                                    {new Date(heroVideo.publishedAt).toLocaleDateString("id-ID", {
+                                        weekday: "short",
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric",
+                                    })}
+                                {/if}
+                            </p>
+                            {#if heroVideo.excerpt}
+                                <p class="video-excerpt">{heroVideo.excerpt}</p>
+                            {/if}
+                            <div class="video-actions">
+                                {#if heroVideo.externalLink}
+                                    <a href={heroVideo.externalLink} target="_blank" rel="noopener noreferrer" class="btn-watch">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                            <polygon points="5,3 19,12 5,21"/>
+                                        </svg>
+                                        Tonton Sekarang
+                                    </a>
+                                {/if}
+                                <a href="/article/{heroVideo.slug}" class="btn-detail">
+                                    Lihat Detail
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M5 12h14m-7-7 7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        {/if}
+    {/await}
 
     <!-- Education Articles -->
     <div class="container">
@@ -127,149 +142,169 @@
                     Artikel Edukasi
                 </h3>
             </div>
-            <div class="articles-grid">
-                {#each data.posts as post}
-                    <a href="/article/{post.slug}" class="article-card">
-                        <div class="article-img-wrap">
-                            <img
-                                src={post.coverImage?.url ?? getPostCoverUrl(post.coverImage?.id)}
-                                alt={post.title}
-                                loading="lazy"
-                            />
-                            <span class="article-section">{post.section}</span>
-                        </div>
-                        <div class="article-body">
-                            <h4>{post.title}</h4>
-                            {#if post.excerpt}
-                                <p class="article-excerpt">{post.excerpt}</p>
-                            {/if}
-                            <div class="article-footer">
-                                <span class="article-date">
-                                    {#if post.publishedAt}
-                                        {timeAgo(post.publishedAt)}
-                                    {/if}
-                                </span>
-                                <span class="read-link">
-                                    Baca
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                        <path d="M5 12h14m-7-7 7 7-7 7"/>
-                                    </svg>
-                                </span>
+            {#await data.streamed.posts}
+                <div class="articles-grid">
+                    {#each Array(6) as _}
+                        <div class="article-card skeleton" style="height: 320px;"></div>
+                    {/each}
+                </div>
+            {:then posts}
+                <div class="articles-grid">
+                    {#each posts as post}
+                        <a href="/article/{post.slug}" class="article-card">
+                            <div class="article-img-wrap">
+                                <img
+                                    src={post.coverImage?.url ?? getPostCoverUrl(post.coverImage?.id)}
+                                    alt={post.title}
+                                    loading="lazy"
+                                />
+                                <span class="article-section">{post.section}</span>
                             </div>
+                            <div class="article-body">
+                                <h4>{post.title}</h4>
+                                {#if post.excerpt}
+                                    <p class="article-excerpt">{post.excerpt}</p>
+                                {/if}
+                                <div class="article-footer">
+                                    <span class="article-date">
+                                        {#if post.publishedAt}
+                                            {timeAgo(post.publishedAt)}
+                                        {/if}
+                                    </span>
+                                    <span class="read-link">
+                                        Baca
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <path d="M5 12h14m-7-7 7 7-7 7"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    {:else}
+                        <div class="empty-state">
+                            <div class="empty-icon">📚</div>
+                            <h4>Belum ada artikel edukasi</h4>
+                            <p>Artikel akan segera hadir, nantikan!</p>
                         </div>
-                    </a>
-                {:else}
-                    <div class="empty-state">
-                        <div class="empty-icon">📚</div>
-                        <h4>Belum ada artikel edukasi</h4>
-                        <p>Artikel akan segera hadir, nantikan!</p>
-                    </div>
-                {/each}
-            </div>
+                    {/each}
+                </div>
+            {/await}
         </section>
-    </div>
-
-    <!-- Upcoming Webinars -->
-    {#if data.upcomingWebinars.length > 0}
+    </div>    <!-- Webinars -->
+    {#await data.streamed.webinars}
         <div class="container">
             <section class="content-section">
-                <div class="section-header">
-                    <h3>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
-                        </svg>
-                        Webinar Akan Datang
-                    </h3>
-                </div>
+                <div class="section-header skeleton" style="width: 250px; height: 32px; margin-bottom: 1.25rem;"></div>
                 <div class="webinar-grid">
-                    {#each data.upcomingWebinars as webinar}
-                        <a href="/article/{webinar.slug}" class="webinar-card upcoming">
-                            <div class="webinar-img-wrap">
-                                <img
-                                    src={webinar.coverImage?.url ?? getPostCoverUrl(webinar.coverImage?.id)}
-                                    alt={webinar.title}
-                                    loading="lazy"
-                                />
-                                <span class="webinar-live-badge">
-                                    <span class="live-dot"></span>
-                                    UPCOMING
-                                </span>
-                            </div>
-                            <div class="webinar-body">
-                                <h4>{webinar.title}</h4>
-                                {#if webinar.eventDate}
-                                    <div class="webinar-date">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
-                                        </svg>
-                                        {new Date(webinar.eventDate).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                                    </div>
-                                    <div class="webinar-time">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-                                        </svg>
-                                        {new Date(webinar.eventDate).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
-                                    </div>
-                                {/if}
-                                {#if webinar.excerpt}
-                                    <p class="webinar-excerpt">{webinar.excerpt}</p>
-                                {/if}
-                            </div>
-                        </a>
+                    {#each Array(3) as _}
+                        <div class="webinar-card skeleton" style="height: 360px;"></div>
                     {/each}
                 </div>
             </section>
         </div>
-    {/if}
+    {:then webinars}
+        <!-- Upcoming Webinars -->
+        {#if webinars.upcoming.length > 0}
+            <div class="container">
+                <section class="content-section">
+                    <div class="section-header">
+                        <h3>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+                            </svg>
+                            Webinar Akan Datang
+                        </h3>
+                    </div>
+                    <div class="webinar-grid">
+                        {#each webinars.upcoming as webinar}
+                            <a href="/article/{webinar.slug}" class="webinar-card upcoming">
+                                <div class="webinar-img-wrap">
+                                    <img
+                                        src={webinar.coverImage?.url ?? getPostCoverUrl(webinar.coverImage?.id)}
+                                        alt={webinar.title}
+                                        loading="lazy"
+                                    />
+                                    <span class="webinar-live-badge">
+                                        <span class="live-dot"></span>
+                                        UPCOMING
+                                    </span>
+                                </div>
+                                <div class="webinar-body">
+                                    <h4>{webinar.title}</h4>
+                                    {#if webinar.eventDate}
+                                        <div class="webinar-date">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+                                            </svg>
+                                            {new Date(webinar.eventDate).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                        </div>
+                                        <div class="webinar-time">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                                            </svg>
+                                            {new Date(webinar.eventDate).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+                                        </div>
+                                    {/if}
+                                    {#if webinar.excerpt}
+                                        <p class="webinar-excerpt">{webinar.excerpt}</p>
+                                    {/if}
+                                </div>
+                            </a>
+                        {/each}
+                    </div>
+                </section>
+            </div>
+        {/if}
 
-    <!-- Past Webinars -->
-    {#if data.pastWebinars.length > 0}
-        <div class="container">
-            <section class="content-section">
-                <div class="section-header">
-                    <h3>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        Rekaman Webinar
-                    </h3>
-                </div>
-                <div class="webinar-grid">
-                    {#each data.pastWebinars as webinar}
-                        <a href="/article/{webinar.slug}" class="webinar-card past">
-                            <div class="webinar-img-wrap">
-                                <img
-                                    src={webinar.coverImage?.url ?? getPostCoverUrl(webinar.coverImage?.id)}
-                                    alt={webinar.title}
-                                    loading="lazy"
-                                />
-                                <span class="webinar-replay-badge">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                                        <polygon points="5,3 19,12 5,21"/>
-                                    </svg>
-                                    REPLAY
-                                </span>
-                            </div>
-                            <div class="webinar-body">
-                                <h4>{webinar.title}</h4>
-                                {#if webinar.eventDate}
-                                    <div class="webinar-date past-date">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+        <!-- Past Webinars -->
+        {#if webinars.past.length > 0}
+            <div class="container">
+                <section class="content-section">
+                    <div class="section-header">
+                        <h3>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Rekaman Webinar
+                        </h3>
+                    </div>
+                    <div class="webinar-grid">
+                        {#each webinars.past as webinar}
+                            <a href="/article/{webinar.slug}" class="webinar-card past">
+                                <div class="webinar-img-wrap">
+                                    <img
+                                        src={webinar.coverImage?.url ?? getPostCoverUrl(webinar.coverImage?.id)}
+                                        alt={webinar.title}
+                                        loading="lazy"
+                                    />
+                                    <span class="webinar-replay-badge">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                            <polygon points="5,3 19,12 5,21"/>
                                         </svg>
-                                        {new Date(webinar.eventDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
-                                    </div>
-                                {/if}
-                                {#if webinar.excerpt}
-                                    <p class="webinar-excerpt">{webinar.excerpt}</p>
-                                {/if}
-                            </div>
-                        </a>
-                    {/each}
-                </div>
-            </section>
-        </div>
-    {/if}
+                                        REPLAY
+                                    </span>
+                                </div>
+                                <div class="webinar-body">
+                                    <h4>{webinar.title}</h4>
+                                    {#if webinar.eventDate}
+                                        <div class="webinar-date past-date">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+                                            </svg>
+                                            {new Date(webinar.eventDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                        </div>
+                                    {/if}
+                                    {#if webinar.excerpt}
+                                        <p class="webinar-excerpt">{webinar.excerpt}</p>
+                                    {/if}
+                                </div>
+                            </a>
+                        {/each}
+                    </div>
+                </section>
+            </div>
+        {/if}
+    {/await}/if}
 </main>
 
 <style>
