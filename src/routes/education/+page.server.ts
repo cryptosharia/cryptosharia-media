@@ -1,43 +1,39 @@
 import type { PageServerLoad } from './$types';
 import { getPosts } from '$lib/api';
 
-export const load: PageServerLoad = async () => {
-    // Fetch education articles
-    const postsResponse = await getPosts({
-        sections: ['education'],
-        types: ['article'],
-        limit: 12,
+export const load: PageServerLoad = ({ setHeaders }) => {
+    // Set cache for 2 minutes to prevent repeated API calls on client-side navigation
+    setHeaders({
+        'cache-control': 'public, max-age=120'
     });
 
-    // Fetch latest video for Hero
-    const videoResponse = await getPosts({
-        types: ['video'],
-        limit: 1,
-    });
-    const heroVideo = videoResponse.data?.data?.items?.[0] || null;
-
-    // Fetch webinars
-    const webinarsResponse = await getPosts({
-        sections: ['education'],
-        types: ['webinar'],
-        limit: 20,
-    });
-
-    const now = new Date();
-    const webinars = webinarsResponse.data?.data?.items ?? [];
-
-    // Split webinars into upcoming and past
-    const upcomingWebinars = webinars.filter(
-        (w: any) => w.eventDate && new Date(w.eventDate) >= now
-    );
-    const pastWebinars = webinars.filter(
-        (w: any) => !w.eventDate || new Date(w.eventDate) < now
-    );
-
+    // Return nested promises so SvelteKit 2 streams them without blocking navigation
     return {
-        posts: postsResponse.data?.data?.items ?? [],
-        heroVideo,
-        upcomingWebinars,
-        pastWebinars,
+        streamed: {
+            posts: getPosts({
+                sections: ['education'],
+                types: ['article'],
+                limit: 12,
+            }).then((res: any) => res.data?.data?.items ?? []),
+
+            heroVideo: getPosts({
+                types: ['video'],
+                limit: 1,
+            }).then((res: any) => res.data?.data?.items?.[0] || null),
+
+            webinars: getPosts({
+                sections: ['education'],
+                types: ['webinar'],
+                limit: 20,
+            }).then((res: any) => {
+                const now = new Date();
+                const webinars = res.data?.data?.items ?? [];
+                
+                return {
+                    upcoming: webinars.filter((w: any) => w.eventDate && new Date(w.eventDate) >= now),
+                    past: webinars.filter((w: any) => !w.eventDate || new Date(w.eventDate) < now)
+                };
+            })
+        }
     };
 };
