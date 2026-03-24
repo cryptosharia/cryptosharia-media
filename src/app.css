@@ -78,8 +78,8 @@ canvas {
 header {
   position: sticky;
   top: 0;
-  z-index: 50;
-  backdrop-filter: saturate(140%) blur(8px);
+  z-index: 999;
+  backdrop-filter: saturate(140%) blur(12px);
   background: var(--header-bg);
   border-bottom: 1px solid var(--border-color);
 }
@@ -470,7 +470,7 @@ body.light-mode .menu a:hover {
   backdrop-filter: saturate(140%) blur(10px);
   border-top: 1px solid var(--border-color);
   padding: 0.35rem 0.5rem calc(env(safe-area-inset-bottom) + 0.35rem);
-  z-index: 60;
+  z-index: 998;
 }
 
 .bottom-nav .tab {
