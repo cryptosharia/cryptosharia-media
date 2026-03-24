@@ -11,7 +11,7 @@
     }
 </script>
 
-<header>
+<header class="site-header">
     <nav class="menu">
         <a href="/" class="brand">
             <div class="logo">
