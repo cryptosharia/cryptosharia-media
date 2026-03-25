@@ -304,7 +304,7 @@
                 </section>
             </div>
         {/if}
-    {/await}/if}
+    {/await}
 </main>
 
 <style>

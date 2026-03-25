@@ -16,6 +16,7 @@
         const url = new URL(window.location.href);
         url.searchParams.set("status", status);
         if (status === "all") url.searchParams.delete("status");
+        url.searchParams.delete("page");
         goto(url.toString(), {
             keepFocus: true,
             noScroll: true,
@@ -31,12 +32,32 @@
             const url = new URL(window.location.href);
             if (searchQuery) url.searchParams.set("q", searchQuery);
             else url.searchParams.delete("q");
+            url.searchParams.delete("page");
             goto(url.toString(), {
                 keepFocus: true,
                 noScroll: true,
                 replaceState: true,
             });
         }, 300);
+    }
+
+    function goToPage(page: number) {
+        const url = new URL(window.location.href);
+        if (page <= 1) url.searchParams.delete("page");
+        else url.searchParams.set("page", String(page));
+        goto(url.toString(), { noScroll: false });
+    }
+
+    function getPageNumbers(current: number, total: number): (number | '...')[] {
+        if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+        const pages: (number | '...')[] = [1];
+        if (current > 3) pages.push('...');
+        for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+            pages.push(i);
+        }
+        if (current < total - 2) pages.push('...');
+        pages.push(total);
+        return pages;
     }
 
     const filterOptions = [
@@ -125,7 +146,13 @@
 
     <!-- Results count -->
     <div class="results-bar">
-        <span class="results-count">{data.tokens.length} coin ditampilkan</span>
+        {#if data.pagination.total > 0}
+            {@const start = (data.pagination.page - 1) * data.pagination.limit + 1}
+            {@const end = Math.min(data.pagination.page * data.pagination.limit, data.pagination.total)}
+            <span class="results-count">Menampilkan {start}–{end} dari {data.pagination.total} coin</span>
+        {:else}
+            <span class="results-count">0 coin ditampilkan</span>
+        {/if}
     </div>
 
     <!-- Coin Grid -->
@@ -190,6 +217,49 @@
             </div>
         {/each}
     </div>
+
+    <!-- Pagination -->
+    {#if data.pagination.totalPages > 1}
+        <nav class="pagination" aria-label="Pagination">
+            <button
+                class="page-btn nav-btn"
+                disabled={data.pagination.page <= 1}
+                onclick={() => goToPage(data.pagination.page - 1)}
+            >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+                <span class="nav-label">Prev</span>
+            </button>
+
+            <div class="page-numbers">
+                {#each getPageNumbers(data.pagination.page, data.pagination.totalPages) as pg}
+                    {#if pg === '...'}
+                        <span class="page-ellipsis">…</span>
+                    {:else}
+                        <button
+                            class="page-btn"
+                            class:active={pg === data.pagination.page}
+                            onclick={() => goToPage(pg as number)}
+                        >
+                            {pg}
+                        </button>
+                    {/if}
+                {/each}
+            </div>
+
+            <button
+                class="page-btn nav-btn"
+                disabled={data.pagination.page >= data.pagination.totalPages}
+                onclick={() => goToPage(data.pagination.page + 1)}
+            >
+                <span class="nav-label">Next</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </button>
+        </nav>
+    {/if}
 </main>
 
 <style>
@@ -645,6 +715,85 @@
 
         .filter-pill {
             flex-shrink: 0;
+        }
+    }
+
+    /* ===== Pagination ===== */
+    .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2.5rem;
+        flex-wrap: wrap;
+    }
+
+    .page-numbers {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .page-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        min-width: 40px;
+        height: 40px;
+        padding: 0 0.65rem;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        background: var(--elev);
+        color: var(--text);
+        font-size: 0.88rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .page-btn:hover:not(:disabled):not(.active) {
+        border-color: rgba(252, 192, 0, 0.4);
+        background: rgba(252, 192, 0, 0.06);
+    }
+
+    .page-btn.active {
+        background: linear-gradient(135deg, var(--brand), var(--accent));
+        color: #000;
+        border-color: transparent;
+        font-weight: 700;
+        box-shadow: 0 2px 12px rgba(252, 192, 0, 0.3);
+    }
+
+    .page-btn:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+    }
+
+    .page-ellipsis {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 40px;
+        color: var(--muted);
+        font-size: 0.95rem;
+        user-select: none;
+    }
+
+    .nav-btn {
+        padding: 0 0.85rem;
+    }
+
+    @media (max-width: 480px) {
+        .nav-label {
+            display: none;
+        }
+
+        .page-btn {
+            min-width: 36px;
+            height: 36px;
+            font-size: 0.82rem;
         }
     }
 </style>
