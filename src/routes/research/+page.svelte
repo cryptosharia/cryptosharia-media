@@ -5,14 +5,54 @@
 
     interface Props {
         data: {
+            featuredPost: Post | null;
             posts: Post[];
+            meta: { currentPage: number; totalPages: number; totalItems?: number };
         };
     }
 
     let { data }: Props = $props();
 
-    const featuredPost = $derived(data.posts[0]);
-    const gridPosts = $derived(data.posts.slice(1));
+    const featuredPost = $derived(data.featuredPost);
+
+    let gridPosts = $state<Post[]>(data.posts);
+    let currentPage = $state(data.meta.currentPage);
+    let totalPages = $state(data.meta.totalPages);
+    let isLoadingMore = $state(false);
+
+    $effect(() => {
+        gridPosts = data.posts;
+        currentPage = data.meta.currentPage;
+        totalPages = data.meta.totalPages;
+    });
+
+    async function loadMore() {
+        if (isLoadingMore || currentPage >= totalPages) return;
+        
+        isLoadingMore = true;
+        try {
+            const nextPage = currentPage + 1;
+            const url = new URL('/api/posts', window.location.origin);
+            url.searchParams.set('page', nextPage.toString());
+            url.searchParams.set('limit', '6');
+            url.searchParams.set('sections', 'research');
+            if (featuredPost) {
+                url.searchParams.set('exclude', featuredPost.slug);
+            }
+
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('Network error');
+            const result = await res.json();
+
+            gridPosts = [...gridPosts, ...result.items];
+            currentPage = result.meta?.currentPage || nextPage;
+            totalPages = result.meta?.totalPages || totalPages;
+        } catch (error) {
+            console.error('Error loading more research posts:', error);
+        } finally {
+            isLoadingMore = false;
+        }
+    }
 
     function timeAgo(dateStr: string): string {
         const now = new Date();
@@ -106,7 +146,7 @@
                         </svg>
                         Semua Riset
                     </h3>
-                    <span class="results-count">{data.posts.length} artikel</span>
+                    <span class="results-count">{data.meta.totalItems ? `${data.meta.totalItems} artikel total` : ''}</span>
                 </div>
             {/if}
             <div class="research-grid">
@@ -150,6 +190,19 @@
                     {/if}
                 {/each}
             </div>
+
+            {#if currentPage < totalPages}
+                <div class="load-more-container" style="text-align: center; margin-top: 2.5rem; display: flex; justify-content: center;">
+                    <button class="btn-load-more" onclick={loadMore} disabled={isLoadingMore}>
+                        {#if isLoadingMore}
+                            <span class="spinner"></span>
+                            Memuat...
+                        {:else}
+                            Muat Lebih Banyak
+                        {/if}
+                    </button>
+                </div>
+            {/if}
         </section>
     </div>
 </main>
@@ -494,6 +547,47 @@
 
     .research-card:hover .rc-read {
         gap: 0.5rem;
+    }
+
+    /* ===== Load More ===== */
+    .btn-load-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--elev);
+        color: var(--text);
+        border: 1px solid var(--border-color);
+        padding: 0.75rem 1.75rem;
+        border-radius: 99px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-load-more:hover:not(:disabled) {
+        border-color: var(--brand);
+        color: var(--brand);
+        transform: translateY(-2px);
+    }
+
+    .btn-load-more:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px solid;
+        border-color: currentColor transparent currentColor transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     /* ===== Empty State ===== */
