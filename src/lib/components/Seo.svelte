@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { PUBLIC_APP_URL } from '$env/static/public';
 
 	let {
 		title = 'CryptoSharia - Edukasi & Screener Kripto Syariah',
@@ -14,7 +15,7 @@
 	}>();
 
 	// url dinamis mengikuti halaman saat ini
-	let url = $derived('https://cryptosharia.com' + $page.url.pathname);
+	let url = $derived(PUBLIC_APP_URL + $page.url.pathname);
 </script>
 
 <svelte:head>

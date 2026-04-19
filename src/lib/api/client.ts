@@ -6,16 +6,17 @@
  * from server-side code (+page.server.ts, +server.ts, hooks.server.ts)
  */
 
+import { CS_API_KEY } from '$env/static/private';
+import { PUBLIC_CS_API_URL } from '$env/static/public';
 import createClient from 'openapi-fetch';
-import { API_KEY } from '$env/static/private';
 import type { paths } from './api';
 
 // =============================================================================
 // Configuration
 // =============================================================================
 
-const API_BASE_URL = 'https://preview.api.cryptosharia.id';
-const apiKey = import.meta.env.VITE_API_KEY || API_KEY;
+const API_BASE_URL = PUBLIC_CS_API_URL;
+const apiKey = CS_API_KEY;
 
 // =============================================================================
 // Server-Side Guard
