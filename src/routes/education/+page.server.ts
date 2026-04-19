@@ -13,8 +13,14 @@ export const load: PageServerLoad = ({ setHeaders }) => {
             posts: getPosts({
                 sections: ['education'],
                 types: ['article'],
-                limit: 12,
-            }).then((res: any) => res.data?.data?.items ?? []),
+                limit: 6,
+            }).then((res: any) => {
+                const data = res.data?.data;
+                return {
+                    items: data?.items ?? [],
+                    meta: data?.meta ?? { currentPage: 1, totalPages: 1 }
+                };
+            }),
 
             heroVideo: getPosts({
                 types: ['video'],

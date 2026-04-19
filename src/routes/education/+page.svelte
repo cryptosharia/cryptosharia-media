@@ -6,7 +6,7 @@
     interface Props {
         data: {
             streamed: {
-                posts: Promise<Post[]>;
+                posts: Promise<{ items: Post[], meta: { currentPage: number, totalPages: number } }>;
                 heroVideo: Promise<Post | null>;
                 webinars: Promise<{
                     upcoming: Post[];
@@ -17,6 +17,47 @@
     }
 
     let { data }: Props = $props();
+
+    let posts = $state<Post[]>([]);
+    let currentPage = $state(1);
+    let totalPages = $state(1);
+    let isLoadingMore = $state(false);
+
+    $effect(() => {
+        data.streamed.posts.then(res => {
+            if (posts.length === 0 && res.items?.length > 0) {
+                posts = res.items;
+                currentPage = res.meta?.currentPage || 1;
+                totalPages = res.meta?.totalPages || 1;
+            }
+        });
+    });
+
+    async function loadMore() {
+        if (isLoadingMore || currentPage >= totalPages) return;
+        
+        isLoadingMore = true;
+        try {
+            const nextPage = currentPage + 1;
+            const url = new URL('/api/posts', window.location.origin);
+            url.searchParams.set('page', nextPage.toString());
+            url.searchParams.set('limit', '6');
+            url.searchParams.set('sections', 'education');
+            url.searchParams.set('types', 'article');
+
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('Network error');
+            const result = await res.json();
+
+            posts = [...posts, ...result.items];
+            currentPage = result.meta?.currentPage || nextPage;
+            totalPages = result.meta?.totalPages || totalPages;
+        } catch (error) {
+            console.error('Error loading more posts:', error);
+        } finally {
+            isLoadingMore = false;
+        }
+    }
 
     function getYoutubeEmbedUrl(url: string | null | undefined): string {
         if (!url) return '';
@@ -148,46 +189,61 @@
                         <div class="article-card skeleton" style="height: 320px;"></div>
                     {/each}
                 </div>
-            {:then posts}
-                <div class="articles-grid">
-                    {#each posts as post}
-                        <a href="/article/{post.slug}" class="article-card">
-                            <div class="article-img-wrap">
-                                <img
-                                    src={post.coverImage?.url ?? getPostCoverUrl(post.coverImage?.id)}
-                                    alt={post.title}
-                                    loading="lazy"
-                                />
-                                <span class="article-section">{post.section}</span>
-                            </div>
-                            <div class="article-body">
-                                <h4>{post.title}</h4>
-                                {#if post.excerpt}
-                                    <p class="article-excerpt">{post.excerpt}</p>
-                                {/if}
-                                <div class="article-footer">
-                                    <span class="article-date">
-                                        {#if post.publishedAt}
-                                            {timeAgo(post.publishedAt)}
-                                        {/if}
-                                    </span>
-                                    <span class="read-link">
-                                        Baca
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                            <path d="M5 12h14m-7-7 7 7-7 7"/>
-                                        </svg>
-                                    </span>
+            {:then initial}
+                {#if posts.length === 0 && initial.items.length === 0}
+                    <div class="empty-state">
+                        <div class="empty-icon">📚</div>
+                        <h4>Belum ada artikel edukasi</h4>
+                        <p>Artikel akan segera hadir, nantikan!</p>
+                    </div>
+                {:else if posts.length > 0}
+                    <div class="articles-grid">
+                        {#each posts as post}
+                            <a href="/article/{post.slug}" class="article-card">
+                                <div class="article-img-wrap">
+                                    <img
+                                        src={post.coverImage?.url ?? getPostCoverUrl(post.coverImage?.id)}
+                                        alt={post.title}
+                                        loading="lazy"
+                                    />
+                                    <span class="article-section">{post.section}</span>
                                 </div>
-                            </div>
-                        </a>
-                    {:else}
-                        <div class="empty-state">
-                            <div class="empty-icon">📚</div>
-                            <h4>Belum ada artikel edukasi</h4>
-                            <p>Artikel akan segera hadir, nantikan!</p>
+                                <div class="article-body">
+                                    <h4>{post.title}</h4>
+                                    {#if post.excerpt}
+                                        <p class="article-excerpt">{post.excerpt}</p>
+                                    {/if}
+                                    <div class="article-footer">
+                                        <span class="article-date">
+                                            {#if post.publishedAt}
+                                                {timeAgo(post.publishedAt)}
+                                            {/if}
+                                        </span>
+                                        <span class="read-link">
+                                            Baca
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                                <path d="M5 12h14m-7-7 7 7-7 7"/>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        {/each}
+                    </div>
+
+                    {#if currentPage < totalPages}
+                        <div class="load-more-container" style="text-align: center; margin-top: 2.5rem; display: flex; justify-content: center;">
+                            <button class="btn-load-more" onclick={loadMore} disabled={isLoadingMore}>
+                                {#if isLoadingMore}
+                                    <span class="spinner"></span>
+                                    Memuat...
+                                {:else}
+                                    Muat Lebih Banyak
+                                {/if}
+                            </button>
                         </div>
-                    {/each}
-                </div>
+                    {/if}
+                {/if}
             {/await}
         </section>
     </div>    <!-- Webinars -->
@@ -647,6 +703,47 @@
 
     .article-card:hover .read-link {
         gap: 0.5rem;
+    }
+
+    /* ===== Load More ===== */
+    .btn-load-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--elev);
+        color: var(--text);
+        border: 1px solid var(--border-color);
+        padding: 0.75rem 1.75rem;
+        border-radius: 99px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-load-more:hover:not(:disabled) {
+        border-color: var(--brand);
+        color: var(--brand);
+        transform: translateY(-2px);
+    }
+
+    .btn-load-more:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px solid;
+        border-color: currentColor transparent currentColor transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     /* ===== Webinar Grid ===== */

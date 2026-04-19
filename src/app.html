@@ -5,6 +5,24 @@
 		<link rel="icon" href="%sveltekit.assets%/logo.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
+		<script>
+			(function() {
+				try {
+					const theme = localStorage.getItem('theme-preference') || 'system';
+					let actualTheme = 'dark';
+					if (theme === 'system') {
+						actualTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+					} else {
+						actualTheme = theme;
+					}
+					if (actualTheme === 'light') {
+						document.body.classList.add('light-mode');
+					} else {
+						document.body.classList.remove('light-mode');
+					}
+				} catch (e) {}
+			})();
+		</script>
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
