@@ -279,6 +279,35 @@
   {/if}
 
   <div class="container">
+    <section class="company-spotlight" aria-label="About CryptoSharia">
+      <div class="company-spotlight-inner">
+        <div class="company-spotlight-copy">
+          <span class="company-kicker">About</span>
+          <h3 class="company-title">CryptoSharia</h3>
+          <p class="company-desc">
+            Kenali tim dan misi di balik CryptoSharia Media, serta bagaimana kami membangun riset dan edukasi crypto
+            berperspektif syariah.
+          </p>
+        </div>
+        <div class="company-spotlight-actions">
+          <a
+            class="company-btn"
+            href="https://profile.cryptosharia.id"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Profil Kami
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M7 17L17 7" />
+              <path d="M9 7h8v8" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="container">
     <div class="divider"></div>
   </div>
 </main>
@@ -871,6 +900,88 @@
     margin: 1rem 0;
   }
 
+  /* ===== Company Spotlight ===== */
+  .company-spotlight {
+    margin: 0.75rem 0 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background:
+      radial-gradient(900px 220px at 20% 0%, rgba(252, 192, 0, 0.14), transparent 60%),
+      radial-gradient(700px 240px at 90% 120%, rgba(245, 102, 10, 0.12), transparent 55%),
+      var(--elev);
+    overflow: hidden;
+  }
+
+  .company-spotlight-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.25rem;
+    align-items: center;
+    padding: 1.25rem 1.25rem;
+  }
+
+  .company-spotlight-copy {
+    min-width: 0;
+  }
+
+  .company-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .company-title {
+    margin: 0.35rem 0 0.35rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+  }
+
+  .company-desc {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    max-width: 56ch;
+  }
+
+  .company-spotlight-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.6rem;
+    min-width: 0;
+  }
+
+  .company-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    color: #000000;
+    font-weight: 800;
+    font-size: 0.88rem;
+    background: linear-gradient(135deg, var(--brand), var(--accent));
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .company-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+  }
+
+
   /* ===== Responsive ===== */
   @media (max-width: 992px) {
     .hero-layout {
@@ -940,6 +1051,15 @@
 
     .carousel-arrow {
       display: none;
+    }
+
+    .company-spotlight-inner {
+      grid-template-columns: 1fr;
+      padding: 1.1rem;
+    }
+
+    .company-spotlight-actions {
+      align-items: flex-start;
     }
   }
 

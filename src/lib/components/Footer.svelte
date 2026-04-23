@@ -12,6 +12,15 @@
                     </div>
                     <p>News & education crypto berperspektif syariah.</p>
                 </div>
+                <a
+                    href="https://profile.cryptosharia.id"
+                    class="company-profile-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Company Profile"
+                >
+                    CryptoSharia Profile
+                </a>
             </div>
             <div
                 class="social-links"
@@ -111,9 +120,11 @@
                     >
                 </a>
                 <a
-                    href="mailto:halo@cryptosharia.news"
+                    href="https://profile.cryptosharia.id/#kontak"
                     class="social-link"
                     title="Email"
+                    target="_blank"
+                    rel="noopener noreferrer"
                 >
                     <svg
                         width="24"
@@ -139,3 +150,31 @@
         </div>
     </div>
 </footer>
+
+<style>
+    .company-profile-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 0.85rem;
+        padding: 0.5rem 0.9rem;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        color: var(--text);
+        font-size: 0.84rem;
+        font-weight: 600;
+        width: fit-content;
+        transition: all 0.2s ease;
+    }
+
+    .company-profile-link:hover {
+        border-color: var(--brand);
+        background: rgba(252, 192, 0, 0.08);
+    }
+
+    @media (max-width: 767px) {
+        .company-profile-link {
+            margin-top: 0.7rem;
+        }
+    }
+</style>
