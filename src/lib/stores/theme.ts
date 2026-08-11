@@ -3,16 +3,15 @@ import { browser } from '$app/environment';
 
 export type Theme = 'light' | 'dark' | 'system';
 
-// Default value should be 'system' or 'dark'
 const initialValue: Theme = browser
     ? (localStorage.getItem('theme-preference') as Theme) || 'system'
-    : 'dark';
+    : 'system';
 
 export const theme = writable<Theme>(initialValue);
 
 if (browser) {
     const applyTheme = (value: Theme) => {
-        let actualTheme: 'light' | 'dark' = 'dark';
+        let actualTheme: 'light' | 'dark' = 'light';
         
         if (value === 'system') {
             actualTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
@@ -20,11 +19,7 @@ if (browser) {
             actualTheme = value;
         }
 
-        if (actualTheme === 'light') {
-            document.body.classList.add('light-mode');
-        } else {
-            document.body.classList.remove('light-mode');
-        }
+        document.documentElement.dataset.theme = actualTheme;
         
         localStorage.setItem('theme-preference', value);
     };
@@ -35,11 +30,7 @@ if (browser) {
     window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
         const currentTheme = localStorage.getItem('theme-preference') as Theme || 'system';
         if (currentTheme === 'system') {
-            if (e.matches) {
-                document.body.classList.add('light-mode');
-            } else {
-                document.body.classList.remove('light-mode');
-            }
+            document.documentElement.dataset.theme = e.matches ? 'light' : 'dark';
         }
     });
 }

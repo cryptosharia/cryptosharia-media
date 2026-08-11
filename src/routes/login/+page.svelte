@@ -1,100 +1,38 @@
 <script lang="ts">
-    import "../../app.css";
-    import { page } from "$app/stores";
+    import Seo from '$lib/components/Seo.svelte';
     import type { ActionData } from './$types';
 
-    interface Props {
-        form: ActionData;
-    }
-
-    let { form }: Props = $props();
-    let urlError = $derived($page.url.searchParams.get('error'));
+    let { form }: { form: ActionData | null } = $props();
 </script>
 
-<svelte:head>
-    <title>Login - CryptoSharia</title>
-</svelte:head>
+<Seo title="Login — CryptoSharia" description="Masuk ke akun CryptoSharia." canonicalPath="/login" noindex />
 
-<main class="login-page">
-    <div class="login-card">
-        <div class="logo"></div>
-        <h1>Login ke CryptoSharia</h1>
-        <p class="muted">Silakan masukkan email dan password Anda.</p>
+<main id="main-content" class="site-main">
+    <section class="container section">
+        <div class="feature-card" style="max-width:440px;margin-inline:auto">
+            <p class="eyebrow">Akun</p>
+            <h1>Login ke CryptoSharia</h1>
+            <p class="muted">Masukkan email dan password akun Anda.</p>
 
-        {#if form?.error}
-            <div class="alert error">
-                {form.error}
-            </div>
-        {/if}
+            {#if form?.error}
+                <div class="alert alert-error" role="alert">{form.error}</div>
+            {/if}
 
-        <form method="POST" action="?/login">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required value={form?.email ?? ''} />
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required />
-            </div>
+            <form class="form-grid" method="POST" action="?/login" style="margin-top:24px">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input class="input" type="email" id="email" name="email" autocomplete="email" required maxlength="255" value={form?.email ?? ''} />
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input class="input" type="password" id="password" name="password" autocomplete="current-password" required minlength="8" />
+                </div>
+                <button type="submit" class="button button-primary">Masuk</button>
+            </form>
 
-            <button type="submit" class="btn primary full-width">Sign In</button>
-        </form>
-
-        <p class="signup-link">
-            Belum punya akun? <a href="/community">Gabung Premium</a>
-        </p>
-    </div>
+            <p class="muted" style="margin-top:24px">
+                Informasi Komunitas Premium tersedia di <a href="/komunitas#premium">halaman Komunitas</a>.
+            </p>
+        </div>
+    </section>
 </main>
-
-<style>
-    .login-page {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: calc(100vh - 200px);
-        padding: 2rem 1rem;
-    }
-
-    .login-card {
-        background: var(--elev);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius);
-        padding: 2.5rem;
-        width: 100%;
-        max-width: 400px;
-        text-align: center;
-    }
-
-    .logo {
-        width: 48px;
-        height: 48px;
-        background: linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
-        border-radius: 12px;
-        margin: 0 auto 1.5rem;
-    }
-
-    h1 {
-        margin: 0 0 0.5rem;
-        font-size: 1.5rem;
-    }
-
-    .muted {
-        margin-bottom: 2rem;
-    }
-
-    .form-group {
-        text-align: left;
-    }
-
-    .full-width {
-        width: 100%;
-        margin-top: 1rem;
-    }
-
-    .signup-link {
-        margin-top: 2rem;
-        font-size: 0.875rem;
-        color: var(--text-muted);
-    }
-</style>

@@ -1,13 +1,6 @@
+import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { getPost } from '$lib/api';
 
-export const load: PageServerLoad = async ({ params }) => {
-    const { slug } = params;
-
-    // Fetch the webinar
-    const webinarResponse = await getPost(slug);
-
-    return {
-        webinar: webinarResponse.data?.data ?? null,
-    };
+export const load: PageServerLoad = ({ params, url }) => {
+    throw redirect(308, `/artikel/${encodeURIComponent(params.slug)}${url.search}`);
 };

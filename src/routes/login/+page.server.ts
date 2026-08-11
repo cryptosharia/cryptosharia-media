@@ -9,14 +9,17 @@ export const actions: Actions = {
         const email = data.get('email');
         const password = data.get('password');
 
-        if (!email || !password) {
-            return fail(400, { email, error: 'Email dan password wajib diisi.' });
+        if (typeof email !== 'string' || typeof password !== 'string' || !email || !password) {
+            return fail(400, { email: typeof email === 'string' ? email : '', error: 'Email dan password wajib diisi.' });
+        }
+        if (email.length > 255 || password.length < 8) {
+            return fail(400, { email, error: 'Email atau password belum valid.' });
         }
 
         try {
             const result = await signIn({
-                email: email.toString(),
-                password: password.toString(),
+                email,
+                password,
             });
 
             if (result.error || !result.data?.data) {
@@ -26,26 +29,28 @@ export const actions: Actions = {
                 });
             }
 
-            const { access_token, refresh_token } = result.data.data;
+            const { accessToken, refreshToken } = result.data.data;
+
+            if (!accessToken || !refreshToken) {
+                return fail(502, { email, error: 'Sesi login tidak diterima dari server.' });
+            }
 
             // Set secure HTTP-only cookies
-            cookies.set('access_token', access_token, {
+            cookies.set('access_token', accessToken, {
                 path: '/',
                 httpOnly: true,
                 sameSite: 'strict',
                 secure: !dev,
-                maxAge: 60 * 60 * 24 * 7 // 1 week
+                maxAge: 60 * 15
             });
 
-            if (refresh_token) {
-                cookies.set('refresh_token', refresh_token, {
-                    path: '/',
-                    httpOnly: true,
-                    sameSite: 'strict',
-                    secure: !dev,
-                    maxAge: 60 * 60 * 24 * 30 // 30 days
-                });
-            }
+            cookies.set('refresh_token', refreshToken, {
+                path: '/',
+                httpOnly: true,
+                sameSite: 'strict',
+                secure: !dev,
+                maxAge: 60 * 60 * 24 * 30
+            });
 
         } catch (err) {
             console.error('Login action error:', err);

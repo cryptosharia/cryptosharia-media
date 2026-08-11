@@ -1,18 +1,16 @@
 <script lang="ts">
-	import Seo from "$lib/components/Seo.svelte";
+	import '../app.css';
 	import Header from "$lib/components/Header.svelte";
 	import Footer from "$lib/components/Footer.svelte";
-	import BottomNav from "$lib/components/BottomNav.svelte";
 	import NavigationLoader from "$lib/components/NavigationLoader.svelte";
 
 	let { children } = $props();
 </script>
 
 <NavigationLoader />
-<Seo />
+<a class="skip-link" href="#main-content">Lewati ke konten utama</a>
 <Header />
 
 {@render children()}
 
 <Footer />
-<BottomNav />

@@ -1,64 +1,136 @@
-/**
- * CryptoSharia API TypeScript Types
- * Wrapper around generated openapi-typescript types
- */
+export type PostSection = 'news' | 'education' | 'research' | 'activity';
+export type PostType = 'article' | 'webinar' | 'video' | 'headline';
+export type PublishStatus = 'draft' | 'published' | 'archived';
+export type ShariaStatus = 'halal' | 'haram' | 'syubhat';
 
-import type { components } from '../src/lib/api/api';
-
-// ============================================================================
-// Core Models from OpenAPI
-// ============================================================================
-
-export type Post = components['schemas']['PostsGetItem'];
-export type PostDetail = components['schemas']['PostsGetData'];
-export type Token = components['schemas']['TokensGetItem'];
-export type TokenDetail = components['schemas']['TokensGetData'] & {
-  category?: string;
-  excerpt?: string;
-};
-export type TokenQuote = components['schemas']['TokensQuotesGetItem'];
-export type Message = components['schemas']['MessagesGetItem'];
-export type InsertMessage = components['schemas']['MessagesPostBody'];
-export type AssetMetadata = components['schemas']['AssetMetadata'];
-export type Pagination = components['schemas']['Pagination'];
-
-// ============================================================================
-// API Response Types
-// ============================================================================
-
-export type ApiResponse<T> = components['schemas']['ApiResponse'] & {
-  data: T;
+export type AssetMetadata = {
+  id: string;
+  url: string;
+  filename: string;
+  size: number;
+  mimeType?: string | null;
+  width?: number | null;
+  height?: number | null;
 };
 
-// Typedef for the data part of a paginated response
-export interface PaginatedData<T> {
-  items: T[];
-  pagination: Pagination;
-}
+export type ContentTag = {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string | null;
+};
 
-// ============================================================================
-// API Response Aliases (Full Response Body)
-// ============================================================================
+export type UserMetadata = {
+  id: string;
+  name: string;
+  email: string;
+} | null;
 
-/** Response type for GET /posts */
-export type PostsResponse = ApiResponse<components['schemas']['PaginatedPostsGetItem']>;
+export type Post = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  section: PostSection;
+  type: PostType;
+  status: PublishStatus;
+  isFeatured: boolean;
+  eventDate: string | null;
+  externalLink: string | null;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string | null;
+  createdBy: UserMetadata;
+  updatedBy: UserMetadata;
+  coverImage: AssetMetadata;
+  tags?: ContentTag[];
+};
 
-/** Response type for GET /posts/:slug (single post) */
-export type PostResponse = ApiResponse<components['schemas']['PostsGetData']>;
+export type PostDetail = Post & { content: string };
 
-/** Response type for GET /tokens */
-export type TokensResponse = ApiResponse<components['schemas']['PaginatedTokensGetItem']>;
+export type Token = {
+  id: string;
+  slug: string;
+  rank: number;
+  name: string;
+  ticker: string;
+  shariaStatus: ShariaStatus;
+  status: PublishStatus;
+  excerpt: string;
+  tradingviewSymbol: string | null;
+  website: string;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string | null;
+  createdBy: UserMetadata;
+  updatedBy: UserMetadata;
+  logo: AssetMetadata;
+  tags?: ContentTag[];
+};
 
-/** Response type for GET /tokens/:slug (single token) */
-export type TokenResponse = ApiResponse<components['schemas']['TokensGetData']>;
+export type TokenDetail = Token & { content: string; category?: string };
 
-// ============================================================================
-// Query Parameter Types
-// ============================================================================
+export type TokenQuote = {
+  slug: string;
+  rank: number;
+  infiniteSupply: boolean;
+  maxSupply: number | null;
+  circulatingSupply: number;
+  priceUsd: number;
+  marketCapUsd: number;
+  marketCapDominance: number;
+  percentChange24h: number;
+};
 
-// We need to extract these from paths
-import type { paths } from '../src/lib/api/api';
+export type Pagination = {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+};
 
-export type ListPostsParams = paths['/posts']['get']['parameters']['query'];
-export type ListTokensParams = paths['/tokens']['get']['parameters']['query'];
+export type PaginatedData<T> = { items: T[]; pagination: Pagination };
+export type ApiResponse<T> = { success: boolean; message: string; data: T; errors?: unknown };
+export type PostsResponse = ApiResponse<PaginatedData<Post>>;
+export type PostResponse = ApiResponse<PostDetail>;
+export type TokensResponse = ApiResponse<PaginatedData<Token>>;
+export type TokenResponse = ApiResponse<TokenDetail>;
 
+export type ListPostsParams = {
+  statuses?: PublishStatus[];
+  sections?: PostSection[];
+  types?: PostType[];
+  slugs?: string[];
+  exclude?: string[];
+  tags?: string[];
+  search?: string;
+  limit?: number;
+  page?: number;
+};
+
+export type ListTokensParams = {
+  statuses?: PublishStatus[];
+  shariaStatuses?: ShariaStatus[];
+  slugs?: string[];
+  exclude?: string[];
+  tags?: string[];
+  search?: string;
+  limit?: number;
+  page?: number;
+};
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl?: string | null;
+  avatar?: string | null;
+  permissions?: string[];
+  role?: string | { id: string; name: string; slug: string } | null;
+};
+
+export type AuthSession = {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+};
