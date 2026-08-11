@@ -32,6 +32,14 @@ npm run build
 npm audit --omit=dev
 ```
 
+## Local testing tanpa API key production
+
+```bash
+npm run dev:local
+```
+
+Perintah ini menjalankan frontend beserta data fixture yang jelas berlabel `[LOCAL TEST]` dan tidak menyentuh layanan production. Checklist pengujian tersedia di [docs/local-testing.md](docs/local-testing.md).
+
 ## Route utama
 
 - `/` — Beranda
