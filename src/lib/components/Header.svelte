@@ -5,6 +5,7 @@
     import { tick } from 'svelte';
 
     let menuOpen = $state(false);
+    let activeDropdown = $state<string | null>(null);
     let menuButton: HTMLButtonElement;
     let mobilePanel: HTMLElement;
     const themes: Theme[] = ['light', 'dark', 'system'];
@@ -16,6 +17,26 @@
         menuOpen = false;
     }
 
+    function closeDesktopDropdown() {
+        activeDropdown = null;
+    }
+
+    function handleDropdownToggle(event: Event, dropdown: string) {
+        const details = event.currentTarget as HTMLDetailsElement;
+        if (details.open) {
+            activeDropdown = dropdown;
+        } else if (activeDropdown === dropdown) {
+            activeDropdown = null;
+        }
+    }
+
+    function handleWindowClick(event: MouseEvent) {
+        const target = event.target;
+        if (target instanceof Element && !target.closest('.nav-dropdown')) {
+            closeDesktopDropdown();
+        }
+    }
+
     async function toggleMenu() {
         menuOpen = !menuOpen;
         if (menuOpen) {
@@ -25,6 +46,9 @@
     }
 
     function handleKeydown(event: KeyboardEvent) {
+        if (activeDropdown && event.key === 'Escape') {
+            closeDesktopDropdown();
+        }
         if (menuOpen && event.key === 'Escape') {
             closeMenu();
             menuButton.focus();
@@ -36,7 +60,7 @@
     }
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
+<svelte:window onclick={handleWindowClick} onkeydown={handleKeydown} />
 
 <header class="site-header">
     <nav class="container site-nav" aria-label="Navigasi utama">
@@ -46,46 +70,46 @@
         </a>
 
         <div class="desktop-nav">
-            <a class="nav-link" class:active={isActive('/')} href="/" aria-current={isActive('/') ? 'page' : undefined}>Beranda</a>
+            <a class="nav-link" class:active={isActive('/')} href="/" aria-current={isActive('/') ? 'page' : undefined} onclick={closeDesktopDropdown}>Beranda</a>
 
-            <details class="nav-dropdown">
+            <details class="nav-dropdown" open={activeDropdown === 'berita'} ontoggle={(event) => handleDropdownToggle(event, 'berita')}>
                 <summary class="nav-summary" class:active={isActive('/berita')}>Berita <span aria-hidden="true">⌄</span></summary>
                 <div class="nav-dropdown-menu">
-                    <a href="/berita">Semua Berita</a>
+                    <a href="/berita" onclick={closeDesktopDropdown}>Semua Berita</a>
                     {#each NEWS_CATEGORIES as category (category.slug)}
-                        <a href={`/berita?kategori=${category.slug}`}>{category.label}</a>
+                        <a href={`/berita?kategori=${category.slug}`} onclick={closeDesktopDropdown}>{category.label}</a>
                     {/each}
                 </div>
             </details>
 
-            <details class="nav-dropdown">
+            <details class="nav-dropdown" open={activeDropdown === 'edukasi'} ontoggle={(event) => handleDropdownToggle(event, 'edukasi')}>
                 <summary class="nav-summary" class:active={isActive('/edukasi')}>Edukasi <span aria-hidden="true">⌄</span></summary>
                 <div class="nav-dropdown-menu">
-                    <a href="/edukasi">Semua Edukasi</a>
+                    <a href="/edukasi" onclick={closeDesktopDropdown}>Semua Edukasi</a>
                     {#each EDUCATION_CATEGORIES as category (category.slug)}
-                        <a href={`/edukasi?kategori=${category.slug}`}>{category.label}</a>
+                        <a href={`/edukasi?kategori=${category.slug}`} onclick={closeDesktopDropdown}>{category.label}</a>
                     {/each}
                 </div>
             </details>
 
-            <a class="nav-link" class:active={isActive('/screening')} href="/screening">Screening Coin</a>
+            <a class="nav-link" class:active={isActive('/screening')} href="/screening" onclick={closeDesktopDropdown}>Screening Coin</a>
 
-            <details class="nav-dropdown">
+            <details class="nav-dropdown" open={activeDropdown === 'tentang'} ontoggle={(event) => handleDropdownToggle(event, 'tentang')}>
                 <summary class="nav-summary" class:active={isActive('/tentang-kami')}>Tentang Kami <span aria-hidden="true">⌄</span></summary>
                 <div class="nav-dropdown-menu">
-                    <a href="/tentang-kami#visi-misi">Visi, Misi & Tujuan</a>
-                    <a href="/tentang-kami#tim">Tim Kami</a>
-                    <a href="/tentang-kami#aktivitas">Aktivitas Kami</a>
-                    <a href="/tentang-kami#hubungi-kami">Hubungi Kami</a>
+                    <a href="/tentang-kami#visi-misi" onclick={closeDesktopDropdown}>Visi, Misi & Tujuan</a>
+                    <a href="/tentang-kami#tim" onclick={closeDesktopDropdown}>Tim Kami</a>
+                    <a href="/tentang-kami#aktivitas" onclick={closeDesktopDropdown}>Aktivitas Kami</a>
+                    <a href="/tentang-kami#hubungi-kami" onclick={closeDesktopDropdown}>Hubungi Kami</a>
                 </div>
             </details>
 
-            <details class="nav-dropdown">
+            <details class="nav-dropdown" open={activeDropdown === 'komunitas'} ontoggle={(event) => handleDropdownToggle(event, 'komunitas')}>
                 <summary class="nav-summary" class:active={isActive('/komunitas')}>Komunitas <span aria-hidden="true">⌄</span></summary>
                 <div class="nav-dropdown-menu">
-                    <a href="/komunitas#gabung">Gabung Komunitas</a>
-                    <a href="/komunitas#sosial-media">Sosial Media</a>
-                    <a href="/komunitas#premium">Komunitas Premium</a>
+                    <a href="/komunitas#gabung" onclick={closeDesktopDropdown}>Gabung Komunitas</a>
+                    <a href="/komunitas#sosial-media" onclick={closeDesktopDropdown}>Sosial Media</a>
+                    <a href="/komunitas#premium" onclick={closeDesktopDropdown}>Komunitas Premium</a>
                 </div>
             </details>
         </div>
