@@ -1,0 +1,33 @@
+CRYPTOSHARIA — COVER PROMPT 11/16
+
+Kategori: GEOPOLITIK
+Judul: Ukraina Dorong Rudal Domestik dan Koalisi Pertahanan FREYJA
+Slug: ukraina-dorong-rudal-balistik-domestik-koalisi-freyja
+Nama gambar produksi: ukraina-dorong-rudal-balistik-domestik-koalisi-freyja.webp
+
+Spesifikasi:
+- 16:9 landscape, ideal 1600 x 900 px atau 1920 x 1080 px.
+- Ekspor WebP/JPG sRGB, target di bawah 1,5 MB, wajib di bawah 4 MB.
+- Jangan memasukkan judul ke dalam gambar; website menampilkannya secara terpisah.
+
+PROMPT
+------
+Create a 16:9 symbolic editorial illustration about layered missile defense cooperation and
+domestic industrial development. Depict an abstract protective shield over a simplified city,
+with a clean interceptor arc safely stopping an incoming trajectory high above the skyline.
+Beside it, show modular industrial components and radar-like forms joining into a shared
+defensive network. The mood should emphasize protection, responsibility, and an unfinished
+coalition project rather than victory or attack. Premium 3D-vector hybrid, dark navy and
+graphite, muted steel blue, CryptoSharia orange, restrained ivory, cinematic but sober light,
+crisp geometry, subtle grain. Keep shield and city central. No national flags, no NATO or
+FREYJA logo, no real weapon model, no technical blueprint, no targeting detail, no explosion,
+no casualties, no triumphal propaganda, no text, no numbers, no watermark.
+
+CHECKLIST
+---------
+- Subjek utama berada di tengah dan aman ketika dipotong menjadi 3:2.
+- Tidak ada tulisan, angka, logo, stempel, watermark, atau wajah orang nyata.
+- Gambar tetap terbaca sebagai thumbnail kecil.
+- Untuk isu konflik atau kesehatan, gambar terlihat sebagai ilustrasi simbolis, bukan foto bukti kejadian.
+- Simpan sebagai: ukraina-dorong-rudal-balistik-domestik-koalisi-freyja.webp
+

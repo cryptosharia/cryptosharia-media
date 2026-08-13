@@ -1,78 +1,41 @@
 <script lang="ts">
     import Pagination from '$lib/components/Pagination.svelte';
+    import ScreeningRow from '$lib/components/screening/ScreeningRow.svelte';
     import Seo from '$lib/components/Seo.svelte';
     import StateMessage from '$lib/components/StateMessage.svelte';
-    import TokenCard from '$lib/components/TokenCard.svelte';
     import type { PageData } from './$types';
-
     let { data }: { data: PageData } = $props();
-
-    function buildHref(targetPage: number) {
-        const query = new URLSearchParams();
-        if (data.status) query.set('status', data.status);
-        if (data.search) query.set('q', data.search);
-        if (targetPage > 1) query.set('page', String(targetPage));
-        return `/screening${query.size ? `?${query}` : ''}`;
-    }
-
-    function canonicalPath() {
-        const query = new URLSearchParams();
-        if (data.status) query.set('status', data.status);
-        if (data.pagination.page > 1) query.set('page', String(data.pagination.page));
-        return `/screening${query.size ? `?${query}` : ''}`;
-    }
+    const filters = [{ value: '', label: 'Semua' }, { value: 'halal', label: 'Halal' }, { value: 'syubhat', label: 'Syubhat' }, { value: 'haram', label: 'Haram' }] as const;
+    function buildHref(targetPage: number) { const query = new URLSearchParams(); if (data.status) query.set('status', data.status); if (data.search) query.set('q', data.search); if (targetPage > 1) query.set('page', String(targetPage)); return `/screening${query.size ? `?${query}` : ''}`; }
+    function canonicalPath() { const query = new URLSearchParams(); if (data.status) query.set('status', data.status); if (data.pagination.page > 1) query.set('page', String(data.pagination.page)); return `/screening${query.size ? `?${query}` : ''}`; }
+    function filterHref(status: string) { const query = new URLSearchParams(); if (status) query.set('status', status); if (data.search) query.set('q', data.search); return `/screening${query.size ? `?${query}` : ''}`; }
 </script>
 
-<Seo
-    title="Screening Coin — CryptoSharia"
-    description="Cari dan baca hasil screening coin yang telah dipublikasikan oleh CryptoSharia."
-    canonicalPath={canonicalPath()}
-    noindex={Boolean(data.search)}
-/>
+<Seo title="Screening Coin — CryptoSharia" description="Cari dan baca hasil screening coin yang telah dipublikasikan oleh CryptoSharia." canonicalPath={canonicalPath()} noindex={Boolean(data.search)} />
 
 <main id="main-content" class="site-main">
-    <header class="container page-hero compact">
-        <p class="eyebrow">Screening Coin</p>
-        <h1>Kenali status setiap coin</h1>
-        <p>Cari coin dan buka penjelasan screening yang telah dipublikasikan oleh tim CryptoSharia.</p>
-    </header>
-
-    <section class="container section-sm" aria-label="Daftar screening coin">
-        <form class="filter-bar" method="GET" action="/screening" role="search">
-            <div style="flex:1;min-width:min(100%,280px)">
-                <label class="sr-only" for="search-coin">Cari coin atau ticker</label>
-                <input id="search-coin" class="input" type="search" name="q" value={data.search} placeholder="Cari coin atau ticker…" />
-            </div>
-            <div>
-                <label class="sr-only" for="screening-status">Filter status</label>
-                <select id="screening-status" class="select" name="status" value={data.status}>
-                    <option value="">Semua status</option>
-                    <option value="halal">Halal</option>
-                    <option value="syubhat">Syubhat</option>
-                    <option value="haram">Haram</option>
-                </select>
-            </div>
-            <button class="button button-primary" type="submit">Terapkan</button>
-            {#if data.search || data.status}<a class="button button-secondary" href="/screening">Reset</a>{/if}
+    <header class="container screening-intro"><p class="screening-kicker">Screening Coin</p><h1>Kenali status setiap coin</h1><p>Cari coin dan buka penjelasan screening yang telah dipublikasikan oleh tim CryptoSharia.</p></header>
+    <section class="container screening-discovery" aria-label="Screener coin">
+        <form class="screening-search" method="GET" action="/screening" role="search">
+            {#if data.status}<input type="hidden" name="status" value={data.status} />{/if}
+            <label class="sr-only" for="search-coin">Cari coin atau ticker</label><input id="search-coin" type="search" name="q" value={data.search} placeholder="Cari nama coin atau ticker…" autocomplete="off" />
+            <button type="submit" aria-label="Cari coin"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.25"></circle><path d="m12.4 12.4 4.1 4.1"></path></svg></button>
         </form>
-
+        <div class="filter-line"><nav class="status-tabs" aria-label="Filter status screening">{#each filters as filter (filter.value)}<a class={`status-tab ${filter.value || 'all'}`} class:active={data.status === filter.value} href={filterHref(filter.value)} aria-current={data.status === filter.value ? 'page' : undefined}>{filter.label}</a>{/each}</nav><span class="asset-count">{data.pagination.total} aset</span></div>
+    </section>
+    <section class="container screening-content" aria-label="Daftar coin tersaring">
         {#if data.tokens.length}
-            <div class="token-grid">
-                {#each data.tokens as token (token.id)}<TokenCard {token} />{/each}
-            </div>
-            <Pagination pagination={data.pagination} {buildHref} />
-        {:else}
-            <StateMessage
-                title={data.error ? 'Data screening belum dapat dimuat' : 'Coin tidak ditemukan'}
-                message={data.error || 'Coba kata kunci atau filter status yang berbeda.'}
-                actionHref="/screening"
-                actionLabel="Reset pencarian"
-            />
-        {/if}
-
-        <div class="alert" style="margin-top:32px">
-            Hasil screening bersifat informasi dan bukan nasihat finansial. Baca penjelasan lengkap serta
-            lakukan pertimbangan mandiri sebelum mengambil keputusan.
-        </div>
+            <div class="screening-table"><div class="table-head"><span>Aset</span><span>Status</span><span>Terakhir diperbarui</span><span aria-hidden="true"></span></div>{#each data.tokens as token (token.id)}<ScreeningRow {token} />{/each}</div>
+            <div class="screening-pagination"><Pagination pagination={data.pagination} {buildHref} /></div>
+        {:else}<StateMessage title={data.error ? 'Data screening belum dapat dimuat' : 'Coin tidak ditemukan'} message={data.error || 'Coba kata kunci atau filter status yang berbeda.'} actionHref="/screening" actionLabel="Reset pencarian" />{/if}
+        <aside class="screening-note"><p>Catatan</p><span>Hasil screening bersifat informasi dan bukan nasihat finansial. Baca penjelasan lengkap serta lakukan pertimbangan mandiri sebelum mengambil keputusan.</span></aside>
     </section>
 </main>
+
+<style>
+ .screening-intro { padding-top: 80px; } .screening-kicker { margin: 0 0 12px; color: var(--muted); font-size: .7rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; } .screening-intro h1 { max-width: 760px; margin: 0; font-size: clamp(3rem,4.5vw,3.5rem); line-height:1.08; letter-spacing:-.05em; } .screening-intro > p:last-child { max-width: 660px; margin:16px 0 0; color:var(--muted); font-size:1.02rem; line-height:1.65; }
+ .screening-discovery { margin-top:52px; padding-block:16px; border-block:1px solid var(--border); } .screening-search { display:grid; width:min(460px,100%); min-height:46px; grid-template-columns:minmax(0,1fr) 46px; align-items:center; overflow:hidden; border:1px solid var(--border-control); border-radius:8px; background:var(--surface); } .screening-search:focus-within { border-color:var(--accent); } .screening-search input { width:100%; min-width:0; height:44px; padding:0 4px 0 14px; color:var(--text); border:0; outline:0; background:transparent; font:inherit; font-size:.86rem; } .screening-search input::placeholder { color:var(--muted); opacity:.8; } .screening-search button { display:grid; width:46px; height:44px; place-items:center; padding:0; color:var(--muted); border:0; background:transparent; cursor:pointer; } .screening-search button:hover { color:var(--text); background:var(--surface-muted); } .screening-search svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-linecap:round; stroke-width:1.6; }
+ .filter-line { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-top:16px; } .status-tabs { display:flex; gap:5px; min-width:0; } .status-tab { display:inline-flex; min-height:36px; flex:0 0 auto; align-items:center; padding:7px 11px; color:var(--muted); border:1px solid transparent; border-radius:7px; font-size:.8rem; font-weight:650; } .status-tab:hover { color:var(--text); border-color:var(--border); } .status-tab.active.all { color:#17130e; border-color:var(--accent); background:var(--accent); } .status-tab.active.halal { color:var(--success); border-color:color-mix(in srgb,var(--success) 45%,var(--border)); background:color-mix(in srgb,var(--success-bg) 68%,transparent); } .status-tab.active.syubhat { color:var(--warning); border-color:color-mix(in srgb,var(--warning) 45%,var(--border)); background:color-mix(in srgb,var(--warning-bg) 68%,transparent); } .status-tab.active.haram { color:var(--danger); border-color:color-mix(in srgb,var(--danger) 45%,var(--border)); background:color-mix(in srgb,var(--danger-bg) 68%,transparent); } .asset-count { color:var(--muted); font-size:.8rem; white-space:nowrap; }
+ .screening-content { padding-block:40px 104px; } .screening-table { border-top:1px solid var(--border-control); } .table-head { display:grid; grid-template-columns:minmax(250px,1.6fr) minmax(120px,.72fr) minmax(150px,.72fr) 20px; gap:24px; min-height:46px; align-items:center; padding-inline:10px; color:var(--muted); border-bottom:1px solid var(--border); font-size:.68rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; } .screening-pagination :global(.pagination) { flex-wrap:wrap; margin-top:56px; padding-top:28px; border-top:1px solid var(--border); } .screening-pagination :global(.pagination .button) { border-radius:7px; background:transparent; } .screening-note { display:grid; max-width:760px; grid-template-columns:110px minmax(0,1fr); gap:20px; margin-top:56px; padding:20px 0 0 18px; color:var(--muted); border-top:1px solid var(--border); border-left:2px solid var(--accent); font-size:.9rem; line-height:1.65; } .screening-note p { margin:0; color:var(--text); font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+ @media(max-width:900px){.screening-intro{padding-top:64px}.screening-intro h1{font-size:2.25rem}} @media(max-width:600px){.screening-intro{padding-top:52px}.screening-intro h1{font-size:clamp(2rem,9.2vw,2.25rem)}.screening-intro>p:last-child{margin-top:12px;font-size:.94rem}.screening-discovery{margin-top:36px}.filter-line{align-items:start;flex-direction:column;gap:10px}.status-tabs{width:calc(100% + 16px);overflow-x:auto;padding-right:16px;scrollbar-width:none}.status-tabs::-webkit-scrollbar{display:none}.asset-count{padding-left:10px}.screening-content{padding-block:32px 80px}.table-head{display:none}.screening-pagination :global(.pagination){gap:8px;margin-top:48px}.screening-pagination :global(.pagination>span:not(.button)){order:-1;width:100%;text-align:center}.screening-note{grid-template-columns:1fr;gap:7px;margin-top:44px;padding-left:15px}}
+</style>

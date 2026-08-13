@@ -1,0 +1,33 @@
+CRYPTOSHARIA — COVER PROMPT 16/16
+
+Kategori: EKONOMI
+Judul: Pendapatan Riil Rumah Tangga OECD Tertinggal dari Pertumbuhan Ekonomi
+Slug: pendapatan-riil-rumah-tangga-oecd-kuartal-i-2026-melambat
+Nama gambar produksi: pendapatan-riil-rumah-tangga-oecd-kuartal-i-2026-melambat.webp
+
+Spesifikasi:
+- 16:9 landscape, ideal 1600 x 900 px atau 1920 x 1080 px.
+- Ekspor WebP/JPG sRGB, target di bawah 1,5 MB, wajib di bawah 4 MB.
+- Jangan memasukkan judul ke dalam gambar; website menampilkannya secara terpisah.
+
+PROMPT
+------
+Create a 16:9 symbolic editorial illustration comparing economic output with household well-
+being. Show two adjacent platforms rising at different speeds: a taller abstract production
+tower on one platform and a modest home with a household essentials basket on the slightly
+lower platform. Connect them with an incomplete bridge to symbolize that GDP growth does not
+automatically reach household purchasing power. Premium 3D-vector hybrid, dark navy and
+graphite, CryptoSharia orange, restrained ivory and muted gold, subtle teal detail, soft
+cinematic lighting, crisp geometry, subtle grain, humane and analytical. Keep both platforms
+inside the center safe area and preserve negative space. No OECD logo, no flags, no currency
+symbol, no poverty stereotype, no distressed face, no text, no numbers, no chart labels, no
+watermark.
+
+CHECKLIST
+---------
+- Subjek utama berada di tengah dan aman ketika dipotong menjadi 3:2.
+- Tidak ada tulisan, angka, logo, stempel, watermark, atau wajah orang nyata.
+- Gambar tetap terbaca sebagai thumbnail kecil.
+- Untuk isu konflik atau kesehatan, gambar terlihat sebagai ilustrasi simbolis, bukan foto bukti kejadian.
+- Simpan sebagai: pendapatan-riil-rumah-tangga-oecd-kuartal-i-2026-melambat.webp
+

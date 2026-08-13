@@ -1,8 +1,9 @@
 import http from 'node:http';
+import { localNewsArticles } from './local-news-content.mjs';
 
 const HOST = '127.0.0.1';
-const PORT = 8787;
-const FRONTEND_URL = 'http://127.0.0.1:5173';
+const PORT = Number.parseInt(process.env.LOCAL_FIXTURE_PORT || '8787', 10);
+const FRONTEND_URL = process.env.LOCAL_FRONTEND_URL || 'http://127.0.0.1:5173';
 
 const auditUser = { id: 'local-editor', name: 'Editor Lokal', email: 'editor@local.test' };
 const coverImage = {
@@ -25,7 +26,18 @@ const taxonomy = {
     'syariah-edu': 'Syariah Edu'
 };
 
-function makePost({ slug, title, section, tag, excerpt, content, status = 'published' }) {
+function makePost({
+    slug,
+    title,
+    section,
+    tag,
+    excerpt,
+    content,
+    status = 'published',
+    isFeatured = false,
+    externalLink = null,
+    publishedAt = '2026-08-11T08:00:00.000Z'
+}) {
     return {
         id: `local-${slug}`,
         title: `[LOCAL TEST] ${title}`,
@@ -35,12 +47,12 @@ function makePost({ slug, title, section, tag, excerpt, content, status = 'publi
         section,
         type: 'article',
         status,
-        isFeatured: slug === 'perkembangan-pasar-kripto',
+        isFeatured,
         eventDate: null,
-        externalLink: null,
-        publishedAt: status === 'published' ? '2026-08-11T08:00:00.000Z' : null,
-        createdAt: '2026-08-10T08:00:00.000Z',
-        updatedAt: '2026-08-11T09:00:00.000Z',
+        externalLink,
+        publishedAt: status === 'published' ? publishedAt : null,
+        createdAt: publishedAt,
+        updatedAt: publishedAt,
         createdBy: auditUser,
         updatedBy: auditUser,
         coverImage,
@@ -62,11 +74,12 @@ Halaman ini menggunakan data fixture lokal untuk menguji tampilan **${topic}** t
 > Data ini hanya untuk local testing dan tidak berasal dari admin production.
 `;
 
+const sortedLocalNews = [...localNewsArticles].sort(
+    (left, right) => new Date(right.publishedAt).getTime() - new Date(left.publishedAt).getTime()
+);
+
 const posts = [
-    makePost({ slug: 'perkembangan-pasar-kripto', title: 'Perkembangan Pasar Kripto', section: 'news', tag: 'crypto-news', excerpt: 'Data uji untuk submenu Crypto News.', content: articleContent('Crypto News') }),
-    makePost({ slug: 'ai-dan-blockchain', title: 'AI dan Blockchain', section: 'news', tag: 'teknologi-ai', excerpt: 'Data uji untuk submenu Teknologi & AI.', content: articleContent('Teknologi & AI') }),
-    makePost({ slug: 'ekonomi-digital-global', title: 'Ekonomi Digital Global', section: 'news', tag: 'ekonomi', excerpt: 'Data uji untuk submenu Ekonomi.', content: articleContent('Ekonomi') }),
-    makePost({ slug: 'geopolitik-aset-digital', title: 'Geopolitik dan Aset Digital', section: 'news', tag: 'geopolitik', excerpt: 'Data uji untuk submenu Geopolitik.', content: articleContent('Geopolitik') }),
+    ...sortedLocalNews.map((news, index) => makePost({ ...news, isFeatured: index === 0 })),
     makePost({ slug: 'dasar-aset-kripto', title: 'Dasar Aset Kripto', section: 'education', tag: 'crypto-edu', excerpt: 'Data uji untuk submenu Crypto Edu.', content: articleContent('Crypto Edu') }),
     makePost({ slug: 'mengenal-perencanaan-keuangan', title: 'Mengenal Perencanaan Keuangan', section: 'education', tag: 'financial-edu', excerpt: 'Data uji untuk submenu Financial Edu.', content: articleContent('Financial Edu') }),
     makePost({ slug: 'prinsip-muamalah-digital', title: 'Prinsip Muamalah Digital', section: 'education', tag: 'syariah-edu', excerpt: 'Data uji untuk submenu Syariah Edu.', content: articleContent('Syariah Edu') }),

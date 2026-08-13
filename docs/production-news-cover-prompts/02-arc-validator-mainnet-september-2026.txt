@@ -1,0 +1,33 @@
+CRYPTOSHARIA — COVER PROMPT 02/16
+
+Kategori: CRYPTO NEWS
+Judul: Arc Menetapkan Validator Pendiri Menjelang Mainnet September
+Slug: arc-validator-mainnet-september-2026
+Nama gambar produksi: arc-validator-mainnet-september-2026.webp
+
+Spesifikasi:
+- 16:9 landscape, ideal 1600 x 900 px atau 1920 x 1080 px.
+- Ekspor WebP/JPG sRGB, target di bawah 1,5 MB, wajib di bawah 4 MB.
+- Jangan memasukkan judul ke dalam gambar; website menampilkannya secara terpisah.
+
+PROMPT
+------
+Create a 16:9 symbolic editorial illustration for a premium crypto infrastructure story.
+Depict a luminous architectural arch as a network gateway, surrounded by a disciplined ring
+of distinct validator nodes connected by precise orange and teal data lines. Behind it,
+suggest institutional infrastructure through abstract vault, payment rail, and market-grid
+forms without showing any real company identity. The network should feel permissioned and
+governed rather than chaotic, with one subtle open application path extending forward.
+Refined 3D-vector hybrid, dark navy and graphite, CryptoSharia warm orange, restrained teal,
+soft ivory highlights, cinematic but restrained lighting, crisp geometry, subtle grain.
+Center the arch and nodes within the middle 65% for safe 16:9 and 3:2 crops. No company
+logos, no partner logos, no countdown, no words, no numbers, no coin price chart, no watermark.
+
+CHECKLIST
+---------
+- Subjek utama berada di tengah dan aman ketika dipotong menjadi 3:2.
+- Tidak ada tulisan, angka, logo, stempel, watermark, atau wajah orang nyata.
+- Gambar tetap terbaca sebagai thumbnail kecil.
+- Untuk isu konflik atau kesehatan, gambar terlihat sebagai ilustrasi simbolis, bukan foto bukti kejadian.
+- Simpan sebagai: arc-validator-mainnet-september-2026.webp
+

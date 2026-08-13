@@ -1,0 +1,32 @@
+CRYPTOSHARIA — COVER PROMPT 14/16
+
+Kategori: EKONOMI
+Judul: Utang Konsumen AS Naik, Saldo Menembus US$5,17 Triliun
+Slug: utang-konsumen-as-juni-2026-naik-5-17-triliun-dolar
+Nama gambar produksi: utang-konsumen-as-juni-2026-naik-5-17-triliun-dolar.webp
+
+Spesifikasi:
+- 16:9 landscape, ideal 1600 x 900 px atau 1920 x 1080 px.
+- Ekspor WebP/JPG sRGB, target di bawah 1,5 MB, wajib di bawah 4 MB.
+- Jangan memasukkan judul ke dalam gambar; website menampilkannya secara terpisah.
+
+PROMPT
+------
+Create a 16:9 symbolic editorial illustration about rising consumer debt and high revolving
+credit costs. Depict a modest household wallet at the center, surrounded by a tightening ring
+made from generic unbranded cards, blank receipts, and repeating payment segments. Show the
+ring becoming denser toward one side to suggest compounding pressure, while a clear exit path
+represents careful budgeting and repayment. Premium 3D-vector hybrid, dark navy and graphite,
+CryptoSharia orange, restrained ivory and muted gold, subtle steel blue, soft cinematic light,
+crisp geometry, subtle grain, empathetic and analytical. Keep wallet and ring within the safe
+crop. No bank or card-network logo, no luxury purchases, no dollar sign, no readable bill,
+no percentage, no text, no numbers, no shame-based imagery, no bullish chart, no watermark.
+
+CHECKLIST
+---------
+- Subjek utama berada di tengah dan aman ketika dipotong menjadi 3:2.
+- Tidak ada tulisan, angka, logo, stempel, watermark, atau wajah orang nyata.
+- Gambar tetap terbaca sebagai thumbnail kecil.
+- Untuk isu konflik atau kesehatan, gambar terlihat sebagai ilustrasi simbolis, bukan foto bukti kejadian.
+- Simpan sebagai: utang-konsumen-as-juni-2026-naik-5-17-triliun-dolar.webp
+

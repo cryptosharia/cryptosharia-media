@@ -1,0 +1,33 @@
+CRYPTOSHARIA — COVER PROMPT 04/16
+
+Kategori: CRYPTO NEWS
+Judul: Visa Membuka Platform Stablecoin untuk Institusi dalam Tahap Beta
+Slug: visa-stablecoin-platform-2026
+Nama gambar produksi: visa-stablecoin-platform-2026.webp
+
+Spesifikasi:
+- 16:9 landscape, ideal 1600 x 900 px atau 1920 x 1080 px.
+- Ekspor WebP/JPG sRGB, target di bawah 1,5 MB, wajib di bawah 4 MB.
+- Jangan memasukkan judul ke dalam gambar; website menampilkannya secara terpisah.
+
+PROMPT
+------
+Create a 16:9 symbolic editorial illustration of an institutional stablecoin management
+platform in beta. Depict a secure generic digital wallet connected to a bank-like structure
+and several clean payment rails, with two independent authorization keys converging before
+a transaction can pass. Add subtle audit-log layers, access gates, and an unfinished outer
+ring to signal a controlled beta rather than a finished mass-market product. Refined premium
+3D-vector hybrid, dark navy and graphite, CryptoSharia warm orange accents, restrained teal,
+soft ivory light, clear hierarchy, subtle grain, sophisticated and non-promotional. Keep the
+wallet and dual-control mechanism in the central safe area. No Visa logo, no branded card,
+no stablecoin logo, no readable interface, no text, no numbers, no advertising gloss, no
+profit symbolism, no watermark.
+
+CHECKLIST
+---------
+- Subjek utama berada di tengah dan aman ketika dipotong menjadi 3:2.
+- Tidak ada tulisan, angka, logo, stempel, watermark, atau wajah orang nyata.
+- Gambar tetap terbaca sebagai thumbnail kecil.
+- Untuk isu konflik atau kesehatan, gambar terlihat sebagai ilustrasi simbolis, bukan foto bukti kejadian.
+- Simpan sebagai: visa-stablecoin-platform-2026.webp
+
