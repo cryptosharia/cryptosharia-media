@@ -17,7 +17,7 @@
 />
 
 <main id="main-content" class="site-main">
-    <HeroSection token={data.tokens[0]} />
+    <HeroSection token={data.tokens[0]} quote={data.snapshotQuote} />
     <TrustStrip />
     <NewsSection posts={data.news} unavailable={data.unavailable.news} />
     <EducationSection posts={data.education} unavailable={data.unavailable.education} />

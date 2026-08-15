@@ -1,10 +1,21 @@
 <script lang="ts">
     import { formatDate } from '$lib/format';
-    import type { Token } from '$types/api';
+    import type { Token, TokenQuote } from '$types/api';
 
-    let { token }: { token?: Token } = $props();
+    let { token, quote }: { token?: Token; quote?: TokenQuote | null } = $props();
 
     const snapshotDate = $derived(token?.updatedAt ?? token?.publishedAt ?? token?.createdAt);
+
+    function formatSupply(value: number | null | undefined, infinite = false) {
+        if (infinite) return '∞';
+        if (typeof value !== 'number' || !Number.isFinite(value)) return '—';
+        return new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(value);
+    }
+
+    function formatPercent(value: number | null | undefined) {
+        if (typeof value !== 'number' || !Number.isFinite(value)) return '—';
+        return `${value.toFixed(2)}%`;
+    }
 
     function setCardGlow(event: MouseEvent) {
         if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -58,6 +69,14 @@
                     <div>
                         <dt>Diperbarui</dt>
                         <dd><time datetime={snapshotDate}>{formatDate(snapshotDate)}</time></dd>
+                    </div>
+                    <div>
+                        <dt>Supply</dt>
+                        <dd title="Supply beredar / supply maksimum">{formatSupply(quote?.circulatingSupply)} / {formatSupply(quote?.maxSupply, quote?.infiniteSupply)}</dd>
+                    </div>
+                    <div>
+                        <dt>Dominasi pasar</dt>
+                        <dd>{formatPercent(quote?.marketCapDominance)}</dd>
                     </div>
                 </dl>
                 <a class="snapshot-link" href={`/screening/${token.slug}`}>
@@ -338,8 +357,9 @@
     .snapshot-meta {
         position: relative;
         display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        gap: 16px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        column-gap: 16px;
+        row-gap: 18px;
         margin: 0;
         padding: 18px 0;
         border-block: 1px solid var(--border);
@@ -463,6 +483,12 @@
 
         .snapshot-ticker {
             font-size: 2.75rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .snapshot-meta {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
 
