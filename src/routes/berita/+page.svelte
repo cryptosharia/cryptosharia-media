@@ -65,7 +65,7 @@
 <main id="main-content" class="site-main">
     <header class="container news-intro">
         <p class="news-kicker">Berita</p>
-        <h1>{data.category?.label ?? 'Berita terbaru'}</h1>
+        <h1>{data.category?.label ?? 'Sorotan Redaksi'}</h1>
         <p>Ikuti perkembangan kripto dan konteks yang memengaruhinya melalui berita yang tersusun rapi.</p>
     </header>
 
