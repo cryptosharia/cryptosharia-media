@@ -1,12 +1,43 @@
 <script lang="ts">
-    import { TEAM_MEMBERS } from '$lib/team';
+    import { tick } from 'svelte';
+    import { TEAM_MEMBERS, type TeamMember } from '$lib/team';
 
+    const chiefExecutive = TEAM_MEMBERS.find((member) => member.id === 'sholahuddin');
+    const members = chiefExecutive
+        ? [chiefExecutive, ...TEAM_MEMBERS.filter((member) => member.id !== chiefExecutive.id)]
+        : TEAM_MEMBERS;
     let selectedIndex = $state(0);
+    let quickSelector: HTMLDivElement;
     let selectorTrack: HTMLDivElement;
-    const selected = $derived(TEAM_MEMBERS[selectedIndex]);
+    const selected = $derived(members[selectedIndex]);
+    const quickMembers = $derived(members.filter((_, index) => index !== selectedIndex));
 
     function selectMember(index: number) {
         selectedIndex = index;
+    }
+
+    async function selectMemberById(id: string) {
+        const index = members.findIndex((member) => member.id === id);
+        if (index < 0) return;
+
+        const quickIndex = quickMembers.findIndex((member) => member.id === id);
+        const scrollPosition = { left: window.scrollX, top: window.scrollY };
+        selectMember(index);
+        await tick();
+
+        const buttons = quickSelector?.querySelectorAll<HTMLButtonElement>('.quick-profile');
+        buttons?.[Math.min(quickIndex, buttons.length - 1)]?.focus({ preventScroll: true });
+        window.scrollTo(scrollPosition);
+        requestAnimationFrame(() => window.scrollTo(scrollPosition));
+    }
+
+    function compactMemberName(member: TeamMember) {
+        const hasHonorific = member.name.startsWith('Ust. ');
+        const words = member.name.replace(/^Ust\.\s+/, '').split(' ');
+        if (hasHonorific) return `Ust. ${words[0]}`;
+        if ((words[0] === 'Muhammad' || words[0] === 'Mokhamad') && words[1]) return `M. ${words[1]}`;
+        if (words[0].length >= 8) return words[0];
+        return words.slice(0, 2).join(' ');
     }
 
     function scrollMemberIntoView(index: number) {
@@ -32,7 +63,7 @@
 
     function selectAdjacent(direction: -1 | 1) {
         const nextIndex = selectedIndex + direction;
-        if (nextIndex < 0 || nextIndex >= TEAM_MEMBERS.length) return;
+        if (nextIndex < 0 || nextIndex >= members.length) return;
 
         selectMember(nextIndex);
         scrollMemberIntoView(nextIndex);
@@ -41,10 +72,10 @@
     function handleSelectorKeydown(event: KeyboardEvent, index: number) {
         let nextIndex: number | undefined;
 
-        if (event.key === 'ArrowRight' && index < TEAM_MEMBERS.length - 1) nextIndex = index + 1;
+        if (event.key === 'ArrowRight' && index < members.length - 1) nextIndex = index + 1;
         if (event.key === 'ArrowLeft' && index > 0) nextIndex = index - 1;
         if (event.key === 'Home') nextIndex = 0;
-        if (event.key === 'End') nextIndex = TEAM_MEMBERS.length - 1;
+        if (event.key === 'End') nextIndex = members.length - 1;
         if (nextIndex === undefined) {
             if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') event.preventDefault();
             return;
@@ -60,15 +91,40 @@
 </script>
 
 <section id="tim" class="container section team-section" aria-labelledby="tim-title">
-    <div class="team-heading">
-        <p class="eyebrow">Orang di balik CryptoSharia</p>
-        <h2 id="tim-title">Kenali Tim CryptoSharia</h2>
-        <p>Pilih profil untuk mengenal peran, fokus, dan kontribusi setiap pengurus dalam mengembangkan CryptoSharia.</p>
+    <div class="team-header">
+        <div class="team-heading">
+            <p class="eyebrow">Orang di balik CryptoSharia</p>
+            <h2 id="tim-title">Kenali Tim CryptoSharia</h2>
+            <p>Pilih profil untuk mengenal peran, fokus, dan kontribusi setiap pengurus dalam mengembangkan CryptoSharia.</p>
+        </div>
+
+        <nav class="quick-selector-panel" aria-labelledby="quick-selector-title">
+            <div class="quick-selector-heading">
+                <h3 id="quick-selector-title">Pilih Profil</h3>
+                <span>{quickMembers.length} pengurus lain</span>
+            </div>
+            <div id="quick-team-selector" class="quick-selector-grid" bind:this={quickSelector}>
+                {#each quickMembers as member (member.id)}
+                    <button
+                        type="button"
+                        class="quick-profile"
+                        class:long-name={compactMemberName(member).length > 10 && !compactMemberName(member).includes(' ')}
+                        aria-label={`Buka profil ${member.name}`}
+                        aria-controls="selected-team-profile"
+                        title={member.name}
+                        onclick={() => selectMemberById(member.id)}
+                    >
+                        <img src={member.image} alt="" loading="lazy" width="48" height="58" />
+                        <span>{compactMemberName(member)}</span>
+                    </button>
+                {/each}
+            </div>
+        </nav>
     </div>
 
     <article id="selected-team-profile" class="featured-profile" aria-labelledby="selected-profile-name">
         <p class="sr-only" aria-live="polite" aria-atomic="true">
-            Profil {selectedIndex + 1} dari {TEAM_MEMBERS.length}: {selected.name}, {selected.role}
+            Profil {selectedIndex + 1} dari {members.length}: {selected.name}, {selected.role}
         </p>
 
         <div class="featured-content">
@@ -80,7 +136,7 @@
                             class="profile-nav-button"
                             type="button"
                             aria-label="Lihat profil sebelumnya"
-                            aria-controls="selected-team-profile team-selector"
+                            aria-controls="selected-team-profile quick-team-selector team-selector"
                             disabled={selectedIndex === 0}
                             onclick={() => selectAdjacent(-1)}
                         ><span aria-hidden="true">←</span></button>
@@ -88,12 +144,12 @@
                             class="profile-nav-button"
                             type="button"
                             aria-label="Lihat profil berikutnya"
-                            aria-controls="selected-team-profile team-selector"
-                            disabled={selectedIndex === TEAM_MEMBERS.length - 1}
+                            aria-controls="selected-team-profile quick-team-selector team-selector"
+                            disabled={selectedIndex === members.length - 1}
                             onclick={() => selectAdjacent(1)}
                         ><span aria-hidden="true">→</span></button>
                     </div>
-                    <span class="featured-counter">{String(selectedIndex + 1).padStart(2, '0')} / {String(TEAM_MEMBERS.length).padStart(2, '0')}</span>
+                    <span class="featured-counter">{String(selectedIndex + 1).padStart(2, '0')} / {String(members.length).padStart(2, '0')}</span>
                 </div>
             </div>
 
@@ -103,7 +159,7 @@
                         class="profile-nav-button portrait-nav-button"
                         type="button"
                         aria-label="Lihat profil sebelumnya"
-                        aria-controls="selected-team-profile team-selector"
+                        aria-controls="selected-team-profile quick-team-selector team-selector"
                         disabled={selectedIndex === 0}
                         onclick={() => selectAdjacent(-1)}
                     ><span aria-hidden="true">←</span></button>
@@ -118,8 +174,8 @@
                         class="profile-nav-button portrait-nav-button"
                         type="button"
                         aria-label="Lihat profil berikutnya"
-                        aria-controls="selected-team-profile team-selector"
-                        disabled={selectedIndex === TEAM_MEMBERS.length - 1}
+                        aria-controls="selected-team-profile quick-team-selector team-selector"
+                        disabled={selectedIndex === members.length - 1}
                         onclick={() => selectAdjacent(1)}
                     ><span aria-hidden="true">→</span></button>
                 </div>
@@ -156,34 +212,30 @@
         </div>
     </article>
 
-    <nav class="team-selector-section" aria-labelledby="team-selector-title">
+    <nav class="mobile-team-selector-section" aria-labelledby="team-selector-title">
         <div class="selector-heading">
-            <h3 id="team-selector-title">Pilih Tokoh Tim Kami</h3>
-            <div class="selector-controls" aria-label="Kontrol daftar tim">
-                <button type="button" aria-label="Lihat profil sebelumnya" aria-controls="selected-team-profile team-selector" disabled={selectedIndex === 0} onclick={() => selectAdjacent(-1)}>←</button>
-                <button type="button" aria-label="Lihat profil berikutnya" aria-controls="selected-team-profile team-selector" disabled={selectedIndex === TEAM_MEMBERS.length - 1} onclick={() => selectAdjacent(1)}>→</button>
-            </div>
+            <h3 id="team-selector-title">Pilih Profil</h3>
+            <span>Geser untuk melihat semua</span>
         </div>
 
         <div id="team-selector" class="team-selector" bind:this={selectorTrack}>
-            {#each TEAM_MEMBERS as member, index (member.id)}
+            {#each members as member, index (member.id)}
                 <button
                     type="button"
                     class="selector-card"
                     class:selected={selectedIndex === index}
                     class:long-name={member.name.length > 32}
-                    aria-label={`Pilih profil ${member.name}, ${member.role}`}
+                    aria-label={`Buka profil ${member.name}`}
                     aria-pressed={selectedIndex === index}
                     aria-controls="selected-team-profile"
                     onclick={() => selectMember(index)}
                     onkeydown={(event) => handleSelectorKeydown(event, index)}
                 >
-                    <img src={member.image} alt="" loading="lazy" width="154" height="166" />
+                    <img src={member.image} alt="" loading="lazy" width="56" height="60" />
                     <span class="member-copy">
                         <strong>{member.name}</strong>
                         <small>{member.role}</small>
                     </span>
-                    {#if selectedIndex === index}<em>Terpilih</em>{/if}
                 </button>
             {/each}
         </div>
@@ -192,10 +244,23 @@
 
 <style>
     .eyebrow::before { display: none; }
-    .team-section { padding-block: clamp(48px, 4vw, 56px); }
-    .team-heading { max-width: 760px; margin-bottom: clamp(28px, 3vw, 36px); }
+    .team-section { padding-block: clamp(48px, 4vw, 56px); overflow-anchor: none; }
+    .team-header { display: grid; gap: 28px; margin-bottom: clamp(28px, 3vw, 36px); }
+    .team-heading { max-width: 760px; }
     .team-heading h2 { margin: 0; font-size: clamp(1.9rem, 3.5vw, 2.65rem); line-height: 1.1; letter-spacing: -.04em; }
     .team-heading > p:last-child { max-width: 690px; margin: 15px 0 0; color: var(--muted); }
+
+    .quick-selector-panel { min-width: 0; }
+    .quick-selector-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
+    .quick-selector-heading h3 { margin: 0; font-size: .7rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .quick-selector-heading span { color: var(--muted); font-size: .72rem; white-space: nowrap; }
+    .quick-selector-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+    .quick-profile { display: grid; min-width: 0; min-height: 72px; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: 4px; padding: 5px; color: var(--text); border: 1px solid var(--border); border-radius: 10px; background: var(--surface); text-align: left; cursor: pointer; transition: color 180ms ease, border-color 180ms ease, background 180ms ease; }
+    .quick-profile:hover { color: var(--accent-text); border-color: color-mix(in srgb, var(--accent) 60%, var(--border)); background: color-mix(in srgb, var(--surface-selected) 46%, var(--surface)); }
+    .quick-profile img { width: 48px; height: 58px; object-fit: cover; object-position: center top; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-muted); }
+    .quick-profile span { min-width: 0; font-size: .66rem; font-weight: 700; line-height: 1.22; letter-spacing: -.015em; overflow-wrap: normal; word-break: normal; }
+    .quick-profile.long-name span { font-size: .59rem; letter-spacing: -.035em; }
+    .quick-profile:focus-visible { outline: 3px solid var(--accent-text); outline-offset: 2px; }
 
     .featured-profile { padding: clamp(20px, 2.2vw, 28px); border: 1px solid var(--border); border-top: 2px solid var(--accent); border-radius: 14px; background: var(--surface); }
     .featured-topline { display: flex; align-items: center; justify-content: space-between; gap: 16px; color: var(--accent-text); font-size: .7rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
@@ -231,29 +296,31 @@
     .expertise strong { font-size: .82rem; line-height: 1.28; }
     .expertise span { margin-top: 4px; color: var(--muted); font-size: .72rem; line-height: 1.38; }
 
-    .team-selector-section { margin-top: clamp(24px, 3vw, 32px); }
+    .mobile-team-selector-section { display: none; }
     .selector-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 10px; }
-    .selector-heading h3 { margin: 0; font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
-    .selector-controls { display: flex; gap: 8px; }
-    .selector-controls button { display: grid; width: 44px; height: 44px; padding: 0; place-items: center; color: var(--text); border: 1px solid var(--border); border-radius: 8px; background: var(--surface); font-size: 1rem; cursor: pointer; transition: border-color 160ms ease, background 160ms ease, opacity 160ms ease; }
-    .selector-controls button:hover:not(:disabled) { border-color: var(--border-control); background: var(--surface-muted); }
-    .selector-controls button:disabled { color: var(--muted); border-color: var(--border); background: var(--surface-muted); opacity: .48; cursor: not-allowed; }
-    .team-selector { display: grid; grid-auto-flow: column; grid-auto-columns: clamp(120px, 10vw, 128px); gap: 10px; padding: 3px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-padding-inline: 3px; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+    .selector-heading h3 { margin: 0; font-size: .7rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .selector-heading span { color: var(--muted); font-size: .7rem; }
+    .team-selector { display: grid; grid-auto-flow: column; grid-auto-columns: min(74vw, 250px); gap: 9px; padding: 3px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-padding-inline: 3px; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
     .team-selector::-webkit-scrollbar { display: none; width: 0; height: 0; }
-    .selector-card { position: relative; display: grid; min-width: 0; padding: 0 0 9px; overflow: hidden; color: var(--text); border: 1px solid var(--border); border-radius: 10px; background: var(--surface); text-align: left; scroll-snap-align: start; cursor: pointer; transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease; }
+    .selector-card { display: grid; min-width: 0; min-height: 76px; grid-template-columns: 54px minmax(0, 1fr); align-items: center; gap: 10px; padding: 8px; overflow: hidden; color: var(--text); border: 1px solid var(--border); border-radius: 10px; background: var(--surface); text-align: left; scroll-snap-align: start; cursor: pointer; transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease; }
     .selector-card:hover { border-color: var(--border-control); background: var(--surface-muted); }
-    .selector-card:focus-visible, .selector-controls button:focus-visible, .profile-nav-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .selector-card:focus-visible, .profile-nav-button:focus-visible { outline: 3px solid var(--accent-text); outline-offset: 2px; }
     .selector-card.selected { border-color: var(--accent); background: color-mix(in srgb, var(--surface) 88%, var(--surface-selected)); box-shadow: inset 0 0 0 1px var(--accent); }
-    .selector-card img { width: 100%; height: auto; aspect-ratio: 4 / 4.15; object-fit: cover; object-position: center top; background: var(--surface-muted); transition: transform 180ms ease; }
-    .selector-card:hover img { transform: scale(1.015); }
-    .member-copy { display: grid; gap: 4px; padding: 8px 8px 0; }
-    .member-copy strong { font-size: .74rem; line-height: 1.24; letter-spacing: -.015em; }
-    .selector-card.long-name .member-copy { padding-inline: 6px; }
+    .selector-card img { width: 54px; height: 60px; object-fit: cover; object-position: center top; border-radius: 8px; background: var(--surface-muted); }
+    .member-copy { display: grid; min-width: 0; gap: 4px; }
+    .member-copy strong { font-size: .75rem; line-height: 1.24; letter-spacing: -.015em; }
     .selector-card.long-name .member-copy strong { font-size: .7rem; letter-spacing: -.025em; }
     .member-copy small { color: var(--muted); font-size: .64rem; line-height: 1.3; }
-    .selector-card em { position: absolute; top: 6px; left: 6px; padding: 2px 5px; color: var(--on-accent); border-radius: 5px; background: var(--accent); font-size: .53rem; font-style: normal; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 
     @keyframes profile-in { from { opacity: .7; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (min-width: 1200px) {
+        .team-header { grid-template-columns: minmax(0, .9fr) minmax(420px, 1.1fr); align-items: start; gap: clamp(36px, 4vw, 52px); }
+    }
+
+    @media (min-width: 768px) and (max-width: 1199px) {
+        .quick-selector-panel { padding-top: 22px; border-top: 1px solid var(--border); }
+    }
 
     @media (max-width: 900px) {
         .featured-main { grid-template-columns: minmax(210px, .68fr) minmax(0, 1.32fr); gap: 24px; }
@@ -262,9 +329,11 @@
         .featured-identity h3.long-name { font-size: clamp(1.55rem, 4vw, 2.15rem); }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         .team-section { padding-block: 48px; }
+        .team-header { margin-bottom: 28px; }
         .team-heading h2 { font-size: clamp(1.625rem, 7vw, 1.875rem); }
+        .quick-selector-panel { display: none; }
         .featured-profile { padding: 16px; }
         .featured-main { grid-template-columns: 1fr; gap: 14px; }
         .featured-profile-controls { display: none; }
@@ -280,8 +349,7 @@
         .expertise { margin-top: 16px; padding-top: 14px; }
         .expertise > div { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
         .expertise article { padding: 10px; }
-        .selector-controls { display: none; }
-        .team-selector { grid-auto-columns: 128px; }
+        .mobile-team-selector-section { display: block; margin-top: 24px; }
     }
 
     @media (max-width: 360px) {
@@ -293,6 +361,6 @@
 
     @media (prefers-reduced-motion: reduce) {
         .featured-portrait, .featured-details, .expertise { animation: none; }
-        .selector-card img { transition: none; }
+        .quick-profile, .selector-card { transition: none; }
     }
 </style>
