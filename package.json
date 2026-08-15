@@ -25,7 +25,7 @@
 	},
 	"dependencies": {
 		"dompurify": "^3.3.3",
-		"isomorphic-dompurify": "^3.3.0",
+		"isomorphic-dompurify": "2.25.0",
 		"marked": "^17.0.4",
 		"openapi-fetch": "^0.16.0"
 	}
