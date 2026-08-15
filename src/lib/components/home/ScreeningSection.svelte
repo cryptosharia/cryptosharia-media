@@ -1,20 +1,21 @@
 <script lang="ts">
     import StateMessage from '$lib/components/StateMessage.svelte';
     import type { Token } from '$types/api';
+    import { reveal } from '$lib/actions/reveal';
 
     let { tokens, unavailable }: { tokens: Token[]; unavailable?: string | null } = $props();
 </script>
 
 <section class="screening-section" aria-labelledby="screening-pilihan">
     <div class="container">
-        <div class="screening-shell">
+        <div class="screening-shell" use:reveal>
             <header class="screening-header">
                 <div>
                     <p class="section-label">Screening coin</p>
-                    <h2 id="screening-pilihan">Status aset, ditinjau dengan metodologi yang jelas.</h2>
+                    <h2 id="screening-pilihan">Cek status syariah aset kripto.</h2>
                 </div>
                 <p>
-                    Temukan ringkasan status aset kripto berdasarkan hasil screening yang dipublikasikan
+                    Temukan hasil screening dan pelajari dasar penilaian setiap aset yang telah ditinjau
                     CryptoSharia.
                 </p>
             </header>
@@ -31,6 +32,7 @@
                         {#each tokens as token (token.id)}
                             <a
                                 class="screening-row"
+                                use:reveal={{ delay: 110 + tokens.indexOf(token) * 65, distance: 14 }}
                                 href={`/screening/${token.slug}`}
                                 aria-label={`Lihat screening ${token.name}, status ${token.shariaStatus}`}
                             >
@@ -48,6 +50,9 @@
                     </div>
                 </div>
 
+                <p class="screening-disclaimer">
+                    Status merupakan hasil analisis berdasarkan metodologi CryptoSharia dan bukan fatwa.
+                </p>
                 <div class="screening-action">
                     <a href="/screening">Lihat Semua Screening <span aria-hidden="true">→</span></a>
                 </div>
@@ -72,7 +77,8 @@
         padding: clamp(28px, 5vw, 56px);
         border: 1px solid var(--border);
         border-radius: 10px;
-        background: var(--surface);
+        background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 5%, transparent), transparent 34%), var(--surface);
+        box-shadow: var(--shadow-sm);
     }
 
     .screening-header {
@@ -132,12 +138,15 @@
     .screening-row {
         min-height: 76px;
         border-bottom: 1px solid var(--border);
-        transition: background 180ms ease;
+        transition: background var(--motion-micro) var(--ease-standard), color var(--motion-micro) var(--ease-standard), border-color var(--motion-micro) var(--ease-standard);
     }
 
-    .screening-row:hover {
+    .screening-row:hover, .screening-row:focus-visible {
         background: color-mix(in srgb, var(--surface-muted) 56%, transparent);
+        border-bottom-color: var(--border-control);
     }
+
+    .screening-row:hover strong, .screening-row:focus-visible strong { color: var(--accent-text); }
 
     .screening-row strong {
         font-size: 1rem;
@@ -158,6 +167,7 @@
         border-radius: 5px;
         font-size: 0.68rem;
         font-weight: 700;
+        transition: background var(--motion-micro) var(--ease-standard), border-color var(--motion-micro) var(--ease-standard), transform var(--motion-micro) var(--ease-standard);
         letter-spacing: 0.08em;
     }
 
@@ -172,6 +182,8 @@
         color: var(--success);
         border-color: color-mix(in srgb, var(--success) 34%, var(--border));
     }
+
+    .screening-row:hover .status-label, .screening-row:focus-visible .status-label { transform: translateY(-1px); background: color-mix(in srgb, currentColor 10%, var(--surface)); }
 
     .status-label.syubhat {
         color: var(--warning);
@@ -199,6 +211,14 @@
         padding-top: 28px;
     }
 
+    .screening-disclaimer {
+        max-width: 680px;
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-size: 0.78rem;
+        line-height: 1.55;
+    }
+
     .screening-action a {
         display: inline-flex;
         min-height: 44px;
@@ -210,6 +230,7 @@
         background: var(--accent);
         font-size: 0.86rem;
         font-weight: 700;
+        transition: transform var(--motion-micro) var(--ease-standard), box-shadow var(--motion-micro) var(--ease-standard), background var(--motion-micro) var(--ease-standard);
     }
 
     .screening-action a span {
@@ -219,6 +240,8 @@
     .screening-action a:hover span {
         transform: translateX(3px);
     }
+
+    .screening-action a:hover { transform: translateY(-1px); background: var(--accent-hover); box-shadow: 0 8px 18px rgb(255 140 0 / 18%); }
 
     @media (max-width: 760px) {
         .screening-section {

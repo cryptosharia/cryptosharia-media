@@ -19,7 +19,7 @@ export const EDUCATION_CATEGORIES = [
 export const COMMUNITY_LINKS = {
     whatsapp: 'https://chat.whatsapp.com/EkyYn2gmXVN7tspbMvz6fx',
     discord: 'https://discord.gg/raBFJtB4ja',
-    premium: 'https://berbagi.link/cryptosharia?tab=tab-marketplace'
+    premium: 'https://berbagi.link/cryptosharia'
 } as const;
 
 export const SOCIAL_LINKS = [

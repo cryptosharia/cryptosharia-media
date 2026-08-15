@@ -2,6 +2,7 @@
     import StateMessage from '$lib/components/StateMessage.svelte';
     import { formatDate } from '$lib/format';
     import type { Post } from '$types/api';
+    import { reveal } from '$lib/actions/reveal';
 
     let { posts, unavailable }: { posts: Post[]; unavailable?: string | null } = $props();
 
@@ -11,10 +12,10 @@
 
 <section class="education-section" aria-labelledby="edukasi-pilihan">
     <div class="container education-layout">
-        <header class="education-intro">
+        <header class="education-intro" use:reveal>
             <p class="section-label">Learning library</p>
             <h2 id="edukasi-pilihan">Edukasi pilihan</h2>
-            <p>Bangun pemahaman tentang aset digital dan prinsip syariah secara bertahap.</p>
+            <p>Bangun pemahaman tentang aset digital dan prinsip syariah, dari dasar hingga pembahasan lanjutan.</p>
             <a class="section-link" href="/edukasi">Semua Edukasi <span aria-hidden="true">→</span></a>
         </header>
 
@@ -23,7 +24,7 @@
                 <ol class="module-list">
                     {#each posts.slice(0, 3) as post, index (post.id)}
                         <li>
-                            <a class="module-row" href={`/artikel/${post.slug}`} aria-label={`Pelajari ${post.title}`}>
+                            <a class="module-row" use:reveal={{ delay: index * 80, distance: 16 }} href={`/artikel/${post.slug}`} aria-label={`Pelajari ${post.title}`}>
                                 <span class="module-number" aria-hidden="true">{moduleNumber(index)}</span>
                                 <div class="module-copy">
                                     <span class="module-category">{moduleLabel(post)}</span>
@@ -58,11 +59,20 @@
     .education-layout {
         display: grid;
         grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.65fr);
+        align-items: start;
         gap: clamp(48px, 8vw, 112px);
     }
 
     .education-intro {
         align-self: start;
+    }
+
+    /* The grid's height follows the article column, so sticky naturally stops at this section's end. */
+    @media (min-width: 1024px) {
+        .education-intro {
+            position: sticky;
+            top: calc(var(--header-height) + 32px);
+        }
     }
 
     .section-label {
@@ -122,6 +132,7 @@
         min-height: 164px;
         padding-block: 24px;
         border-bottom: 1px solid var(--border);
+        transition: background var(--motion-micro) var(--ease-standard), border-color var(--motion-micro) var(--ease-standard);
     }
 
     .module-number {
@@ -153,8 +164,10 @@
         transition: color 180ms ease;
     }
 
-    .module-row:hover h3 {
+    .module-row:hover, .module-row:focus-visible { background: color-mix(in srgb, var(--surface-selected) 40%, transparent); border-bottom-color: var(--border-control); }
+    .module-row:hover h3, .module-row:focus-visible h3 {
         color: var(--accent-text);
+        transform: translateX(2px);
     }
 
     .module-copy p {
@@ -166,7 +179,11 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         line-clamp: 2;
+        transition: opacity var(--motion-micro) var(--ease-standard);
     }
+
+    .module-row:hover .module-number, .module-row:focus-visible .module-number { color: var(--accent); }
+    .module-row:hover .module-copy p, .module-row:focus-visible .module-copy p { opacity: 1; }
 
     .module-row time {
         color: var(--muted);

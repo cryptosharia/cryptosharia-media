@@ -19,6 +19,7 @@
     let mobilePanel: HTMLElement;
     let siteHeader: HTMLElement;
     let desktopDropdownTrigger: HTMLButtonElement | undefined;
+    let isScrolled = $state(false);
 
     const isActive = (path: string) =>
         path === '/' ? page.url.pathname === '/' : page.url.pathname.startsWith(path);
@@ -81,6 +82,10 @@
         } else {
             closeDesktopDropdown();
         }
+    }
+
+    function handleScroll() {
+        isScrolled = window.scrollY > 12;
     }
 
     async function toggleMenu() {
@@ -179,9 +184,9 @@
     });
 </script>
 
-<svelte:window onclick={handleWindowClick} onkeydown={handleKeydown} onresize={handleResize} />
+<svelte:window onclick={handleWindowClick} onkeydown={handleKeydown} onresize={handleResize} onscroll={handleScroll} />
 
-<header class="site-header" bind:this={siteHeader}>
+<header class="site-header" class:scrolled={isScrolled} bind:this={siteHeader}>
     <nav class="container site-nav" aria-label="Navigasi utama">
         <a
             class="brand header-brand"
@@ -298,6 +303,13 @@
                     hidden={activeDropdown !== 'tentang'}
                 >
                     <a
+                        href="/tentang-kami"
+                        aria-current={isAnchorActive('/tentang-kami', '#', true)
+                            ? 'location'
+                            : undefined}
+                        onclick={() => closeDesktopDropdown()}>Tentang Kami</a
+                    >
+                    <a
                         href="/tentang-kami#visi-misi"
                         aria-current={isAnchorActive('/tentang-kami', '#visi-misi', true)
                             ? 'location'
@@ -345,6 +357,13 @@
                     class="nav-dropdown-menu nav-dropdown-menu-end"
                     hidden={activeDropdown !== 'komunitas'}
                 >
+                    <a
+                        href="/komunitas"
+                        aria-current={isAnchorActive('/komunitas', '#', true)
+                            ? 'location'
+                            : undefined}
+                        onclick={() => closeDesktopDropdown()}>Komunitas</a
+                    >
                     <a
                         href="/komunitas#gabung"
                         aria-current={isAnchorActive('/komunitas', '#gabung', true)
@@ -613,8 +632,16 @@
         z-index: 1000;
         height: var(--header-height);
         border-bottom: 1px solid var(--border);
-        background: var(--canvas);
-        backdrop-filter: none;
+        background: rgb(from var(--canvas) r g b / 94%);
+        backdrop-filter: blur(0);
+        transition: height var(--motion-ui) var(--ease-standard), background var(--motion-ui) var(--ease-standard), border-color var(--motion-ui) var(--ease-standard), backdrop-filter var(--motion-ui) var(--ease-standard);
+    }
+
+    .site-header.scrolled {
+        height: 60px;
+        border-bottom-color: color-mix(in srgb, var(--border-control) 60%, var(--border));
+        background: var(--header-bg);
+        backdrop-filter: blur(16px) saturate(140%);
     }
 
     .site-nav {
@@ -675,7 +702,7 @@
         line-height: 1;
         white-space: nowrap;
         cursor: pointer;
-        transition: color 160ms ease;
+        transition: color var(--motion-micro) var(--ease-standard);
     }
 
     .nav-link:hover,
@@ -699,7 +726,9 @@
         background: var(--accent);
         content: '';
         opacity: 0;
-        transition: opacity 160ms ease;
+        transform: scaleX(0.65);
+        transform-origin: center;
+        transition: opacity var(--motion-micro) var(--ease-standard), transform var(--motion-ui) var(--ease-out);
     }
 
     .nav-link:hover::after,
@@ -712,6 +741,7 @@
     .nav-link.active::after,
     .nav-summary.active::after {
         opacity: 1;
+        transform: scaleX(1);
     }
 
     .screening-link {

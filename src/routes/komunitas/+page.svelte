@@ -49,6 +49,7 @@
 </main>
 
 <style>
+    .community-page .eyebrow::before { display: none; }
     .community-hero { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(240px, .75fr); align-items: end; gap: clamp(40px, 7vw, 96px); padding-block: clamp(60px, 8vw, 100px) clamp(64px, 8vw, 104px); }
     .community-hero h1 { max-width: 720px; margin: 0; font-size: clamp(2.35rem, 5vw, 3.65rem); line-height: 1.06; letter-spacing: -.045em; }
     .community-hero-copy > p:last-child { max-width: 660px; margin: 20px 0 0; color: var(--muted); font-size: clamp(1rem, 1.4vw, 1.06rem); }

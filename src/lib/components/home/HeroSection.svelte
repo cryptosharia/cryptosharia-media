@@ -5,24 +5,38 @@
     let { token }: { token?: Token } = $props();
 
     const snapshotDate = $derived(token?.updatedAt ?? token?.publishedAt ?? token?.createdAt);
+
+    function setCardGlow(event: MouseEvent) {
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        const card = event.currentTarget as HTMLElement;
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--pointer-x', `${event.clientX - rect.left}px`);
+        card.style.setProperty('--pointer-y', `${event.clientY - rect.top}px`);
+    }
+
+    function clearCardGlow(event: MouseEvent) {
+        const card = event.currentTarget as HTMLElement;
+        card.style.removeProperty('--pointer-x');
+        card.style.removeProperty('--pointer-y');
+    }
 </script>
 
 <section class="home-hero" aria-labelledby="home-title">
     <div class="container hero-layout">
         <div class="home-hero-copy">
-            <p class="hero-kicker">Riset · Edukasi · Screening Aset Digital</p>
-            <h1 id="home-title">Pahami dunia kripto dengan <span>perspektif syariah.</span></h1>
-            <p class="hero-intro">
-                Berita aktual, edukasi yang mudah dipahami, dan screening aset digital berdasarkan
-                metodologi CryptoSharia—disajikan jernih untuk keputusan yang lebih bertanggung jawab.
+            <p class="hero-kicker hero-enter hero-enter-1">Riset · Edukasi · Screening Aset Digital</p>
+            <h1 id="home-title" class="hero-enter hero-enter-2">Pahami dunia kripto dengan <span>perspektif syariah.</span></h1>
+            <p class="hero-intro hero-enter hero-enter-3">
+                Berita, riset, edukasi, dan screening aset kripto untuk membantu Muslim memahami pasar
+                dan menilai aset digital dari perspektif syariah.
             </p>
-            <div class="hero-actions">
-                <a class="hero-cta primary" href="/berita">Baca Berita</a>
-                <a class="hero-cta secondary" href="/screening">Cek Screening Coin <span aria-hidden="true">→</span></a>
+            <div class="hero-actions hero-enter hero-enter-4">
+                <a class="hero-cta primary" href="/screening">Cek Screening Coin</a>
+                <a class="hero-cta secondary" href="/berita">Baca Berita <span aria-hidden="true">→</span></a>
             </div>
         </div>
 
-        <aside class="research-snapshot" aria-labelledby="snapshot-title">
+        <aside class="research-snapshot hero-enter hero-enter-card" aria-labelledby="snapshot-title" onmousemove={setCardGlow} onmouseleave={clearCardGlow}>
             <img class="snapshot-watermark" src="/logo.png" alt="" width="96" height="96" />
             <div class="snapshot-heading">
                 <p>Screening snapshot</p>
@@ -45,10 +59,6 @@
                         <dt>Diperbarui</dt>
                         <dd><time datetime={snapshotDate}>{formatDate(snapshotDate)}</time></dd>
                     </div>
-                    <div>
-                        <dt>Peringkat data</dt>
-                        <dd>#{token.rank}</dd>
-                    </div>
                 </dl>
                 <a class="snapshot-link" href={`/screening/${token.slug}`}>
                     Lihat analisis <span aria-hidden="true">→</span>
@@ -68,11 +78,40 @@
 
 <style>
     .home-hero {
+        position: relative;
         padding-block: 96px 112px;
+        overflow: clip;
         background: var(--canvas);
     }
 
+    .home-hero::before {
+        position: absolute;
+        top: -260px;
+        right: max(-11vw, -160px);
+        width: min(58vw, 720px);
+        aspect-ratio: 1;
+        border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+        border-radius: 50%;
+        background: radial-gradient(circle, color-mix(in srgb, var(--accent) 10%, transparent), transparent 66%);
+        content: '';
+        opacity: .7;
+        animation: ambient-drift 16s var(--ease-standard) infinite alternate;
+    }
+
+    .home-hero::after {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image: radial-gradient(color-mix(in srgb, var(--text) 12%, transparent) .65px, transparent .65px);
+        background-size: 18px 18px;
+        mask-image: linear-gradient(90deg, transparent 30%, black 70%, transparent);
+        opacity: .2;
+        content: '';
+    }
+
     .hero-layout {
+        position: relative;
+        z-index: 1;
         display: grid;
         grid-template-columns: minmax(0, 1.35fr) minmax(340px, 0.9fr);
         align-items: center;
@@ -102,8 +141,29 @@
     }
 
     h1 span {
+        position: relative;
         color: var(--accent-text);
     }
+
+    h1 span::after {
+        position: absolute;
+        right: 0;
+        bottom: .02em;
+        left: 0;
+        height: .09em;
+        background: color-mix(in srgb, var(--accent) 48%, transparent);
+        content: '';
+        transform: scaleX(0);
+        transform-origin: left;
+        animation: underline-sweep 600ms var(--ease-out) 580ms forwards;
+    }
+
+    .hero-enter { animation: hero-enter 620ms var(--ease-out) both; }
+    .hero-enter-1 { animation-delay: 60ms; }
+    .hero-enter-2 { animation-delay: 130ms; }
+    .hero-enter-3 { animation-delay: 220ms; }
+    .hero-enter-4 { animation-delay: 300ms; }
+    .hero-enter-card { animation-delay: 260ms; }
 
     .hero-intro {
         max-width: 610px;
@@ -131,7 +191,7 @@
         border-radius: 8px;
         font-size: 0.94rem;
         font-weight: 700;
-        transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+        transition: color var(--motion-micro) var(--ease-standard), background var(--motion-micro) var(--ease-standard), border-color var(--motion-micro) var(--ease-standard), transform var(--motion-micro) var(--ease-standard), box-shadow var(--motion-micro) var(--ease-standard);
     }
 
     .hero-cta.primary {
@@ -144,6 +204,9 @@
         background: var(--accent-hover);
         border-color: var(--accent-hover);
     }
+
+    .hero-cta.primary:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgb(255 140 0 / 20%); }
+    .hero-cta:active { transform: translateY(0); }
 
     .hero-cta.secondary {
         color: var(--text);
@@ -172,8 +235,12 @@
         overflow: hidden;
         border: 1px solid var(--border);
         border-radius: 10px;
-        background: var(--surface);
+        background: radial-gradient(240px circle at var(--pointer-x, 70%) var(--pointer-y, 20%), color-mix(in srgb, var(--accent) 10%, transparent), transparent 62%), var(--surface);
+        box-shadow: var(--shadow-sm);
+        transition: transform var(--motion-ui) var(--ease-out), border-color var(--motion-ui) var(--ease-standard), box-shadow var(--motion-ui) var(--ease-standard);
     }
+
+    .research-snapshot:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 34%, var(--border)); box-shadow: 0 18px 42px rgb(20 24 31 / 12%), 0 0 0 1px rgb(255 140 0 / 7%); }
 
     .snapshot-watermark {
         position: absolute;
@@ -194,6 +261,8 @@
         padding-bottom: 20px;
         border-bottom: 1px solid var(--border);
     }
+
+    .hero-enter-card .snapshot-heading { animation: divider-reveal 520ms var(--ease-out) 550ms both; }
 
     .snapshot-heading p {
         color: var(--text);
@@ -254,6 +323,8 @@
         border-color: color-mix(in srgb, var(--success) 34%, var(--border));
     }
 
+    .hero-enter-card .snapshot-status { animation: status-enter 360ms var(--ease-out) 620ms both; }
+
     .snapshot-status.syubhat {
         color: var(--warning);
         border-color: color-mix(in srgb, var(--warning) 34%, var(--border));
@@ -267,7 +338,7 @@
     .snapshot-meta {
         position: relative;
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 1fr);
         gap: 16px;
         margin: 0;
         padding: 18px 0;
@@ -302,6 +373,12 @@
         font-size: 0.88rem;
         font-weight: 700;
     }
+
+    @keyframes hero-enter { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes underline-sweep { to { transform: scaleX(1); } }
+    @keyframes divider-reveal { from { opacity: 0; transform: scaleX(.1); transform-origin: left; } to { opacity: 1; transform: scaleX(1); } }
+    @keyframes status-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes ambient-drift { to { transform: translate3d(-24px, 18px, 0) rotate(8deg); } }
 
     .snapshot-empty {
         position: relative;
@@ -387,6 +464,11 @@
         .snapshot-ticker {
             font-size: 2.75rem;
         }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .home-hero::before, .hero-enter, h1 span::after, .hero-enter-card .snapshot-heading, .hero-enter-card .snapshot-status { animation: none; }
+        .hero-enter { opacity: 1; transform: none; }
     }
 
     @media (max-width: 380px) {

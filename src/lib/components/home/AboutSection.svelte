@@ -1,20 +1,24 @@
+<script lang="ts">
+    import { reveal } from '$lib/actions/reveal';
+</script>
+
 <section class="about-section" aria-labelledby="tentang-ringkas">
     <div class="container about-layout">
-        <article class="about-copy">
+        <article class="about-copy panel-link" use:reveal>
             <p class="section-label">Tentang CryptoSharia</p>
             <h2 id="tentang-ringkas">Mempertemukan riset aset digital dengan prinsip keuangan Islam.</h2>
             <p>
-                CryptoSharia mengintegrasikan edukasi, literasi, dan inovasi aset digital dengan prinsip
-                kepatuhan syariah Islam.
+                CryptoSharia membantu masyarakat memahami aset digital melalui edukasi, riset pasar,
+                dan analisis syariah yang mudah diakses.
             </p>
             <a href="/tentang-kami">Kenali CryptoSharia <span aria-hidden="true">→</span></a>
         </article>
 
-        <aside class="community-note" aria-labelledby="community-title">
+        <aside class="community-note panel-link" use:reveal={{ delay: 100 }} aria-labelledby="community-title">
             <p class="section-label">Komunitas</p>
             <h2 id="community-title">Bertumbuh lewat diskusi dan pembelajaran bersama.</h2>
-            <p>Temukan kanal sosial, ruang diskusi, dan informasi Komunitas Premium CryptoSharia.</p>
-            <a href="/komunitas">Lihat Komunitas <span aria-hidden="true">→</span></a>
+            <p>Ikuti diskusi pasar, pembelajaran aset digital, dan pembahasan syariah bersama komunitas CryptoSharia.</p>
+            <a href="/komunitas#gabung">Gabung Komunitas <span aria-hidden="true">→</span></a>
         </aside>
     </div>
 </section>
@@ -34,6 +38,7 @@
     .about-copy,
     .community-note {
         padding-block: 56px;
+        transition: background var(--motion-ui) var(--ease-standard), box-shadow var(--motion-ui) var(--ease-standard);
     }
 
     .about-copy {
@@ -62,6 +67,10 @@
         letter-spacing: -0.045em;
         text-wrap: balance;
     }
+
+    .panel-link h2 { transition: color var(--motion-micro) var(--ease-standard), transform var(--motion-micro) var(--ease-standard); }
+    .panel-link:hover, .panel-link:focus-within { background: color-mix(in srgb, var(--surface-selected) 34%, var(--surface)); box-shadow: inset 0 2px 0 color-mix(in srgb, var(--accent) 30%, transparent); }
+    .panel-link:hover h2, .panel-link:focus-within h2 { color: var(--accent-text); transform: translateX(2px); }
 
     .community-note h2 {
         font-size: clamp(1.5rem, 2.4vw, 2rem);

@@ -3,6 +3,7 @@
     import StateMessage from '$lib/components/StateMessage.svelte';
     import { formatDate } from '$lib/format';
     import type { Post } from '$types/api';
+    import { reveal } from '$lib/actions/reveal';
 
     let { posts, unavailable }: { posts: Post[]; unavailable?: string | null } = $props();
 
@@ -13,18 +14,18 @@
 
 <section class="news-section" aria-labelledby="berita-terbaru">
     <div class="container">
-        <header class="section-header">
+        <header class="section-header" use:reveal>
             <div>
                 <p class="section-label">Berita</p>
                 <h2 id="berita-terbaru">Berita pilihan</h2>
-                <p>Analisis dan perkembangan terbaru yang perlu diperhatikan.</p>
+                <p>Perkembangan ekonomi, pasar, dan aset digital yang relevan bagi investor kripto.</p>
             </div>
             <a class="section-link" href="/berita">Semua Berita <span aria-hidden="true">→</span></a>
         </header>
 
         {#if featured}
             <div class="news-layout">
-                <a class="featured-story" href={`/artikel/${featured.slug}`} aria-label={`Baca ${featured.title}`}>
+                <a class="featured-story" use:reveal={{ delay: 70 }} href={`/artikel/${featured.slug}`} aria-label={`Baca ${featured.title}`}>
                     <EditorialMedia
                         imageUrl={featured.coverImage?.url}
                         imageFilename={featured.coverImage?.filename}
@@ -49,7 +50,7 @@
 
                 <div class="secondary-stories" aria-label="Berita pilihan lainnya">
                     {#each secondary as post (post.id)}
-                        <a class="story-row" href={`/artikel/${post.slug}`} aria-label={`Baca ${post.title}`}>
+                        <a class="story-row" use:reveal={{ delay: 100 + secondary.indexOf(post) * 70, distance: 16 }} href={`/artikel/${post.slug}`} aria-label={`Baca ${post.title}`}>
                             <div class="row-media">
                                 <EditorialMedia
                                     imageUrl={post.coverImage?.url}
@@ -153,6 +154,10 @@
         min-width: 0;
     }
 
+    .featured-story :global(.editorial-media) { overflow: hidden; }
+    .featured-story :global(.editorial-media img) { transform: scale(1.03); transition: transform 700ms var(--ease-out); }
+    .featured-story:hover :global(.editorial-media img) { transform: scale(1); }
+
     .featured-copy {
         padding-top: 24px;
     }
@@ -221,7 +226,13 @@
         min-height: 152px;
         padding-block: 20px;
         border-bottom: 1px solid var(--border);
+        transition: background var(--motion-micro) var(--ease-standard), border-color var(--motion-micro) var(--ease-standard);
     }
+
+    .story-row:hover, .story-row:focus-visible { background: color-mix(in srgb, var(--surface-muted) 52%, transparent); border-bottom-color: var(--border-control); }
+    .row-media { overflow: hidden; }
+    .row-media :global(img) { transition: transform 420ms var(--ease-out); }
+    .story-row:hover .row-media :global(img), .story-row:focus-visible .row-media :global(img) { transform: scale(1.035); }
 
     .row-copy {
         min-width: 0;
