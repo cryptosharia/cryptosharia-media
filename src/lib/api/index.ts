@@ -1,5 +1,6 @@
 export {
     getPosts,
+    getContentCategories,
     getPost,
     getTokens,
     getToken,

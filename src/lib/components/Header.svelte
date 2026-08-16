@@ -1,8 +1,9 @@
 <script lang="ts">
     import { page } from '$app/state';
-    import { EDUCATION_CATEGORIES, NEWS_CATEGORIES } from '$lib/config';
     import { theme, type Theme } from '$lib/stores/theme';
     import { tick } from 'svelte';
+
+    let { newsCategories, educationCategories }: { newsCategories: ReadonlyArray<{ label: string; slug: string }>; educationCategories: ReadonlyArray<{ label: string; slug: string }> } = $props();
 
     const DESKTOP_BREAKPOINT = 1020;
     const themes: Theme[] = ['light', 'dark', 'system'];
@@ -231,7 +232,7 @@
                         aria-current={isSectionIndex('/berita') ? 'page' : undefined}
                         onclick={() => closeDesktopDropdown()}>Semua Berita</a
                     >
-                    {#each NEWS_CATEGORIES as category (category.slug)}
+                    {#each newsCategories as category (category.slug)}
                         <a
                             href={`/berita?kategori=${category.slug}`}
                             aria-current={isCategoryActive('/berita', category.slug) ? 'page' : undefined}
@@ -265,7 +266,7 @@
                         aria-current={isSectionIndex('/edukasi') ? 'page' : undefined}
                         onclick={() => closeDesktopDropdown()}>Semua Edukasi</a
                     >
-                    {#each EDUCATION_CATEGORIES as category (category.slug)}
+                    {#each educationCategories as category (category.slug)}
                         <a
                             href={`/edukasi?kategori=${category.slug}`}
                             aria-current={isCategoryActive('/edukasi', category.slug) ? 'page' : undefined}
@@ -476,7 +477,7 @@
                         aria-current={isSectionIndex('/berita') ? 'page' : undefined}
                         onclick={handleMobileNavigate}>Semua Berita</a
                     >
-                    {#each NEWS_CATEGORIES as category (category.slug)}
+                    {#each newsCategories as category (category.slug)}
                         <a
                             href={`/berita?kategori=${category.slug}`}
                             aria-current={isCategoryActive('/berita', category.slug) ? 'page' : undefined}
@@ -511,7 +512,7 @@
                         aria-current={isSectionIndex('/edukasi') ? 'page' : undefined}
                         onclick={handleMobileNavigate}>Semua Edukasi</a
                     >
-                    {#each EDUCATION_CATEGORIES as category (category.slug)}
+                    {#each educationCategories as category (category.slug)}
                         <a
                             href={`/edukasi?kategori=${category.slug}`}
                             aria-current={isCategoryActive('/edukasi', category.slug) ? 'page' : undefined}

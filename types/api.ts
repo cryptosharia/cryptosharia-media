@@ -18,7 +18,12 @@ export type ContentTag = {
   name: string;
   slug: string;
   description?: string | null;
+  contentSection?: 'news' | 'education' | null;
+  showInNavigation?: boolean;
+  displayOrder?: number | null;
 };
+
+export type ContentCategory = Pick<ContentTag, 'id' | 'name' | 'slug' | 'contentSection' | 'showInNavigation' | 'displayOrder'> & { label: string };
 
 export type UserMetadata = {
   id: string;
@@ -115,6 +120,13 @@ export type ListTokensParams = {
   exclude?: string[];
   tags?: string[];
   search?: string;
+  limit?: number;
+  page?: number;
+};
+
+export type ListTagsParams = {
+  contentSections?: Array<'news' | 'education'>;
+  showInNavigation?: boolean;
   limit?: number;
   page?: number;
 };

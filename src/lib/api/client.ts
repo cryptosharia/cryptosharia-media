@@ -11,6 +11,9 @@ import type {
     Token,
     TokenDetail,
     TokenQuote,
+    ContentCategory,
+    ContentTag,
+    ListTagsParams,
     User
 } from '$types/api';
 
@@ -98,6 +101,14 @@ export async function getPosts(params: ListPostsParams = {}) {
         result.data.data.items = result.data.data.items.map(redactPost);
     }
     return result;
+}
+
+export async function getContentCategories(params: ListTagsParams = {}) {
+    const result = await apiRequest<PaginatedData<ContentTag>>('/tags', { query: params });
+    if (result.data) {
+        result.data.data.items = result.data.data.items.map((tag) => ({ ...tag, createdBy: null, updatedBy: null }));
+    }
+    return result as ApiResult<PaginatedData<ContentCategory>>;
 }
 
 export async function getPost(slug: string) {
