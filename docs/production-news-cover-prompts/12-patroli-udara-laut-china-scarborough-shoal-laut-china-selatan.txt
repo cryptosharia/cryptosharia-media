@@ -1,0 +1,33 @@
+CRYPTOSHARIA — COVER PROMPT 12/16
+
+Kategori: GEOPOLITIK
+Judul: Patroli China di Scarborough Shoal Naikkan Suhu Laut China Selatan
+Slug: patroli-udara-laut-china-scarborough-shoal-laut-china-selatan
+Nama gambar produksi: patroli-udara-laut-china-scarborough-shoal-laut-china-selatan.webp
+
+Spesifikasi:
+- 16:9 landscape, ideal 1600 x 900 px atau 1920 x 1080 px.
+- Ekspor WebP/JPG sRGB, target di bawah 1,5 MB, wajib di bawah 4 MB.
+- Jangan memasukkan judul ke dalam gambar; website menampilkannya secara terpisah.
+
+PROMPT
+------
+Create a 16:9 neutral symbolic editorial illustration of a contested maritime area viewed
+from above. Show an abstract coral shoal surrounded by deep navy water, with two anonymous
+patrol vessels positioned at equal visual weight and a few small fishing boats kept safely
+outside their paths. Add restrained shipping-route lines passing through the wider sea to
+suggest the importance of navigation. The composition must not imply ownership or endorse a
+territorial claim. Premium 3D-vector hybrid, dark navy, muted steel blue, CryptoSharia orange
+route accents, restrained teal water detail, ivory highlights, crisp and sober, subtle grain.
+Keep the shoal central for safe crops. No Chinese or Philippine flag, no national colors as
+claim markers, no territorial boundary, no official map label, no confrontation, no weapons,
+no text, no numbers, no watermark.
+
+CHECKLIST
+---------
+- Subjek utama berada di tengah dan aman ketika dipotong menjadi 3:2.
+- Tidak ada tulisan, angka, logo, stempel, watermark, atau wajah orang nyata.
+- Gambar tetap terbaca sebagai thumbnail kecil.
+- Untuk isu konflik atau kesehatan, gambar terlihat sebagai ilustrasi simbolis, bukan foto bukti kejadian.
+- Simpan sebagai: patroli-udara-laut-china-scarborough-shoal-laut-china-selatan.webp
+

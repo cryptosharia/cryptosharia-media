@@ -1,180 +1,306 @@
+<script lang="ts">
+    import { SOCIAL_LINKS } from '$lib/config';
+    import { reveal } from '$lib/actions/reveal';
+</script>
+
 <footer class="site-footer">
     <div class="container">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <div class="brand">
-                    <div class="logo">
-                        <img
-                            src="/logo.png"
-                            alt="CryptoSharia Logo"
-                            style="width: 100%; height: 100%; object-fit: contain;"
-                        />
+        <div class="footer-layout">
+            <div class="footer-intro" use:reveal>
+                <a class="brand footer-brand" href="/" aria-label="CryptoSharia — Beranda">
+                    <img src="/logo.png" alt="" width="40" height="40" />
+                    <span class="brand-name">CryptoSharia</span>
+                </a>
+                <p>Berita, edukasi, dan screening aset kripto dari perspektif syariah.</p>
+            </div>
+
+            <nav class="footer-navigation footer-navigation-desktop" use:reveal={{ delay: 80 }} aria-label="Navigasi footer">
+                <div class="footer-group">
+                    <h2>Konten</h2>
+                    <div class="footer-links">
+                        <a href="/berita">Berita</a>
+                        <a href="/edukasi">Edukasi</a>
+                        <a href="/screening">Screening Coin</a>
                     </div>
-                    <p>News & education crypto berperspektif syariah.</p>
                 </div>
-                <a
-                    href="https://profile.cryptosharia.id"
-                    class="company-profile-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Company Profile"
-                >
-                    CryptoSharia Profile
-                </a>
-            </div>
-            <div
-                class="social-links"
-                style="display: flex; gap: 1rem; align-items: center; justify-content: flex-end;"
-            >
-                <a
-                    href="https://t.me/cryptosharia"
-                    class="social-link"
-                    target="_blank"
-                    rel="noopener"
-                    title="Telegram"
-                >
-                    <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><line x1="22" y1="2" x2="11" y2="13"></line><polygon
-                            points="22 2 15 22 11 13 2 9 22 2"
-                        ></polygon></svg
-                    >
-                </a>
-                <a
-                    href="https://youtube.com/@cryptosharia"
-                    class="social-link"
-                    target="_blank"
-                    rel="noopener"
-                    title="YouTube"
-                >
-                    <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><path
-                            d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"
-                        ></path><polygon
-                            points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"
-                        ></polygon></svg
-                    >
-                </a>
-                <a
-                    href="https://instagram.com/cryptosharia"
-                    class="social-link"
-                    target="_blank"
-                    rel="noopener"
-                    title="Instagram"
-                >
-                    <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><rect x="2" y="2" width="20" height="20" rx="5" ry="5"
-                        ></rect><path
-                            d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
-                        ></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"
-                        ></line></svg
-                    >
-                </a>
-                <a
-                    href="https://discord.com/invite/raBFJtB4ja"
-                    class="social-link"
-                    target="_blank"
-                    rel="noopener"
-                    title="Discord"
-                >
-                    <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><path
-                            d="M18 9a5 5 0 0 0-5-5h-2a5 5 0 0 0-5 5v2a5 5 0 0 0 5 5h2a5 5 0 0 0 5-5V9z"
-                        ></path><path d="M8 22v-3"></path><path d="M16 22v-3"
-                        ></path><circle cx="9" cy="11" r="1"></circle><circle
-                            cx="15"
-                            cy="11"
-                            r="1"
-                        ></circle></svg
-                    >
-                </a>
-                <a
-                    href="https://profile.cryptosharia.id/#kontak"
-                    class="social-link"
-                    title="Email"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><path
-                            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                        ></path><polyline points="22,6 12,13 2,6"
-                        ></polyline></svg
-                    >
-                </a>
-            </div>
+
+                <div class="footer-group">
+                    <h2>CryptoSharia</h2>
+                    <div class="footer-links">
+                        <a href="/tentang-kami">Tentang Kami</a>
+                        <a href="/tentang-kami#aktivitas">Aktivitas</a>
+                        <a href="/komunitas">Komunitas</a>
+                        <a href="/tentang-kami#hubungi-kami">Hubungi Kami</a>
+                    </div>
+                </div>
+
+                <div class="footer-group footer-group-social">
+                    <h2>Ikuti Kami</h2>
+                    <div class="footer-links social-links">
+                        {#each SOCIAL_LINKS as link (link.label)}
+                            <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+                        {/each}
+                    </div>
+                </div>
+            </nav>
+
+            <nav class="footer-navigation-mobile" aria-label="Navigasi footer">
+                <details class="footer-accordion">
+                    <summary>Konten</summary>
+                    <div class="footer-links">
+                        <a href="/berita">Berita</a>
+                        <a href="/edukasi">Edukasi</a>
+                        <a href="/screening">Screening Coin</a>
+                    </div>
+                </details>
+
+                <details class="footer-accordion">
+                    <summary>CryptoSharia</summary>
+                    <div class="footer-links">
+                        <a href="/tentang-kami">Tentang Kami</a>
+                        <a href="/tentang-kami#aktivitas">Aktivitas</a>
+                        <a href="/komunitas">Komunitas</a>
+                        <a href="/tentang-kami#hubungi-kami">Hubungi Kami</a>
+                    </div>
+                </details>
+
+                <details class="footer-accordion">
+                    <summary>Ikuti Kami</summary>
+                    <div class="footer-links social-links">
+                        {#each SOCIAL_LINKS as link (link.label)}
+                            <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+                        {/each}
+                    </div>
+                </details>
+            </nav>
         </div>
-        <div class="footer-mini">
-            <span
-                >© {new Date().getFullYear()} CryptoSharia. All rights reserved.</span
-            >
+
+        <div class="footer-bottom">
+            <span>© {new Date().getFullYear()} CryptoSharia.</span>
+            <span>Seluruh hak cipta dilindungi.</span>
         </div>
     </div>
 </footer>
 
 <style>
-    .company-profile-link {
+    .site-footer {
+        margin-top: 0;
+        padding-block: 64px 28px;
+        color: #eeeef1;
+        border-top: 1px solid #2b303b;
+        background: #0f1115;
+    }
+
+    .footer-layout {
+        display: grid;
+        grid-template-columns: minmax(260px, 1.15fr) minmax(520px, 1.85fr);
+        gap: clamp(48px, 8vw, 112px);
+        align-items: start;
+    }
+
+    .footer-intro {
+        max-width: 390px;
+    }
+
+    .footer-brand {
         display: inline-flex;
+        min-height: 44px;
         align-items: center;
-        justify-content: center;
-        margin-top: 0.85rem;
-        padding: 0.5rem 0.9rem;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
-        color: var(--text);
-        font-size: 0.84rem;
-        font-weight: 600;
+        gap: 11px;
+        color: #ffffff;
+        font-size: 1.08rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+    }
+
+    .footer-brand img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+    }
+
+    .brand-name {
+        display: inline;
+    }
+
+    .footer-intro p {
+        max-width: 350px;
+        margin: 20px 0 0;
+        color: #b5bbc7;
+        font-size: 0.96rem;
+        line-height: 1.7;
+    }
+
+    .footer-navigation {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(28px, 4vw, 56px);
+    }
+
+    .footer-navigation-mobile {
+        display: none;
+    }
+
+    .footer-group h2 {
+        margin: 0 0 18px;
+        color: #eeeef1;
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .footer-links {
+        display: grid;
+        gap: 4px;
+    }
+
+    .footer-links a {
+        display: flex;
+        min-height: 38px;
+        align-items: center;
         width: fit-content;
-        transition: all 0.2s ease;
+        color: #aeb5c1;
+        font-size: 0.9rem;
+        text-decoration: none;
+        text-underline-offset: 4px;
+        transition: color var(--motion-micro) var(--ease-standard), transform var(--motion-micro) var(--ease-standard);
     }
 
-    .company-profile-link:hover {
-        border-color: var(--brand);
-        background: rgba(252, 192, 0, 0.08);
+    .footer-links a:hover {
+        color: #ffffff;
+        text-decoration: underline;
+        transform: translateX(2px);
     }
 
-    @media (max-width: 767px) {
-        .company-profile-link {
-            margin-top: 0.7rem;
+    .footer-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 52px;
+        padding-top: 22px;
+        color: #8f97a5;
+        border-top: 1px solid #2b303b;
+        font-size: 0.8rem;
+    }
+
+    @media (max-width: 900px) {
+        .footer-layout {
+            grid-template-columns: 1fr;
+            gap: 44px;
+        }
+
+        .footer-intro {
+            max-width: 520px;
+        }
+
+        .footer-navigation {
+            gap: 32px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .site-footer {
+            padding-block: 32px 20px;
+        }
+
+        .site-footer > .container {
+            width: calc(100% - 40px);
+        }
+
+        .footer-layout {
+            gap: 22px;
+        }
+
+        .brand-name {
+            display: inline;
+        }
+
+        .footer-intro p {
+            max-width: 320px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+        .footer-navigation-desktop {
+            display: none;
+        }
+
+        .footer-navigation-mobile {
+            display: block;
+            border-bottom: 1px solid #2b303b;
+        }
+
+        .footer-accordion {
+            border-top: 1px solid #2b303b;
+        }
+
+        .footer-accordion summary {
+            display: flex;
+            min-height: 44px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            color: #eeeef1;
+            cursor: pointer;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            list-style: none;
+            text-transform: uppercase;
+        }
+
+        .footer-accordion summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .footer-accordion summary::after {
+            content: '+';
+            flex: 0 0 auto;
+            color: #aeb5c1;
+            font-size: 1.15rem;
+            font-weight: 400;
+            line-height: 1;
+            transition: transform var(--motion-micro) var(--ease-standard);
+        }
+
+        .footer-accordion[open] summary::after {
+            transform: rotate(45deg);
+        }
+
+        .footer-accordion summary:focus-visible {
+            border-radius: 4px;
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .footer-accordion .footer-links {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0 12px;
+            padding: 0 0 8px;
+        }
+
+        .footer-accordion .footer-links a {
+            min-width: 0;
+            min-height: 44px;
+            width: 100%;
+            overflow-wrap: anywhere;
+        }
+
+        .footer-bottom {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 24px;
+            padding-top: 16px;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .site-footer > .container {
+            width: calc(100% - 32px);
         }
     }
 </style>

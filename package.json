@@ -5,6 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
+		"dev:local": "node scripts/dev-local.mjs",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -24,6 +25,7 @@
 	},
 	"dependencies": {
 		"dompurify": "^3.3.3",
+		"isomorphic-dompurify": "2.25.0",
 		"marked": "^17.0.4",
 		"openapi-fetch": "^0.16.0"
 	}

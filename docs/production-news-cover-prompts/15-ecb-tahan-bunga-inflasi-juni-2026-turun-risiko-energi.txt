@@ -1,0 +1,33 @@
+CRYPTOSHARIA — COVER PROMPT 15/16
+
+Kategori: EKONOMI
+Judul: ECB Tahan Bunga saat Inflasi Turun, Risiko Energi Belum Usai
+Slug: ecb-tahan-bunga-inflasi-juni-2026-turun-risiko-energi
+Nama gambar produksi: ecb-tahan-bunga-inflasi-juni-2026-turun-risiko-energi.webp
+
+Spesifikasi:
+- 16:9 landscape, ideal 1600 x 900 px atau 1920 x 1080 px.
+- Ekspor WebP/JPG sRGB, target di bawah 1,5 MB, wajib di bawah 4 MB.
+- Jangan memasukkan judul ke dalam gambar; website menampilkannya secara terpisah.
+
+PROMPT
+------
+Create a 16:9 symbolic editorial illustration about a central bank holding interest rates
+while inflation eases and energy risk remains. Show a neutral abstract institutional building
+balancing two forces: a warm, turbulent energy wave on one side and a gently descending,
+unnumbered price curve made of geometric blocks on the other. Include a small home silhouette
+under a restrained financing-pressure arc to suggest mortgage effects. Premium 3D-vector
+editorial style, dark navy and graphite, CryptoSharia orange energy accents, ivory and muted
+gold economic highlights, restrained steel blue, soft cinematic lighting, subtle grain,
+factual and calm. Center the balance structure within the middle 65%. No ECB logo, no euro
+symbol, no EU flag, no official building replica, no readable graph, no text, no numbers, no
+stock-market imagery, no watermark.
+
+CHECKLIST
+---------
+- Subjek utama berada di tengah dan aman ketika dipotong menjadi 3:2.
+- Tidak ada tulisan, angka, logo, stempel, watermark, atau wajah orang nyata.
+- Gambar tetap terbaca sebagai thumbnail kecil.
+- Untuk isu konflik atau kesehatan, gambar terlihat sebagai ilustrasi simbolis, bukan foto bukti kejadian.
+- Simpan sebagai: ecb-tahan-bunga-inflasi-juni-2026-turun-risiko-energi.webp
+

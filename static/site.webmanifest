@@ -1,0 +1,16 @@
+{
+  "name": "CryptoSharia",
+  "short_name": "CryptoSharia",
+  "description": "Berita, edukasi, dan screening aset kripto dari perspektif syariah.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FCFCFC",
+  "theme_color": "#FF8C00",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "500x500",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,36 +1,96 @@
 import type { Handle } from '@sveltejs/kit';
-import { getMe } from '$lib/api';
+import { getMe, refreshSession } from '$lib/api';
+
+function legacyTarget(url: URL) {
+    const hostname = url.hostname.toLowerCase();
+    const query = url.search;
+
+    if (hostname === 'cryptosharia.id') return `https://www.cryptosharia.id${url.pathname}${query}`;
+
+    if (hostname === 'portal.cryptosharia.id') {
+        return `https://www.cryptosharia.id/komunitas${query}`;
+    }
+
+    if (hostname === 'profile.cryptosharia.id') {
+        if (url.pathname.startsWith('/aktivitas/')) {
+            return `https://www.cryptosharia.id${url.pathname}${query}`;
+        }
+        if (url.pathname === '/aktivitas') {
+            return `https://www.cryptosharia.id/tentang-kami${query}#aktivitas`;
+        }
+        if (url.pathname === '/pengurus') {
+            return `https://www.cryptosharia.id/tentang-kami${query}#tim`;
+        }
+        return `https://www.cryptosharia.id/tentang-kami${query}`;
+    }
+
+    if (hostname === 'media.cryptosharia.id') {
+        const pathname = url.pathname === '/' ? '/berita' : url.pathname;
+        return `https://www.cryptosharia.id${pathname}${query}`;
+    }
+
+    return null;
+}
 
 export const handle: Handle = async ({ event, resolve }) => {
-    // Read the access token from cookies
-    const token = event.cookies.get('access_token');
+    const target = legacyTarget(event.url);
+    if (target) return new Response(null, { status: 308, headers: { location: target } });
 
-    // Default locals to null
+    const token = event.cookies.get('access_token');
+    const refreshToken = event.cookies.get('refresh_token');
     event.locals.user = null;
     event.locals.token = null;
 
-    if (token) {
-        try {
-            // Verify token and get user profile
-            const { data, error } = await getMe(token);
+    const clearSession = () => {
+        event.cookies.delete('access_token', { path: '/' });
+        event.cookies.delete('refresh_token', { path: '/' });
+    };
 
-            if (!error && data?.data) {
-                // Token is valid, set user in locals
-                event.locals.user = data.data;
-                event.locals.token = token;
-            } else {
-                // Token is invalid or expired, clear it
-                event.cookies.delete('access_token', { path: '/' });
-            }
-        } catch (err) {
-            console.error('Error validating session token:', err);
-            // In case of network errors during SSR, we might not want to log the user out immediately,
-            // but for simplicity, we clear it here.
-            event.cookies.delete('access_token', { path: '/' });
+    const restoreSession = async () => {
+        if (!refreshToken) return false;
+        const refreshed = await refreshSession(refreshToken);
+        const session = refreshed.data?.data;
+        if (!session?.accessToken || !session.refreshToken) {
+            if (refreshed.response.status === 400 || refreshed.response.status === 401) clearSession();
+            return false;
         }
+
+        const secure = event.url.protocol === 'https:';
+        event.cookies.set('access_token', session.accessToken, {
+            path: '/',
+            httpOnly: true,
+            sameSite: 'strict',
+            secure,
+            maxAge: 60 * 15
+        });
+        event.cookies.set('refresh_token', session.refreshToken, {
+            path: '/',
+            httpOnly: true,
+            sameSite: 'strict',
+            secure,
+            maxAge: 60 * 60 * 24 * 30
+        });
+        event.locals.user = session.user;
+        event.locals.token = session.accessToken;
+        return true;
+    };
+
+    if (token) {
+        const result = await getMe(token);
+        if (result.data?.data) {
+            event.locals.user = result.data.data;
+            event.locals.token = token;
+        } else if (result.response.status === 401) {
+            const restored = await restoreSession();
+            if (!restored && !refreshToken) clearSession();
+        }
+    } else if (refreshToken) {
+        await restoreSession();
     }
 
-    // Process the request
     const response = await resolve(event);
+    response.headers.set('x-content-type-options', 'nosniff');
+    response.headers.set('referrer-policy', 'strict-origin-when-cross-origin');
+    response.headers.set('permissions-policy', 'camera=(), microphone=(), geolocation=()');
     return response;
 };

@@ -1,0 +1,33 @@
+CRYPTOSHARIA — COVER PROMPT 07/16
+
+Kategori: TEKNOLOGI & AI
+Judul: Anthropic Perbarui Pengaman Biologi Fable 5 agar Lebih Tepat Sasaran
+Slug: anthropic-perbarui-pengaman-biologi-fable-5
+Nama gambar produksi: anthropic-perbarui-pengaman-biologi-fable-5.webp
+
+Spesifikasi:
+- 16:9 landscape, ideal 1600 x 900 px atau 1920 x 1080 px.
+- Ekspor WebP/JPG sRGB, target di bawah 1,5 MB, wajib di bawah 4 MB.
+- Jangan memasukkan judul ke dalam gambar; website menampilkannya secara terpisah.
+
+PROMPT
+------
+Create a 16:9 symbolic editorial illustration about a more precise AI biology safety filter.
+Show elegant abstract molecular forms approaching an adjustable aperture made of layered
+transparent shields. Benign educational patterns pass through a clear, narrow channel while
+ambiguous high-risk forms are calmly redirected to a separate review path. The image should
+communicate balance between useful scientific access and responsible safeguards, without
+depicting an actual pathogen or experiment. Premium 3D-vector hybrid, dark navy and graphite,
+CryptoSharia orange, cool cyan, restrained ivory, soft cinematic lighting, crisp detail,
+subtle grain, measured and non-alarmist. Keep the aperture central for safe crop. No Anthropic
+logo, no realistic virus, no laboratory procedure, no weaponizable detail, no biohazard sign,
+no text, no numbers, no scary imagery, no watermark.
+
+CHECKLIST
+---------
+- Subjek utama berada di tengah dan aman ketika dipotong menjadi 3:2.
+- Tidak ada tulisan, angka, logo, stempel, watermark, atau wajah orang nyata.
+- Gambar tetap terbaca sebagai thumbnail kecil.
+- Untuk isu konflik atau kesehatan, gambar terlihat sebagai ilustrasi simbolis, bukan foto bukti kejadian.
+- Simpan sebagai: anthropic-perbarui-pengaman-biologi-fable-5.webp
+

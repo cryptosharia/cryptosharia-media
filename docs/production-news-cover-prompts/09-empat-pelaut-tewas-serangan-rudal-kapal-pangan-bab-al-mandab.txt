@@ -1,0 +1,33 @@
+CRYPTOSHARIA — COVER PROMPT 09/16
+
+Kategori: GEOPOLITIK
+Judul: Empat Pelaut Tewas dalam Serangan Rudal ke Kapal Pangan di Bab al-Mandab
+Slug: empat-pelaut-tewas-serangan-rudal-kapal-pangan-bab-al-mandab
+Nama gambar produksi: empat-pelaut-tewas-serangan-rudal-kapal-pangan-bab-al-mandab.webp
+
+Spesifikasi:
+- 16:9 landscape, ideal 1600 x 900 px atau 1920 x 1080 px.
+- Ekspor WebP/JPG sRGB, target di bawah 1,5 MB, wajib di bawah 4 MB.
+- Jangan memasukkan judul ke dalam gambar; website menampilkannya secara terpisah.
+
+PROMPT
+------
+Create a 16:9 symbolic editorial illustration, explicitly not a documentary photograph, for
+a report about a deadly attack on a civilian food-supply vessel. Show an anonymous cargo ship
+from a respectful distance in a narrow sea passage at dusk, with sealed food-supply crates
+suggested on deck and a focused rescue light approaching across the water. Use a tense but
+restrained sky and a subtle broken navigation line to communicate disrupted passage. The
+image must center human protection and rescue, not spectacle or blame. Premium 3D-vector
+hybrid, dark navy, muted steel blue, CryptoSharia orange rescue light, ivory highlights,
+subtle grain, sober editorial tone. No explosion, no missile, no flames, no bodies, no blood,
+no flags, no military insignia, no identified attacker, no real vessel markings, no text,
+no numbers, no watermark.
+
+CHECKLIST
+---------
+- Subjek utama berada di tengah dan aman ketika dipotong menjadi 3:2.
+- Tidak ada tulisan, angka, logo, stempel, watermark, atau wajah orang nyata.
+- Gambar tetap terbaca sebagai thumbnail kecil.
+- Untuk isu konflik atau kesehatan, gambar terlihat sebagai ilustrasi simbolis, bukan foto bukti kejadian.
+- Simpan sebagai: empat-pelaut-tewas-serangan-rudal-kapal-pangan-bab-al-mandab.webp
+

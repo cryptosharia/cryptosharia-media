@@ -1,42 +1,57 @@
-# sv
+# CryptoSharia Web
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Frontend publik utama CryptoSharia untuk `https://www.cryptosharia.id`.
 
-## Creating a project
+Phase 1 menyatukan halaman publik Beranda, Berita, Edukasi, Screening Coin, Tentang Kami, dan Komunitas. Admin serta API tetap berjalan sebagai layanan terpisah. Academy belum termasuk dalam fase ini.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Menjalankan project
 
-```sh
-# create a new project
-npx sv create my-app
-```
+Persyaratan: Node.js 20 atau lebih baru.
 
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-npx sv create --template minimal --types ts --install npm .
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+```bash
+npm install
+cp .env.example .env
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Environment yang diperlukan:
 
-To create a production version of your app:
+```env
+PUBLIC_APP_URL=https://www.cryptosharia.id
+PUBLIC_CS_API_URL=https://api.cryptosharia.id
+CS_API_KEY=<server-only-api-key>
+```
 
-```sh
+`CS_API_KEY` tidak boleh diberi prefix `PUBLIC_`, disimpan di browser, atau dikirim ke client.
+
+## Pemeriksaan sebelum rilis
+
+```bash
+npm run check
 npm run build
+npm audit --omit=dev
 ```
 
-You can preview the production build with `npm run preview`.
+## Local testing tanpa API key production
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+npm run dev:local
+```
+
+Perintah ini menjalankan frontend beserta data fixture yang jelas berlabel `[LOCAL TEST]` dan tidak menyentuh layanan production. Checklist pengujian tersedia di [docs/local-testing.md](docs/local-testing.md).
+
+## Route utama
+
+- `/` — Beranda
+- `/berita` — Berita dan filter subkategori
+- `/edukasi` — Edukasi dan filter subkategori
+- `/artikel/[slug]` — Detail berita/edukasi/riset
+- `/screening` — Daftar Screening Coin
+- `/screening/[slug]` — Detail screening
+- `/tentang-kami` — Visi, misi, tujuan, tim, aktivitas, dan kontak
+- `/aktivitas/[slug]` — Detail aktivitas
+- `/komunitas` — Komunitas umum, sosial media, dan CTA Premium
+- `/riset` — Arsip kompatibilitas untuk konten riset lama; tidak tampil di menu utama
+- `/sitemap.xml` — Sitemap dinamis
+
+Detail cutover, taxonomy, redirect, dan handover tersedia di [docs/phase-1-handover.md](docs/phase-1-handover.md).

@@ -3,7 +3,7 @@
  * Helper functions for constructing asset/media URLs
  */
 
-import { PUBLIC_CS_API_URL } from "$env/static/public";
+import { env } from '$env/dynamic/public';
 
 // =============================================================================
 // Configuration
@@ -13,7 +13,7 @@ import { PUBLIC_CS_API_URL } from "$env/static/public";
  * Base URL for asset files
  * Change this if the asset endpoint differs from the API
  */
-const ASSETS_BASE_URL = PUBLIC_CS_API_URL;
+const ASSETS_BASE_URL = env.PUBLIC_CS_API_URL || 'https://api.cryptosharia.id';
 
 /**
  * Asset path prefix (e.g., '/assets', '/files', '/uploads')

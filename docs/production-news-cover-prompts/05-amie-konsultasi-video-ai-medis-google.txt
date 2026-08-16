@@ -1,0 +1,33 @@
+CRYPTOSHARIA — COVER PROMPT 05/16
+
+Kategori: TEKNOLOGI & AI
+Judul: AMIE Belajar Membaca Suara dan Gerak dalam Simulasi Konsultasi Medis
+Slug: amie-konsultasi-video-ai-medis-google
+Nama gambar produksi: amie-konsultasi-video-ai-medis-google.webp
+
+Spesifikasi:
+- 16:9 landscape, ideal 1600 x 900 px atau 1920 x 1080 px.
+- Ekspor WebP/JPG sRGB, target di bawah 1,5 MB, wajib di bawah 4 MB.
+- Jangan memasukkan judul ke dalam gambar; website menampilkannya secara terpisah.
+
+PROMPT
+------
+Create a 16:9 symbolic editorial illustration that clearly represents a simulated AI medical
+video consultation, not a real clinical event. Show an anonymous, non-identifiable patient
+silhouette inside a video frame, with gentle sound waves, motion-tracking points, and three
+interconnected reasoning layers for conversation, planning, and perception. Place a calm
+human clinician silhouette outside the system as an oversight figure, making it clear that
+human review remains essential. Premium 3D-vector hybrid, dark navy and graphite,
+CryptoSharia orange, cool cyan medical-tech accents, restrained ivory, soft cinematic light,
+clean and humane, subtle grain. Center the consultation frame within the safe area. No Google
+or product logo, no recognizable face, no diagnosis label, no medical claim, no hospital
+branding, no text, no numbers, no alarming symptoms, no gore, no watermark.
+
+CHECKLIST
+---------
+- Subjek utama berada di tengah dan aman ketika dipotong menjadi 3:2.
+- Tidak ada tulisan, angka, logo, stempel, watermark, atau wajah orang nyata.
+- Gambar tetap terbaca sebagai thumbnail kecil.
+- Untuk isu konflik atau kesehatan, gambar terlihat sebagai ilustrasi simbolis, bukan foto bukti kejadian.
+- Simpan sebagai: amie-konsultasi-video-ai-medis-google.webp
+
