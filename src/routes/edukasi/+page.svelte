@@ -2,7 +2,6 @@
     import EducationStory from '$lib/components/education/EducationStory.svelte';
     import Pagination from '$lib/components/Pagination.svelte';
     import Seo from '$lib/components/Seo.svelte';
-    import { EDUCATION_CATEGORIES } from '$lib/config';
     import type { Post } from '$types/api';
     import type { PageData } from './$types';
 
@@ -14,7 +13,7 @@
     const resultCount = $derived(`${data.pagination.total} materi`);
 
     function categoryLabel(post: Post) {
-        const category = EDUCATION_CATEGORIES.find((item) => post.tags?.some((tag) => tag.slug === item.slug));
+        const category = data.categories.find((item) => post.tags?.some((tag) => tag.slug === item.slug));
         return category?.label ?? data.category?.label ?? 'Edukasi';
     }
 
@@ -55,7 +54,7 @@
         <div class="discovery-toolbar">
             <nav class="category-tabs" aria-label="Kategori edukasi">
                 <a class="category-tab" class:active={!data.category} href="/edukasi" aria-current={!data.category ? 'page' : undefined}>Semua</a>
-                {#each EDUCATION_CATEGORIES as category (category.slug)}
+                {#each data.categories as category (category.slug)}
                     <a class="category-tab" class:active={data.category?.slug === category.slug} href={`/edukasi?kategori=${category.slug}`} aria-current={data.category?.slug === category.slug ? 'page' : undefined}>{category.label}</a>
                 {/each}
             </nav>

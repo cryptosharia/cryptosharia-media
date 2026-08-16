@@ -2,7 +2,6 @@
     import NewsStory from '$lib/components/news/NewsStory.svelte';
     import Pagination from '$lib/components/Pagination.svelte';
     import Seo from '$lib/components/Seo.svelte';
-    import { NEWS_CATEGORIES } from '$lib/config';
     import type { Post } from '$types/api';
     import type { PageData } from './$types';
 
@@ -17,7 +16,7 @@
     const resultCount = $derived(`${data.pagination.total} artikel`);
 
     function categoryLabel(post: Post) {
-        const category = NEWS_CATEGORIES.find((item) =>
+        const category = data.categories.find((item) =>
             post.tags?.some((tag) => tag.slug === item.slug)
         );
         return category?.label ?? data.category?.label ?? 'Berita';
@@ -78,7 +77,7 @@
                     href="/berita"
                     aria-current={!data.category ? 'page' : undefined}>Semua</a
                 >
-                {#each NEWS_CATEGORIES as category (category.slug)}
+                {#each data.categories as category (category.slug)}
                     <a
                         class="category-tab"
                         class:active={data.category?.slug === category.slug}
