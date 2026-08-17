@@ -9,7 +9,11 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
     ]);
 
     const news = newsResult.data?.data.items ?? [];
-    const snapshotToken = tokenResult.data?.data.items[0];
+    const tokens = tokenResult.data?.data.items ?? [];
+    const snapshotToken = tokens.find((token) => {
+        const ticker = token.ticker.toUpperCase();
+        return ticker === 'BTC' || ticker.startsWith('BTC-') || token.slug === 'bitcoin';
+    }) ?? tokens[0];
     const snapshotQuoteResult = snapshotToken ? await getTokenQuotes(snapshotToken.slug) : null;
     const snapshotQuote = snapshotQuoteResult?.data?.data.find((item) => item.slug === snapshotToken?.slug) ?? null;
     const hasUpstreamError = Boolean(newsResult.error || educationResult.error || tokenResult.error || snapshotQuoteResult?.error);
@@ -22,7 +26,8 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
     return {
         news: [...news].sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured)),
         education: educationResult.data?.data.items ?? [],
-        tokens: tokenResult.data?.data.items ?? [],
+        tokens,
+        snapshotToken,
         snapshotQuote,
         unavailable: {
             news: newsResult.error?.message ?? null,

@@ -21,6 +21,7 @@
     let siteHeader: HTMLElement;
     let desktopDropdownTrigger: HTMLButtonElement | undefined;
     let isScrolled = $state(false);
+    let scrollFrame = 0;
 
     const isActive = (path: string) =>
         path === '/' ? page.url.pathname === '/' : page.url.pathname.startsWith(path);
@@ -86,7 +87,11 @@
     }
 
     function handleScroll() {
-        isScrolled = window.scrollY > 12;
+        if (scrollFrame) return;
+        scrollFrame = requestAnimationFrame(() => {
+            isScrolled = window.scrollY > 12;
+            scrollFrame = 0;
+        });
     }
 
     async function toggleMenu() {
@@ -195,7 +200,7 @@
             aria-label="CryptoSharia — Beranda"
             onclick={() => closeMenu()}
         >
-            <img src="/logo.png" alt="" width="30" height="30" />
+            <img src="/logo.webp" alt="" width="30" height="30" />
             <span class="brand-name">CryptoSharia</span>
         </a>
 
@@ -312,7 +317,7 @@
                     >
                     <a
                         href="/tentang-kami#visi-misi"
-                        aria-current={isAnchorActive('/tentang-kami', '#visi-misi', true)
+                        aria-current={isAnchorActive('/tentang-kami', '#visi-misi')
                             ? 'location'
                             : undefined}
                         onclick={() => closeDesktopDropdown()}>Visi, Misi & Tujuan</a
@@ -367,7 +372,7 @@
                     >
                     <a
                         href="/komunitas#gabung"
-                        aria-current={isAnchorActive('/komunitas', '#gabung', true)
+                        aria-current={isAnchorActive('/komunitas', '#gabung')
                             ? 'location'
                             : undefined}
                         onclick={() => closeDesktopDropdown()}>Gabung Komunitas</a
@@ -552,7 +557,7 @@
                 >
                     <a
                         href="/tentang-kami#visi-misi"
-                        aria-current={isAnchorActive('/tentang-kami', '#visi-misi', true)
+                        aria-current={isAnchorActive('/tentang-kami', '#visi-misi')
                             ? 'location'
                             : undefined}
                         onclick={handleMobileNavigate}>Visi, Misi & Tujuan</a
@@ -601,7 +606,7 @@
                 >
                     <a
                         href="/komunitas#gabung"
-                        aria-current={isAnchorActive('/komunitas', '#gabung', true)
+                        aria-current={isAnchorActive('/komunitas', '#gabung')
                             ? 'location'
                             : undefined}
                         onclick={handleMobileNavigate}>Gabung Komunitas</a
@@ -634,15 +639,16 @@
         height: var(--header-height);
         border-bottom: 1px solid var(--border);
         background: rgb(from var(--canvas) r g b / 94%);
-        backdrop-filter: blur(0);
+        backdrop-filter: none;
         transition: height var(--motion-ui) var(--ease-standard), background var(--motion-ui) var(--ease-standard), border-color var(--motion-ui) var(--ease-standard), backdrop-filter var(--motion-ui) var(--ease-standard);
+        animation: header-enter 460ms var(--ease-out) both;
     }
 
     .site-header.scrolled {
         height: 60px;
         border-bottom-color: color-mix(in srgb, var(--border-control) 60%, var(--border));
         background: var(--header-bg);
-        backdrop-filter: blur(16px) saturate(140%);
+        backdrop-filter: blur(10px) saturate(115%);
     }
 
     .site-nav {
@@ -787,6 +793,7 @@
         border-radius: 8px;
         background: var(--surface);
         box-shadow: 0 10px 24px rgb(0 0 0 / 16%);
+        animation: dropdown-enter var(--motion-micro) var(--ease-out) both;
     }
 
     .nav-dropdown-menu[hidden] {
@@ -871,7 +878,23 @@
         display: none;
     }
 
+    @keyframes header-enter {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes dropdown-enter {
+        from { opacity: 0; transform: translateY(-5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 1020px) {
+        .site-header,
+        .site-header.scrolled {
+            height: var(--header-height);
+            backdrop-filter: none;
+        }
+
         .site-nav {
             gap: 12px;
         }
@@ -975,6 +998,7 @@
             gap: 0;
             padding: 8px 4px 12px 22px;
             border-bottom: 1px solid var(--border);
+            animation: submenu-enter var(--motion-micro) var(--ease-out) both;
         }
 
         .mobile-submenu[hidden] {
@@ -1015,6 +1039,19 @@
     @media (max-width: 340px) {
         .brand-name {
             display: none;
+        }
+    }
+
+    @keyframes submenu-enter {
+        from { opacity: 0; transform: translateY(-4px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .site-header,
+        .nav-dropdown-menu,
+        .mobile-submenu {
+            animation: none;
         }
     }
 </style>

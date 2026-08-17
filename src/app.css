@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
-
 :root {
   color-scheme: light;
   --canvas: #fcfcfc;
@@ -34,6 +32,8 @@
   --motion-micro: 180ms;
   --motion-ui: 280ms;
   --motion-reveal: 620ms;
+  --lift-card: -3px;
+  --shift-arrow: 4px;
 
   /* Compatibility aliases for legacy pages during the redirect window. */
   --bg: var(--canvas);
@@ -166,6 +166,20 @@ a {
 
 .motion-reveal.is-revealed { opacity: 1; transform: translateY(0); }
 
+.page-enter {
+  animation: page-enter var(--motion-reveal) var(--ease-out) both;
+}
+
+.page-enter-1 { animation-delay: 50ms; }
+.page-enter-2 { animation-delay: 120ms; }
+.page-enter-3 { animation-delay: 210ms; }
+.page-enter-4 { animation-delay: 290ms; }
+
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .scroll-progress {
   position: fixed;
   top: 0;
@@ -262,6 +276,15 @@ a {
   line-height: 1.2;
   cursor: pointer;
   transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.button > span[aria-hidden='true'] {
+  transition: transform var(--motion-micro) var(--ease-standard);
+}
+
+.button:hover > span[aria-hidden='true'],
+.button:focus-visible > span[aria-hidden='true'] {
+  transform: translateX(var(--shift-arrow));
 }
 
 .button:hover {
@@ -544,6 +567,12 @@ a {
   transform: translateY(-3px);
 }
 
+.article-card:focus-visible {
+  border-color: var(--border-control);
+  box-shadow: var(--shadow-md);
+  transform: translateY(var(--lift-card));
+}
+
 .article-card-media {
   position: relative;
   aspect-ratio: 16 / 9;
@@ -559,6 +588,10 @@ a {
 }
 
 .article-card:hover .article-card-media img {
+  transform: scale(1.035);
+}
+
+.article-card:focus-visible .article-card-media img {
   transform: scale(1.035);
 }
 
@@ -595,6 +628,16 @@ a {
   padding-top: 18px;
   color: var(--muted);
   font-size: 0.78rem;
+}
+
+.card-meta > span:last-child {
+  transition: color var(--motion-micro) var(--ease-standard), transform var(--motion-micro) var(--ease-standard);
+}
+
+.article-card:hover .card-meta > span:last-child,
+.article-card:focus-visible .card-meta > span:last-child {
+  color: var(--accent-text);
+  transform: translateX(var(--shift-arrow));
 }
 
 .badge,
@@ -1109,5 +1152,30 @@ a {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+
+  .motion-reveal,
+  .motion-reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  .page-enter {
+    animation: none;
+  }
+
+  .button:hover,
+  .button:active,
+  .button:focus-visible,
+  .button:hover > span[aria-hidden='true'],
+  .button:focus-visible > span[aria-hidden='true'],
+  .article-card:hover,
+  .article-card:focus-visible,
+  .article-card:hover .article-card-media img,
+  .article-card:focus-visible .article-card-media img,
+  .article-card:hover .card-meta > span:last-child,
+  .article-card:focus-visible .card-meta > span:last-child {
+    transform: none;
   }
 }

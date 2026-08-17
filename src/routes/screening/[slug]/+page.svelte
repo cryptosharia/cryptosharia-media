@@ -30,7 +30,18 @@
     function formatSupply(value: number | null | undefined, infinite = false) { if (infinite) return '∞'; if (typeof value !== 'number' || !Number.isFinite(value)) return '—'; return new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(value); }
 </script>
 
-<Seo title={`${data.token.name} (${data.token.ticker}) — Screening CryptoSharia`} description={data.token.excerpt} image={data.token.logo?.url || '/logo.png'} canonicalPath={`/screening/${data.token.slug}`} />
+<Seo
+    title={`${data.token.name} (${data.token.ticker}) — Screening CryptoSharia`}
+    description={data.token.excerpt}
+    image={data.token.logo?.url || '/logo.png'}
+    imageWidth={data.token.logo?.url ? data.token.logo.width : 500}
+    imageHeight={data.token.logo?.url ? data.token.logo.height : 500}
+    imageAlt={data.token.logo?.url ? `Logo ${data.token.name}` : 'Logo CryptoSharia'}
+    type="article"
+    publishedTime={data.token.publishedAt ?? data.token.createdAt}
+    modifiedTime={data.token.updatedAt ?? data.token.publishedAt ?? data.token.createdAt}
+    canonicalPath={`/screening/${data.token.slug}`}
+/>
 
 <main id="main-content" class="site-main">
     <header class="container coin-header">

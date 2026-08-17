@@ -12,15 +12,34 @@ function legacyTarget(url: URL) {
     }
 
     if (hostname === 'profile.cryptosharia.id') {
-        if (url.pathname.startsWith('/aktivitas/')) {
-            return `https://www.cryptosharia.id${url.pathname}${query}`;
+        const pathname = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, '') : '/';
+        const route = pathname.toLowerCase();
+
+        if (route.startsWith('/aktivitas/')) {
+            const slug = pathname.slice('/aktivitas/'.length);
+            return `https://www.cryptosharia.id/aktivitas/${slug}${query}`;
         }
-        if (url.pathname === '/aktivitas') {
+
+        if (route === '/komunitas' || route === '/community') {
+            return `https://www.cryptosharia.id/komunitas${query}`;
+        }
+
+        if (route === '/aktivitas') {
             return `https://www.cryptosharia.id/tentang-kami${query}#aktivitas`;
         }
-        if (url.pathname === '/pengurus') {
+
+        if (route === '/pengurus' || route === '/tim') {
             return `https://www.cryptosharia.id/tentang-kami${query}#tim`;
         }
+
+        if (['/visi-misi', '/visi', '/misi', '/tujuan'].includes(route)) {
+            return `https://www.cryptosharia.id/tentang-kami${query}#visi-misi`;
+        }
+
+        if (['/hubungi-kami', '/kontak', '/contact'].includes(route)) {
+            return `https://www.cryptosharia.id/tentang-kami${query}#hubungi-kami`;
+        }
+
         return `https://www.cryptosharia.id/tentang-kami${query}`;
     }
 

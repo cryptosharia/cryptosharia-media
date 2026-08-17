@@ -21,33 +21,35 @@
             </header>
 
             {#if tokens.length}
-                <div class="screening-table" aria-label="Ringkasan screening coin">
+                <div class="screening-table">
                     <div class="table-head" aria-hidden="true">
                         <span>Ticker</span>
                         <span>Aset digital</span>
                         <span>Status kajian</span>
                         <span aria-hidden="true"></span>
                     </div>
-                    <div class="table-body">
+                    <ul class="table-body" aria-label="Daftar ringkasan screening coin">
                         {#each tokens as token (token.id)}
-                            <a
-                                class="screening-row"
-                                use:reveal={{ delay: 110 + tokens.indexOf(token) * 65, distance: 14 }}
-                                href={`/screening/${token.slug}`}
-                                aria-label={`Lihat screening ${token.name}, status ${token.shariaStatus}`}
-                            >
-                                <strong>{token.ticker}</strong>
-                                <span class="asset-name">{token.name}</span>
-                                <span>
-                                    <span class={`status-label ${token.shariaStatus}`}>
-                                        <span class="status-dot" aria-hidden="true"></span>
-                                        {token.shariaStatus.toUpperCase()}
+                            <li>
+                                <a
+                                    class="screening-row"
+                                    use:reveal={{ delay: 110 + tokens.indexOf(token) * 65, distance: 14 }}
+                                    href={`/screening/${token.slug}`}
+                                    aria-label={`Lihat screening ${token.name} (${token.ticker}), status ${token.shariaStatus}`}
+                                >
+                                    <strong>{token.ticker}</strong>
+                                    <span class="asset-name">{token.name}</span>
+                                    <span>
+                                        <span class={`status-label ${token.shariaStatus}`}>
+                                            <span class="status-dot" aria-hidden="true"></span>
+                                            {token.shariaStatus.toUpperCase()}
+                                        </span>
                                     </span>
-                                </span>
-                                <span class="row-arrow" aria-hidden="true">→</span>
-                            </a>
+                                    <span class="row-arrow" aria-hidden="true">→</span>
+                                </a>
+                            </li>
                         {/each}
-                    </div>
+                    </ul>
                 </div>
 
                 <p class="screening-disclaimer">
@@ -115,6 +117,17 @@
 
     .screening-table {
         border-top: 1px solid var(--border-control);
+    }
+
+    .table-body {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .table-body > li {
+        margin: 0;
+        padding: 0;
     }
 
     .table-head,
@@ -197,10 +210,11 @@
 
     .row-arrow {
         color: var(--muted);
-        transition: color 180ms ease, transform 180ms ease;
+        transition: color var(--motion-micro) var(--ease-standard), transform var(--motion-micro) var(--ease-standard);
     }
 
-    .screening-row:hover .row-arrow {
+    .screening-row:hover .row-arrow,
+    .screening-row:focus-visible .row-arrow {
         color: var(--text);
         transform: translateX(3px);
     }
@@ -234,14 +248,29 @@
     }
 
     .screening-action a span {
-        transition: transform 180ms ease;
+        transition: transform var(--motion-micro) var(--ease-standard);
     }
 
-    .screening-action a:hover span {
+    .screening-action a:hover span,
+    .screening-action a:focus-visible span {
         transform: translateX(3px);
     }
 
-    .screening-action a:hover { transform: translateY(-1px); background: var(--accent-hover); box-shadow: 0 8px 18px rgb(255 140 0 / 18%); }
+    .screening-action a:hover,
+    .screening-action a:focus-visible { transform: translateY(-1px); background: var(--accent-hover); box-shadow: 0 8px 18px rgb(255 140 0 / 18%); }
+
+    @media (prefers-reduced-motion: reduce) {
+        .screening-row:hover .status-label,
+        .screening-row:focus-visible .status-label,
+        .screening-row:hover .row-arrow,
+        .screening-row:focus-visible .row-arrow,
+        .screening-action a:hover,
+        .screening-action a:focus-visible,
+        .screening-action a:hover span,
+        .screening-action a:focus-visible span {
+            transform: none;
+        }
+    }
 
     @media (max-width: 760px) {
         .screening-section {

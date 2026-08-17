@@ -109,11 +109,13 @@
 
     .section-link span,
     .module-arrow {
-        transition: transform 180ms ease;
+        transition: transform var(--motion-micro) var(--ease-standard);
     }
 
     .section-link:hover span,
-    .module-row:hover .module-arrow {
+    .section-link:focus-visible span,
+    .module-row:hover .module-arrow,
+    .module-row:focus-visible .module-arrow {
         transform: translateX(3px);
     }
 
@@ -161,7 +163,7 @@
         font-size: clamp(1.25rem, 2vw, 1.55rem);
         line-height: 1.2;
         letter-spacing: -0.035em;
-        transition: color 180ms ease;
+        transition: color var(--motion-micro) var(--ease-standard), transform var(--motion-micro) var(--ease-standard);
     }
 
     .module-row:hover, .module-row:focus-visible { background: color-mix(in srgb, var(--surface-selected) 40%, transparent); border-bottom-color: var(--border-control); }
@@ -193,6 +195,17 @@
 
     .module-arrow {
         color: var(--muted);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .section-link:hover span,
+        .section-link:focus-visible span,
+        .module-row:hover .module-arrow,
+        .module-row:focus-visible .module-arrow,
+        .module-row:hover h3,
+        .module-row:focus-visible h3 {
+            transform: none;
+        }
     }
 
     @media (max-width: 880px) {

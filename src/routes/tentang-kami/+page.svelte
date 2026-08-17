@@ -1,5 +1,6 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
+    import { reveal } from '$lib/actions/reveal';
     import ArticleCard from '$lib/components/ArticleCard.svelte';
     import Seo from '$lib/components/Seo.svelte';
     import StateMessage from '$lib/components/StateMessage.svelte';
@@ -21,28 +22,112 @@
     };
 </script>
 
-<Seo title="Tentang CryptoSharia" description="Kenali visi, misi, tujuan, tim, aktivitas, dan cara menghubungi CryptoSharia." canonicalPath="/tentang-kami" />
+<Seo
+    title="Tentang Kami — CryptoSharia"
+    description="Kenali organisasi, visi, tim, aktivitas, dan cara menghubungi CryptoSharia sebagai platform media dan riset aset digital berperspektif syariah."
+    canonicalPath="/tentang-kami"
+/>
 
 <main id="main-content" class="site-main about-page">
     <header class="container about-hero">
-        <div><p class="eyebrow">Tentang Kami</p><h1>Menghubungkan inovasi aset digital dengan nilai syariah.</h1><p>CryptoSharia mengintegrasikan edukasi, literasi, dan inovasi aset digital untuk membantu masyarakat memahami ekosistem kripto secara etis, transparan, dan bertanggung jawab.</p></div>
-        <aside><p>Fokus Kami</p><ol>{#each focus as item, i (item)}<li><span>0{i + 1}</span>{item}</li>{/each}</ol></aside>
+        <div>
+            <p class="eyebrow page-enter page-enter-1">Tentang Kami</p>
+            <h1 class="page-enter page-enter-2">Menghubungkan inovasi aset digital dengan nilai syariah.</h1>
+            <p class="page-enter page-enter-3">
+                CryptoSharia mengintegrasikan edukasi, literasi, dan inovasi aset digital untuk membantu
+                masyarakat memahami ekosistem kripto secara etis, transparan, dan bertanggung jawab.
+            </p>
+        </div>
+        <aside class="page-enter page-enter-4" aria-label="Fokus CryptoSharia">
+            <p>Fokus Kami</p>
+            <ol>
+                {#each focus as item, i (item)}
+                    <li><span>{String(i + 1).padStart(2, '0')}</span>{item}</li>
+                {/each}
+            </ol>
+        </aside>
     </header>
 
     <section id="visi-misi" class="about-direction" aria-labelledby="visi-misi-title">
-        <div class="container"><p class="eyebrow">Arah kami</p><h2 id="visi-misi-title">Visi, Misi &amp; Tujuan</h2><div class="about-principles">{#each principles as principle, i (principle[0])}<article><span>0{i + 1}</span><h3>{principle[0]}</h3><p>{principle[1]}</p></article>{/each}</div></div>
+        <div class="container">
+            <div use:reveal>
+                <p class="eyebrow">Arah kami</p>
+                <h2 id="visi-misi-title">Visi, Misi &amp; Tujuan</h2>
+            </div>
+            <div class="about-principles">
+                {#each principles as principle, i (principle[0])}
+                    <article use:reveal={{ delay: i * 75, distance: 16 }}>
+                        <span>{String(i + 1).padStart(2, '0')}</span>
+                        <h3>{principle[0]}</h3>
+                        <p>{principle[1]}</p>
+                    </article>
+                {/each}
+            </div>
+        </div>
     </section>
 
     <InteractiveTeamDirectory />
 
     <section id="aktivitas" class="about-activities" aria-labelledby="aktivitas-title">
-        <div class="container"><div class="about-heading"><p class="eyebrow">Aktivitas</p><h2 id="aktivitas-title">Aktivitas Kami</h2><p>Dokumentasi kegiatan CryptoSharia yang telah dipublikasikan.</p></div>{#if data.activities.length}<div class="about-activity-grid" role="region" aria-label="Daftar aktivitas CryptoSharia">{#each data.activities as post (post.id)}<ArticleCard {post} href={`/aktivitas/${post.slug}`} label="Aktivitas" />{/each}</div>{:else}<StateMessage title="Aktivitas belum tersedia" message={data.activityError || 'Dokumentasi kegiatan akan segera ditambahkan.'} />{/if}</div>
+        <div class="container">
+            <div class="about-heading" use:reveal>
+                <p class="eyebrow">Aktivitas</p>
+                <h2 id="aktivitas-title">Aktivitas Kami</h2>
+                <p>Dokumentasi kegiatan CryptoSharia yang telah dipublikasikan.</p>
+            </div>
+            {#if data.activities.length}
+                <ul class="about-activity-grid" aria-label="Daftar aktivitas CryptoSharia">
+                    {#each data.activities as post, index (post.id)}
+                        <li class="activity-item" use:reveal={{ delay: index * 70, distance: 18 }}>
+                            <ArticleCard {post} href={`/aktivitas/${post.slug}`} label="Aktivitas" />
+                        </li>
+                    {/each}
+                </ul>
+            {:else}
+                <StateMessage title="Aktivitas belum tersedia" message={data.activityError || 'Dokumentasi kegiatan akan segera ditambahkan.'} />
+            {/if}
+        </div>
     </section>
 
     <section id="hubungi-kami" class="container section" aria-labelledby="contact-title">
         <div class="about-contact">
-            <div><p class="eyebrow">Kontak</p><h2 id="contact-title">Hubungi Kami</h2><p>Punya pertanyaan, masukan, atau peluang kolaborasi? Tim kami siap membantu.</p><dl><div><dt>WhatsApp</dt><dd><a href="https://wa.me/6282186584279" target="_blank" rel="noopener noreferrer">+62 821-8658-4279 ↗</a></dd></div><div><dt>Email</dt><dd><a href="mailto:contact@cryptosharia.id">contact@cryptosharia.id</a></dd></div><div><dt>Alamat</dt><dd><a href="https://maps.google.com/?q=Jl.+Wibawa+Mukti+II+No.+6,+Jatiluhur,+Jatiasih,+Kota+Bekasi" target="_blank" rel="noopener noreferrer">Jl. Wibawa Mukti II No. 6, Jatiluhur, Jatiasih, Bekasi ↗</a></dd></div></dl></div>
-            <form class="form-grid about-form" method="POST" action="?/sendMessage#hubungi-kami" aria-busy={submitting} use:enhance={handleSubmit}><div class="field"><label for="contact-name">Nama</label><input id="contact-name" class="input" name="name" autocomplete="name" required minlength="2" maxlength="120" value={form?.fields?.name ?? ''} /></div><div class="field"><label for="contact-email">Email</label><input id="contact-email" class="input" type="email" name="email" autocomplete="email" required maxlength="255" value={form?.fields?.email ?? ''} /></div><div class="field"><label for="contact-message">Pesan</label><textarea id="contact-message" class="textarea" name="message" required minlength="10" maxlength="5000">{form?.fields?.message ?? ''}</textarea></div><button class="button button-primary" type="submit" disabled={submitting}>{submitting ? 'Mengirim…' : 'Kirim Pesan →'}</button>{#if data.messageSent}<div class="alert alert-success" role="status">Pesan berhasil dikirim. Terima kasih.</div>{/if}{#if form?.error}<div class="alert alert-error" role="alert">{form.error}</div>{/if}</form>
+            <div use:reveal>
+                <p class="eyebrow">Kontak</p>
+                <h2 id="contact-title">Hubungi Kami</h2>
+                <p>Punya pertanyaan, masukan, atau peluang kolaborasi? Tim kami siap membantu.</p>
+                <dl>
+                    <div><dt>WhatsApp</dt><dd><a href="https://wa.me/6282186584279" target="_blank" rel="noopener noreferrer">+62 821-8658-4279 ↗</a></dd></div>
+                    <div><dt>Email</dt><dd><a href="mailto:contact@cryptosharia.id">contact@cryptosharia.id</a></dd></div>
+                    <div><dt>Alamat</dt><dd><a href="https://maps.google.com/?q=Jl.+Wibawa+Mukti+II+No.+6,+Jatiluhur,+Jatiasih,+Kota+Bekasi" target="_blank" rel="noopener noreferrer">Jl. Wibawa Mukti II No. 6, Jatiluhur, Jatiasih, Bekasi ↗</a></dd></div>
+                </dl>
+            </div>
+
+            <form
+                class="form-grid about-form"
+                method="POST"
+                action="?/sendMessage#hubungi-kami"
+                aria-busy={submitting}
+                use:enhance={handleSubmit}
+                use:reveal={{ delay: 100, distance: 18 }}
+            >
+                <div class="field">
+                    <label for="contact-name">Nama</label>
+                    <input id="contact-name" class="input" name="name" autocomplete="name" required minlength="2" maxlength="120" value={form?.fields?.name ?? ''} />
+                </div>
+                <div class="field">
+                    <label for="contact-email">Email</label>
+                    <input id="contact-email" class="input" type="email" name="email" autocomplete="email" required maxlength="255" value={form?.fields?.email ?? ''} />
+                </div>
+                <div class="field">
+                    <label for="contact-message">Pesan</label>
+                    <textarea id="contact-message" class="textarea" name="message" required minlength="10" maxlength="5000">{form?.fields?.message ?? ''}</textarea>
+                </div>
+                <button class="button button-primary" type="submit" disabled={submitting}>
+                    {submitting ? 'Mengirim…' : 'Kirim Pesan →'}
+                </button>
+                {#if data.messageSent}<div class="alert alert-success" role="status">Pesan berhasil dikirim. Terima kasih.</div>{/if}
+                {#if form?.error}<div class="alert alert-error" role="alert">{form.error}</div>{/if}
+            </form>
         </div>
     </section>
 </main>
@@ -145,6 +230,11 @@
         gap: 24px;
         padding: 28px 0;
         border-bottom: 1px solid var(--border);
+        transition: background var(--motion-micro) var(--ease-standard);
+    }
+
+    .about-principles article:hover {
+        background: color-mix(in srgb, var(--surface) 56%, transparent);
     }
 
     .about-principles h3 {
@@ -165,6 +255,33 @@
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 20px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .activity-item {
+        min-width: 0;
+    }
+
+    .activity-item :global(.article-card) {
+        height: 100%;
+    }
+
+    .activity-item :global(.article-card h3),
+    .activity-item :global(.badge) {
+        transition: color var(--motion-micro) var(--ease-standard), background var(--motion-micro) var(--ease-standard), border-color var(--motion-micro) var(--ease-standard);
+    }
+
+    .activity-item :global(.article-card:hover h3),
+    .activity-item :global(.article-card:focus-visible h3) {
+        color: var(--accent-text);
+    }
+
+    .activity-item :global(.article-card:hover .badge),
+    .activity-item :global(.article-card:focus-visible .badge) {
+        border-color: color-mix(in srgb, var(--accent) 56%, var(--border));
+        background: color-mix(in srgb, var(--accent) 14%, var(--surface));
     }
 
     .about-contact {
@@ -346,7 +463,7 @@
             display: none;
         }
 
-        .about-activity-grid > :global(.article-card) {
+        .about-activity-grid > .activity-item {
             flex: 0 0 min(84vw, 340px);
             scroll-snap-align: start;
         }
@@ -471,6 +588,16 @@
         .about-activities,
         #hubungi-kami {
             padding-block: 48px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .about-principles article:hover,
+        .activity-item :global(.article-card:hover),
+        .activity-item :global(.article-card:focus-visible),
+        .activity-item :global(.article-card:hover .article-card-media img),
+        .activity-item :global(.article-card:focus-visible .article-card-media img) {
+            transform: none;
         }
     }
 </style>

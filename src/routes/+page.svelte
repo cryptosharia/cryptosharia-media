@@ -12,12 +12,13 @@
 </script>
 
 <Seo
-    title="CryptoSharia — Berita, Edukasi & Screening Coin"
-    description="Satu tempat untuk mengikuti berita, mempelajari aset digital, dan membaca hasil screening coin dari perspektif syariah."
+    title="CryptoSharia — Berita, Edukasi & Screening Aset Digital"
+    description="Platform berita, edukasi, dan screening aset digital untuk membantu Anda memahami ekosistem kripto dari perspektif syariah."
+    canonicalPath="/"
 />
 
 <main id="main-content" class="site-main">
-    <HeroSection token={data.tokens[0]} quote={data.snapshotQuote} />
+    <HeroSection token={data.snapshotToken} quote={data.snapshotQuote} />
     <TrustStrip />
     <NewsSection posts={data.news} unavailable={data.unavailable.news} />
     <EducationSection posts={data.education} unavailable={data.unavailable.education} />

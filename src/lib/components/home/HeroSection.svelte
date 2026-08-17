@@ -17,19 +17,6 @@
         return `${value.toFixed(2)}%`;
     }
 
-    function setCardGlow(event: MouseEvent) {
-        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-        const card = event.currentTarget as HTMLElement;
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty('--pointer-x', `${event.clientX - rect.left}px`);
-        card.style.setProperty('--pointer-y', `${event.clientY - rect.top}px`);
-    }
-
-    function clearCardGlow(event: MouseEvent) {
-        const card = event.currentTarget as HTMLElement;
-        card.style.removeProperty('--pointer-x');
-        card.style.removeProperty('--pointer-y');
-    }
 </script>
 
 <section class="home-hero" aria-labelledby="home-title">
@@ -47,8 +34,12 @@
             </div>
         </div>
 
-        <aside class="research-snapshot hero-enter hero-enter-card" aria-labelledby="snapshot-title" onmousemove={setCardGlow} onmouseleave={clearCardGlow}>
-            <img class="snapshot-watermark" src="/logo.png" alt="" width="96" height="96" />
+        <a
+            class="research-snapshot hero-enter hero-enter-card"
+            href={token ? `/screening/${token.slug}` : '/screening'}
+            aria-labelledby="snapshot-title"
+        >
+            <img class="snapshot-watermark" src="/logo.webp" alt="" width="96" height="96" />
             <div class="snapshot-heading">
                 <p>Screening snapshot</p>
                 <span>Research desk</span>
@@ -79,19 +70,19 @@
                         <dd>{formatPercent(quote?.marketCapDominance)}</dd>
                     </div>
                 </dl>
-                <a class="snapshot-link" href={`/screening/${token.slug}`}>
+                <span class="snapshot-link">
                     Lihat analisis <span aria-hidden="true">→</span>
-                </a>
+                </span>
             {:else}
                 <div class="snapshot-empty">
                     <h2 id="snapshot-title">Basis riset aset digital</h2>
                     <p>Jelajahi hasil screening yang telah dipublikasikan CryptoSharia.</p>
                 </div>
-                <a class="snapshot-link" href="/screening">
+                <span class="snapshot-link">
                     Buka screening <span aria-hidden="true">→</span>
-                </a>
+                </span>
             {/if}
-        </aside>
+        </a>
     </div>
 </section>
 
@@ -111,20 +102,20 @@
         aspect-ratio: 1;
         border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
         border-radius: 50%;
-        background: radial-gradient(circle, color-mix(in srgb, var(--accent) 10%, transparent), transparent 66%);
         content: '';
-        opacity: .7;
-        animation: ambient-drift 16s var(--ease-standard) infinite alternate;
+        opacity: .72;
     }
 
     .home-hero::after {
         position: absolute;
         inset: 0;
         pointer-events: none;
-        background-image: radial-gradient(color-mix(in srgb, var(--text) 12%, transparent) .65px, transparent .65px);
-        background-size: 18px 18px;
+        background-image:
+            linear-gradient(color-mix(in srgb, var(--text) 8%, transparent) 1px, transparent 1px),
+            linear-gradient(90deg, color-mix(in srgb, var(--text) 8%, transparent) 1px, transparent 1px);
+        background-size: 44px 44px;
         mask-image: linear-gradient(90deg, transparent 30%, black 70%, transparent);
-        opacity: .2;
+        opacity: .16;
         content: '';
     }
 
@@ -254,12 +245,19 @@
         overflow: hidden;
         border: 1px solid var(--border);
         border-radius: 10px;
-        background: radial-gradient(240px circle at var(--pointer-x, 70%) var(--pointer-y, 20%), color-mix(in srgb, var(--accent) 10%, transparent), transparent 62%), var(--surface);
+        color: var(--text);
+        background:
+            linear-gradient(145deg, color-mix(in srgb, var(--accent) 4%, transparent), transparent 42%),
+            var(--surface);
         box-shadow: var(--shadow-sm);
         transition: transform var(--motion-ui) var(--ease-out), border-color var(--motion-ui) var(--ease-standard), box-shadow var(--motion-ui) var(--ease-standard);
     }
 
     .research-snapshot:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 34%, var(--border)); box-shadow: 0 18px 42px rgb(20 24 31 / 12%), 0 0 0 1px rgb(255 140 0 / 7%); }
+
+    .research-snapshot:focus-visible {
+        outline-offset: 5px;
+    }
 
     .snapshot-watermark {
         position: absolute;
@@ -331,10 +329,20 @@
     }
 
     .status-dot {
+        position: relative;
         width: 6px;
         height: 6px;
         border-radius: 50%;
         background: currentColor;
+    }
+
+    .status-dot::after {
+        position: absolute;
+        inset: -4px;
+        border: 1px solid currentColor;
+        border-radius: inherit;
+        content: '';
+        opacity: 0;
     }
 
     .snapshot-status.halal {
@@ -343,6 +351,7 @@
     }
 
     .hero-enter-card .snapshot-status { animation: status-enter 360ms var(--ease-out) 620ms both; }
+    .hero-enter-card .status-dot::after { animation: status-pulse-once 720ms var(--ease-out) 900ms both; }
 
     .snapshot-status.syubhat {
         color: var(--warning);
@@ -381,6 +390,12 @@
         margin: 0;
         font-size: 0.86rem;
         font-weight: 600;
+        transition: color var(--motion-micro) var(--ease-standard);
+    }
+
+    .research-snapshot:hover .snapshot-meta dd,
+    .research-snapshot:focus-visible .snapshot-meta dd {
+        color: var(--accent-text);
     }
 
     .snapshot-link {
@@ -394,11 +409,20 @@
         font-weight: 700;
     }
 
+    .research-snapshot:hover .snapshot-link > span,
+    .research-snapshot:focus-visible .snapshot-link > span {
+        transform: translateX(3px);
+    }
+
     @keyframes hero-enter { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes underline-sweep { to { transform: scaleX(1); } }
     @keyframes divider-reveal { from { opacity: 0; transform: scaleX(.1); transform-origin: left; } to { opacity: 1; transform: scaleX(1); } }
     @keyframes status-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes ambient-drift { to { transform: translate3d(-24px, 18px, 0) rotate(8deg); } }
+    @keyframes status-pulse-once {
+        0% { opacity: 0; transform: scale(.65); }
+        35% { opacity: .38; }
+        100% { opacity: 0; transform: scale(1.55); }
+    }
 
     .snapshot-empty {
         position: relative;
@@ -493,8 +517,18 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .home-hero::before, .hero-enter, h1 span::after, .hero-enter-card .snapshot-heading, .hero-enter-card .snapshot-status { animation: none; }
+        .home-hero::before, .hero-enter, h1 span::after, .hero-enter-card .snapshot-heading, .hero-enter-card .snapshot-status, .hero-enter-card .status-dot::after { animation: none; }
         .hero-enter { opacity: 1; transform: none; }
+        .research-snapshot:hover,
+        .research-snapshot:focus-visible,
+        .research-snapshot:hover .snapshot-link > span,
+        .research-snapshot:focus-visible .snapshot-link > span,
+        .hero-cta:hover,
+        .hero-cta:active,
+        .hero-cta:hover span,
+        .hero-cta:focus-visible span {
+            transform: none;
+        }
     }
 
     @media (max-width: 380px) {

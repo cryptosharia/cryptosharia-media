@@ -43,7 +43,7 @@
         padding-block: 56px;
         overflow: hidden;
         cursor: pointer;
-        transition: background 200ms var(--ease-standard);
+        transition: background var(--motion-micro) var(--ease-standard);
     }
 
     .panel-link::before {
@@ -54,7 +54,7 @@
         height: 1px;
         background: color-mix(in srgb, var(--border-control) 55%, transparent);
         content: '';
-        transition: width 200ms var(--ease-standard), background-color 200ms var(--ease-standard);
+        transition: width var(--motion-micro) var(--ease-standard), background-color var(--motion-micro) var(--ease-standard);
     }
 
     .about-copy {
@@ -86,7 +86,7 @@
     }
 
     .panel-link h2 {
-        transition: color 180ms var(--ease-standard);
+        transition: color var(--motion-micro) var(--ease-standard), transform var(--motion-micro) var(--ease-standard);
     }
 
     .panel-link:focus-visible {
@@ -109,6 +109,7 @@
     .panel-link:focus-visible h2,
     .panel-link:active h2 {
         color: var(--accent-text);
+        transform: translateX(2px);
     }
 
     @media (hover: hover) and (pointer: fine) {
@@ -123,6 +124,7 @@
 
         .panel-link:hover h2 {
             color: var(--accent-text);
+            transform: translateX(2px);
         }
 
         .panel-link:hover .cta-arrow {
@@ -150,17 +152,28 @@
         border-bottom: 1px solid var(--border-control);
         font-size: 0.88rem;
         font-weight: 700;
-        transition: color 180ms var(--ease-standard);
+        transition: color var(--motion-micro) var(--ease-standard);
     }
 
     .cta-arrow {
         color: var(--accent-text);
-        transition: transform 190ms var(--ease-standard), color 180ms var(--ease-standard);
+        transition: transform var(--motion-micro) var(--ease-standard), color var(--motion-micro) var(--ease-standard);
     }
 
     .panel-link:focus-visible .cta-arrow,
     .panel-link:active .cta-arrow {
         transform: translateX(4px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .panel-link:hover h2,
+        .panel-link:focus-visible h2,
+        .panel-link:active h2,
+        .panel-link:hover .cta-arrow,
+        .panel-link:focus-visible .cta-arrow,
+        .panel-link:active .cta-arrow {
+            transform: none;
+        }
     }
 
     @media (max-width: 820px) {

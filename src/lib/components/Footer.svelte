@@ -8,7 +8,7 @@
         <div class="footer-layout">
             <div class="footer-intro" use:reveal>
                 <a class="brand footer-brand" href="/" aria-label="CryptoSharia — Beranda">
-                    <img src="/logo.png" alt="" width="40" height="40" />
+                    <img src="/logo.webp" alt="" width="40" height="40" loading="lazy" decoding="async" />
                     <span class="brand-name">CryptoSharia</span>
                 </a>
                 <p>Berita, edukasi, dan screening aset kripto dari perspektif syariah.</p>
@@ -301,6 +301,13 @@
     @media (max-width: 360px) {
         .site-footer > .container {
             width: calc(100% - 32px);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .footer-links a:hover,
+        .footer-accordion[open] summary::after {
+            transform: none;
         }
     }
 </style>

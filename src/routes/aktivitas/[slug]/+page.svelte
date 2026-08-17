@@ -5,7 +5,18 @@
     let { data }: { data: PageData } = $props();
 </script>
 
-<Seo title={`${data.post.title} — Aktivitas CryptoSharia`} description={data.post.excerpt} image={data.post.coverImage?.url || '/logo.png'} type="article" canonicalPath={`/aktivitas/${data.post.slug}`} />
+<Seo
+    title={`${data.post.title} — Aktivitas CryptoSharia`}
+    description={data.post.excerpt}
+    image={data.post.coverImage?.url || '/logo.png'}
+    imageWidth={data.post.coverImage?.url ? data.post.coverImage.width : 500}
+    imageHeight={data.post.coverImage?.url ? data.post.coverImage.height : 500}
+    imageAlt={data.post.coverImage?.url ? `Dokumentasi ${data.post.title}` : 'Logo CryptoSharia'}
+    type="article"
+    publishedTime={data.post.publishedAt ?? data.post.createdAt}
+    modifiedTime={data.post.updatedAt ?? data.post.publishedAt ?? data.post.createdAt}
+    canonicalPath={`/aktivitas/${data.post.slug}`}
+/>
 
 <main id="main-content" class="site-main">
     <article>
