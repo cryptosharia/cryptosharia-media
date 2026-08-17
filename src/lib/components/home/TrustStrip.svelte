@@ -63,6 +63,10 @@
     }
 
     @media (max-width: 680px) {
+        .trust-strip {
+            display: none;
+        }
+
         ul {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
