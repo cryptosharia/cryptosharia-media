@@ -1,10 +1,11 @@
 <script lang="ts">
     import { dev } from '$app/environment';
+    import { env } from '$env/dynamic/public';
     import { AD_PLACEMENTS, type AdPlacement } from '$lib/config/ads';
 
     let { placement }: { placement: AdPlacement } = $props();
     const config = $derived(AD_PLACEMENTS[placement]);
-    const showPlaceholder = $derived(dev && !config.enabled);
+    const showPlaceholder = $derived(!config.enabled && (dev || env.PUBLIC_SHOW_AD_PLACEHOLDERS === 'true'));
 </script>
 
 {#if config.enabled || showPlaceholder}
