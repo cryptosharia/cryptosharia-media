@@ -11,8 +11,8 @@
         !data.category && !data.search && data.pagination.page === 1
     );
     const leadStory = $derived(useEditorialLead ? data.posts[0] : undefined);
-    const secondaryStories = $derived(useEditorialLead ? data.posts.slice(1, 4) : []);
-    const archiveStories = $derived(useEditorialLead ? data.posts.slice(4) : data.posts);
+    const secondaryStories = $derived(useEditorialLead ? data.posts.slice(1, 5) : []);
+    const archiveStories = $derived(useEditorialLead ? data.posts.slice(5) : data.posts);
     const resultCount = $derived(`${data.pagination.total} artikel`);
 
     function categoryLabel(post: Post) {
@@ -125,6 +125,7 @@
 
                     {#if secondaryStories.length}
                         <div class="secondary-list" aria-label="Berita terbaru lainnya">
+                            <p class="latest-kicker">Berita terbaru</p>
                             {#each secondaryStories as post (post.id)}
                                 <NewsStory post={post} label={categoryLabel(post)} variant="row" headingLevel={2} />
                             {/each}
@@ -188,7 +189,7 @@
 
 <style>
     .news-intro {
-        padding-top: 80px;
+        padding-top: 88px;
     }
 
     .news-kicker {
@@ -217,7 +218,7 @@
     }
 
     .news-discovery {
-        margin-top: 52px;
+        margin-top: 48px;
     }
 
     .discovery-toolbar {
@@ -327,12 +328,12 @@
     }
 
     .news-content {
-        padding-block: 48px 104px;
+        padding-block: 40px 104px;
     }
 
     .lead-layout {
         display: grid;
-        grid-template-columns: minmax(0, 1.7fr) minmax(340px, 1fr);
+        grid-template-columns: minmax(0, 2fr) minmax(280px, 0.9fr);
         gap: clamp(32px, 4.5vw, 56px);
         align-items: start;
     }
@@ -345,8 +346,16 @@
         border-top: 1px solid var(--border-control);
     }
 
+    .latest-kicker {
+        margin: 0;
+        padding: 18px 0 2px;
+        font-size: clamp(1.25rem, 2vw, 1.5rem);
+        font-weight: 700;
+        letter-spacing: -0.035em;
+    }
+
     .archive-section {
-        margin-top: 80px;
+        margin-top: 88px;
     }
 
     .archive-heading,
@@ -369,12 +378,8 @@
 
     .archive-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0 36px;
-    }
-
-    .archive-grid > :global(.news-story:last-child:nth-child(odd)) {
-        grid-column: 1 / -1;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 32px 28px;
     }
 
     .results-meta {
@@ -457,12 +462,13 @@
         }
 
         .lead-layout {
-            grid-template-columns: minmax(0, 1.45fr) minmax(300px, 1fr);
+            grid-template-columns: minmax(0, 1.45fr) minmax(280px, 1fr);
             gap: 32px;
         }
 
         .archive-grid {
-            column-gap: 28px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 28px;
         }
     }
 
@@ -505,13 +511,6 @@
             border-top-color: var(--border-control);
         }
 
-        .archive-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .archive-grid > :global(.news-story:last-child:nth-child(odd)) {
-            grid-column: auto;
-        }
     }
 
     @media (max-width: 600px) {
@@ -549,6 +548,11 @@
 
         .news-content {
             padding-block: 40px 80px;
+        }
+
+        .archive-grid {
+            grid-template-columns: 1fr;
+            gap: 32px;
         }
 
         .lead-layout {
