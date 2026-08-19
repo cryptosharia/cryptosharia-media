@@ -51,9 +51,6 @@
                 <p>{post.excerpt}</p>
             {/if}
 
-            {#if variant === 'lead'}
-                <span class="lead-read">Baca <span aria-hidden="true">→</span></span>
-            {/if}
         </div>
 
     </a>
@@ -134,26 +131,6 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         line-clamp: 2;
-    }
-
-    .lead-read {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 20px;
-        padding-bottom: 3px;
-        border-bottom: 1px solid var(--border-control);
-        font-size: 0.84rem;
-        font-weight: 700;
-    }
-
-    .lead-read span {
-        transition: color 180ms ease, transform 180ms ease;
-    }
-
-    .story-link:hover .lead-read span {
-        color: var(--text);
-        transform: translateX(3px);
     }
 
     .row .story-link {

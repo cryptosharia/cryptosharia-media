@@ -30,7 +30,6 @@
         <p>{post.excerpt}</p>
         <div class="card-meta">
             <time datetime={post.publishedAt ?? post.createdAt}>{formatDate(post.publishedAt ?? post.createdAt)}</time>
-            <span>Baca →</span>
         </div>
     </div>
 </a>

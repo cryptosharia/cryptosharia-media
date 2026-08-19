@@ -48,9 +48,6 @@
             {#if variant !== 'row'}
                 <p>{post.excerpt}</p>
             {/if}
-            {#if variant === 'lead'}
-                <span class="read-link">Pelajari <span aria-hidden="true">→</span></span>
-            {/if}
         </div>
 
     </a>
@@ -69,9 +66,6 @@
     .lead .story-copy { padding-top: 22px; }
     .lead h2 { max-width: 720px; margin-top: 10px; font-size: clamp(1.95rem, 3vw, 2.45rem); line-height: 1.15; text-wrap: balance; }
     .lead p { display: -webkit-box; max-width: 680px; margin: 14px 0 0; overflow: hidden; color: var(--muted); font-size: .95rem; line-height: 1.65; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
-    .read-link { display: inline-flex; gap: 8px; margin-top: 20px; padding-bottom: 3px; border-bottom: 1px solid var(--border-control); font-size: .84rem; font-weight: 700; }
-    .read-link span { transition: color 180ms ease, transform 180ms ease; }
-    a:hover .read-link span { color: var(--text); transform: translateX(3px); }
     .row a { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 18px; align-items: center; min-height: 132px; padding-block: 20px; border-bottom: 1px solid var(--border); }
     .row h2, .row h3 { display: -webkit-box; margin-top: 8px; overflow: hidden; font-size: clamp(1.05rem, 1.55vw, 1.22rem); line-height: 1.3; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; }
     .archive a { display: block; padding: 0 0 8px; border-radius: var(--radius-sm); transition: background var(--motion-micro) var(--ease-standard); }
