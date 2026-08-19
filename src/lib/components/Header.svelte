@@ -67,6 +67,16 @@
         desktopDropdownTrigger = trigger;
     }
 
+    function openDesktopDropdown(dropdown: string) {
+        activeDropdown = dropdown;
+    }
+
+    function closeDesktopDropdownOnLeave(dropdown: string) {
+        if (activeDropdown === dropdown) {
+            closeDesktopDropdown();
+        }
+    }
+
     function toggleMobileDropdown(dropdown: string) {
         mobileDropdown = mobileDropdown === dropdown ? null : dropdown;
     }
@@ -213,7 +223,13 @@
                 onclick={() => closeDesktopDropdown()}>Beranda</a
             >
 
-            <div class="nav-dropdown" class:open={activeDropdown === 'berita'}>
+            <div
+                class="nav-dropdown"
+                class:open={activeDropdown === 'berita'}
+                role="group"
+                onmouseenter={() => openDesktopDropdown('berita')}
+                onmouseleave={() => closeDesktopDropdownOnLeave('berita')}
+            >
                 <button
                     class="nav-summary"
                     class:active={isActive('/berita')}
@@ -247,7 +263,13 @@
                 </div>
             </div>
 
-            <div class="nav-dropdown" class:open={activeDropdown === 'edukasi'}>
+            <div
+                class="nav-dropdown"
+                class:open={activeDropdown === 'edukasi'}
+                role="group"
+                onmouseenter={() => openDesktopDropdown('edukasi')}
+                onmouseleave={() => closeDesktopDropdownOnLeave('edukasi')}
+            >
                 <button
                     class="nav-summary"
                     class:active={isActive('/edukasi')}
@@ -289,7 +311,13 @@
                 onclick={() => closeDesktopDropdown()}>Screening Coin</a
             >
 
-            <div class="nav-dropdown" class:open={activeDropdown === 'tentang'}>
+            <div
+                class="nav-dropdown"
+                class:open={activeDropdown === 'tentang'}
+                role="group"
+                onmouseenter={() => openDesktopDropdown('tentang')}
+                onmouseleave={() => closeDesktopDropdownOnLeave('tentang')}
+            >
                 <button
                     class="nav-summary"
                     class:active={isActive('/tentang-kami')}
@@ -344,7 +372,13 @@
                 </div>
             </div>
 
-            <div class="nav-dropdown" class:open={activeDropdown === 'komunitas'}>
+            <div
+                class="nav-dropdown"
+                class:open={activeDropdown === 'komunitas'}
+                role="group"
+                onmouseenter={() => openDesktopDropdown('komunitas')}
+                onmouseleave={() => closeDesktopDropdownOnLeave('komunitas')}
+            >
                 <button
                     class="nav-summary"
                     class:active={isActive('/komunitas')}
