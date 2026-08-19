@@ -1,5 +1,6 @@
 <script lang="ts">
     import MarketTicker from '$lib/components/home/MarketTicker.svelte';
+    import ShariaIntelligenceOrbit from '$lib/components/home/ShariaIntelligenceOrbit.svelte';
     import type { Token, TokenQuote } from '$types/api';
 
     let { tokens, quotes }: { tokens: Token[]; quotes: TokenQuote[] } = $props();
@@ -18,20 +19,24 @@
                 dan menilai aset digital dari perspektif syariah.
             </p>
             <div class="hero-actions hero-enter hero-enter-4">
-                <a class="hero-cta primary" href="/screening">Cek Screening Coin</a>
+                <a class="hero-cta primary" href="/screening">Cek Screening Coin <span aria-hidden="true">→</span></a>
                 <a class="hero-cta secondary" href="/berita">Baca Berita <span aria-hidden="true">→</span></a>
             </div>
+            <p class="hero-trust hero-enter hero-enter-4">Riset berbasis data <span>•</span> Screening syariah <span>•</span> Edukasi terstruktur</p>
         </div>
-
+        <div class="intelligence-visual hero-enter hero-enter-3">
+            <ShariaIntelligenceOrbit />
+        </div>
     </div>
 </section>
 
 <style>
     .home-hero {
         position: relative;
-        padding-block: 96px 112px;
+        padding: 0 0 64px;
         overflow: clip;
-        background: var(--canvas);
+        color: #f1f0ec;
+        background: #0f1115;
     }
 
     .home-hero::before {
@@ -51,11 +56,11 @@
         inset: 0;
         pointer-events: none;
         background-image:
-            linear-gradient(color-mix(in srgb, var(--text) 8%, transparent) 1px, transparent 1px),
-            linear-gradient(90deg, color-mix(in srgb, var(--text) 8%, transparent) 1px, transparent 1px);
+            linear-gradient(rgb(255 255 255 / 5%) 1px, transparent 1px),
+            linear-gradient(90deg, rgb(255 255 255 / 5%) 1px, transparent 1px);
         background-size: 44px 44px;
-        mask-image: linear-gradient(90deg, transparent 30%, black 70%, transparent);
-        opacity: .16;
+        mask-image: radial-gradient(ellipse 90% 105% at 62% 46%, black 15%, transparent 74%);
+        opacity: .64;
         content: '';
     }
 
@@ -63,29 +68,34 @@
         position: relative;
         z-index: 1;
         display: grid;
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1.05fr) minmax(420px, .95fr);
+        min-height: 570px;
         align-items: center;
         gap: clamp(48px, 7vw, 88px);
+        padding-top: 56px;
     }
 
     .home-hero-copy {
-        max-width: 690px;
+        max-width: 650px;
     }
 
     .hero-kicker {
         margin: 0;
-        color: var(--muted);
-        font-size: 0.73rem;
+        color: #aeb4be;
+        font-size: 0.7rem;
         font-weight: 700;
         letter-spacing: 0.14em;
         text-transform: uppercase;
     }
 
+    .hero-kicker::before { display: inline-block; width: 6px; height: 6px; margin: -1px 8px 0 0; border-radius: 50%; background: var(--accent); content: ''; vertical-align: middle; }
+
     h1 {
         margin: 20px 0 0;
-        font-size: clamp(3.5rem, 5.1vw, 4rem);
-        line-height: 1.02;
-        letter-spacing: -0.055em;
+        max-width: 650px;
+        font-size: clamp(3.35rem, 4.2vw, 4.75rem);
+        line-height: 1;
+        letter-spacing: -0.045em;
         text-wrap: balance;
     }
 
@@ -116,8 +126,8 @@
     .hero-intro {
         max-width: 610px;
         margin: 24px 0 0;
-        color: var(--muted);
-        font-size: 1.1rem;
+        color: #aeb4be;
+        font-size: 1.02rem;
         line-height: 1.65;
     }
 
@@ -157,13 +167,14 @@
     .hero-cta:active { transform: translateY(0); }
 
     .hero-cta.secondary {
-        color: var(--text);
-        border-color: var(--border-control);
-        background: transparent;
+        color: #f1f0ec;
+        border-color: rgb(255 255 255 / 24%);
+        background: rgb(255 255 255 / 3%);
     }
 
     .hero-cta.secondary:hover {
-        border-color: var(--text);
+        border-color: rgb(255 255 255 / 62%);
+        background: rgb(255 255 255 / 8%);
     }
 
     .hero-cta.secondary span {
@@ -174,17 +185,23 @@
         transform: translateX(3px);
     }
 
+    .hero-trust { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; color: #aeb4be; font-size: .72rem; font-weight: 600; }
+    .hero-trust span { color: var(--accent); }
+    .intelligence-visual { min-width: 0; }
+
     @keyframes hero-enter { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes underline-sweep { to { transform: scaleX(1); } }
 
     @media (max-width: 900px) {
         .home-hero {
-            padding-block: 80px 96px;
+            padding-bottom: 76px;
         }
 
         .hero-layout {
             grid-template-columns: 1fr;
-            gap: 48px;
+            min-height: 0;
+            gap: 42px;
+            padding-top: 56px;
         }
 
         .home-hero-copy {
@@ -202,11 +219,12 @@
 
     @media (max-width: 600px) {
         .home-hero {
-            padding-block: 64px 80px;
+            padding-bottom: 64px;
         }
 
         .hero-layout {
             gap: 40px;
+            padding-top: 44px;
         }
 
         h1 {
@@ -225,6 +243,8 @@
         .hero-actions {
             margin-top: 28px;
         }
+
+        .hero-trust { margin-top: 18px; font-size: .68rem; }
 
     }
 

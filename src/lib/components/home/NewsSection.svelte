@@ -95,7 +95,7 @@
 
 <style>
     .news-section {
-        padding-block: 104px 88px;
+        padding-block: 84px 88px;
         border-top: 1px solid var(--border);
         background: var(--surface);
     }

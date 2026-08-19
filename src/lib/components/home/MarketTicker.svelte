@@ -62,10 +62,10 @@
 
     a {
         display: flex;
-        min-width: 184px;
+        min-width: 172px;
         align-items: center;
         gap: 10px;
-        padding: 10px 18px;
+        padding: 7px 14px;
         border-right: 1px solid rgb(255 255 255 / 8%);
         transition: background var(--motion-micro) var(--ease-standard);
     }
@@ -77,8 +77,8 @@
 
     img,
     .ticker-mark {
-        width: 30px;
-        height: 30px;
+        width: 26px;
+        height: 26px;
         flex: 0 0 auto;
         border-radius: 50%;
         object-fit: cover;
@@ -103,7 +103,7 @@
     .ticker-name {
         overflow: hidden;
         color: #aeb4be;
-        font-size: 0.68rem;
+        font-size: 0.64rem;
         font-weight: 650;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -118,8 +118,8 @@
         grid-template-columns: auto auto;
         justify-content: start;
         gap: 6px;
-        margin-top: 3px;
-        font-size: 0.76rem;
+        margin-top: 2px;
+        font-size: 0.72rem;
     }
 
     .ticker-quote strong {
@@ -128,7 +128,7 @@
 
     .ticker-quote span {
         color: #aeb4be;
-        font-size: 0.68rem;
+        font-size: 0.64rem;
         font-weight: 700;
     }
 
@@ -142,6 +142,6 @@
         }
 
         .market-ticker::-webkit-scrollbar { display: none; }
-        a { min-width: 176px; padding-inline: 14px; }
+        a { min-width: 164px; padding-inline: 12px; }
     }
 </style>
