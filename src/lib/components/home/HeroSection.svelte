@@ -1,6 +1,6 @@
 <script lang="ts">
     import MarketTicker from '$lib/components/home/MarketTicker.svelte';
-    import ShariaIntelligenceOrbit from '$lib/components/home/ShariaIntelligenceOrbit.svelte';
+    import HeroIntelligenceArtwork from '$lib/components/home/HeroIntelligenceArtwork.svelte';
     import type { Token, TokenQuote } from '$types/api';
 
     let { tokens, quotes }: { tokens: Token[]; quotes: TokenQuote[] } = $props();
@@ -25,7 +25,7 @@
             <p class="hero-trust hero-enter hero-enter-4">Riset berbasis data <span>•</span> Screening syariah <span>•</span> Edukasi terstruktur</p>
         </div>
         <div class="intelligence-visual hero-enter hero-enter-3">
-            <ShariaIntelligenceOrbit />
+            <HeroIntelligenceArtwork />
         </div>
     </div>
 </section>
@@ -35,8 +35,8 @@
         position: relative;
         padding: 0 0 64px;
         overflow: clip;
-        color: #f1f0ec;
-        background: #0f1115;
+        color: var(--text);
+        background: var(--canvas);
     }
 
     .home-hero::before {
@@ -45,10 +45,10 @@
         right: max(-11vw, -160px);
         width: min(58vw, 720px);
         aspect-ratio: 1;
-        border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+        border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
         border-radius: 50%;
         content: '';
-        opacity: .72;
+        opacity: .38;
     }
 
     .home-hero::after {
@@ -56,11 +56,11 @@
         inset: 0;
         pointer-events: none;
         background-image:
-            linear-gradient(rgb(255 255 255 / 5%) 1px, transparent 1px),
-            linear-gradient(90deg, rgb(255 255 255 / 5%) 1px, transparent 1px);
+            linear-gradient(rgb(20 24 31 / 4%) 1px, transparent 1px),
+            linear-gradient(90deg, rgb(20 24 31 / 4%) 1px, transparent 1px);
         background-size: 44px 44px;
         mask-image: radial-gradient(ellipse 90% 105% at 62% 46%, black 15%, transparent 74%);
-        opacity: .64;
+        opacity: .72;
         content: '';
     }
 
@@ -81,7 +81,7 @@
 
     .hero-kicker {
         margin: 0;
-        color: #aeb4be;
+        color: var(--muted);
         font-size: 0.7rem;
         font-weight: 700;
         letter-spacing: 0.14em;
@@ -126,7 +126,7 @@
     .hero-intro {
         max-width: 610px;
         margin: 24px 0 0;
-        color: #aeb4be;
+        color: var(--muted);
         font-size: 1.02rem;
         line-height: 1.65;
     }
@@ -167,14 +167,14 @@
     .hero-cta:active { transform: translateY(0); }
 
     .hero-cta.secondary {
-        color: #f1f0ec;
-        border-color: rgb(255 255 255 / 24%);
-        background: rgb(255 255 255 / 3%);
+        color: var(--text);
+        border-color: var(--border-control);
+        background: color-mix(in srgb, var(--surface) 58%, transparent);
     }
 
     .hero-cta.secondary:hover {
-        border-color: rgb(255 255 255 / 62%);
-        background: rgb(255 255 255 / 8%);
+        border-color: var(--text);
+        background: var(--surface-muted);
     }
 
     .hero-cta.secondary span {
@@ -185,9 +185,31 @@
         transform: translateX(3px);
     }
 
-    .hero-trust { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; color: #aeb4be; font-size: .72rem; font-weight: 600; }
+    .hero-trust { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; color: var(--muted); font-size: .72rem; font-weight: 600; }
     .hero-trust span { color: var(--accent); }
     .intelligence-visual { min-width: 0; }
+
+    :global(:root[data-theme='dark']) .home-hero {
+        color: #eeeeF1;
+        background: #13161b;
+    }
+
+    :global(:root[data-theme='dark']) .home-hero::after {
+        background-image:
+            linear-gradient(rgb(255 255 255 / 5%) 1px, transparent 1px),
+            linear-gradient(90deg, rgb(255 255 255 / 5%) 1px, transparent 1px);
+        opacity: .56;
+    }
+
+    :global(:root[data-theme='dark']) .hero-cta.secondary {
+        border-color: rgb(255 255 255 / 24%);
+        background: rgb(255 255 255 / 3%);
+    }
+
+    :global(:root[data-theme='dark']) .hero-cta.secondary:hover {
+        border-color: rgb(255 255 255 / 62%);
+        background: rgb(255 255 255 / 8%);
+    }
 
     @keyframes hero-enter { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes underline-sweep { to { transform: scaleX(1); } }
