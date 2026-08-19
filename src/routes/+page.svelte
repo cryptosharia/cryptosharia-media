@@ -1,5 +1,6 @@
 <script lang="ts">
     import AboutSection from '$lib/components/home/AboutSection.svelte';
+    import AdSlot from '$lib/components/AdSlot.svelte';
     import EducationSection from '$lib/components/home/EducationSection.svelte';
     import HeroSection from '$lib/components/home/HeroSection.svelte';
     import NewsSection from '$lib/components/home/NewsSection.svelte';
@@ -20,7 +21,9 @@
 <main id="main-content" class="site-main">
     <HeroSection tokens={data.tokens} quotes={data.tokenQuotes} />
     <TrustStrip />
+    <AdSlot placement="homepage-top" />
     <NewsSection posts={data.news} unavailable={data.unavailable.news} />
+    <AdSlot placement="homepage-middle" />
     <EducationSection posts={data.education} unavailable={data.unavailable.education} />
     <ScreeningSection tokens={data.tokens} unavailable={data.unavailable.tokens} />
     <AboutSection />

@@ -3,6 +3,15 @@ import { getPost, getPosts } from '$lib/api';
 import { renderMarkdown } from '$lib/markdown';
 import type { PageServerLoad } from './$types';
 
+function splitForInlineAd(html: string) {
+    const paragraphEndings = [...html.matchAll(/<\/p>/g)];
+    const splitPoint = paragraphEndings[2]?.index;
+    if (splitPoint === undefined) return { articleBefore: html, articleAfter: '' };
+
+    const end = splitPoint + '</p>'.length;
+    return { articleBefore: html.slice(0, end), articleAfter: html.slice(end) };
+}
+
 export const load: PageServerLoad = async ({ params, setHeaders }) => {
     const result = await getPost(params.slug);
     const post = result.data?.data;
@@ -26,7 +35,7 @@ export const load: PageServerLoad = async ({ params, setHeaders }) => {
 
     return {
         post: { ...post, content: '' },
-        html: renderMarkdown(post.content),
+        ...splitForInlineAd(renderMarkdown(post.content)),
         related: relatedResult.data?.data.items ?? []
     };
 };

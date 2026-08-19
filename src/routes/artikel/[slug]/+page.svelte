@@ -1,5 +1,7 @@
 <script lang="ts">
     import ArticleCard from '$lib/components/ArticleCard.svelte';
+    import AdSlot from '$lib/components/AdSlot.svelte';
+    import { AD_PLACEMENTS } from '$lib/config/ads';
     import Seo from '$lib/components/Seo.svelte';
     import { formatDate, safeExternalUrl } from '$lib/format';
     import type { PageData } from './$types';
@@ -9,6 +11,9 @@
     const labels = { news: 'Berita', education: 'Edukasi', research: 'Riset', activity: 'Aktivitas' } as const;
     const externalLink = $derived(safeExternalUrl(data.post.externalLink));
     const publishedAt = $derived(data.post.publishedAt ?? data.post.createdAt);
+    const supportsInlineAd = $derived(
+        AD_PLACEMENTS['article-inline'].sections.includes(data.post.section as 'news' | 'education')
+    );
 </script>
 
 <Seo
@@ -48,7 +53,13 @@
                 </figure>
             {/if}
 
-            <div class="article-prose prose">{@html data.html}</div>
+            <div class="article-prose prose">
+                {@html data.articleBefore}
+                {#if data.articleAfter && supportsInlineAd}
+                    <AdSlot placement="article-inline" />
+                {/if}
+                {@html data.articleAfter}
+            </div>
 
             <footer class="article-footer">
                 {#if data.post.tags?.length}
@@ -80,6 +91,7 @@
                 <a class="promo-primary" href="/komunitas#gabung">Gabung Komunitas</a>
                 <a class="promo-secondary" href="/komunitas#premium">Pelajari komunitas</a>
             </div>
+            <AdSlot placement="article-sidebar" />
         </aside>
     </div>
 
@@ -140,6 +152,6 @@
     .related-section { margin-top: clamp(72px, 10vw, 128px); padding-block: clamp(64px, 8vw, 96px); border-block: 1px solid var(--border); }
     .related-section .section-heading { margin-bottom: 28px; }
 
-    @media (max-width: 1023px) { .article-layout { grid-template-columns: 1fr; gap: 56px; } .article-sidebar { max-width: 560px; } .community-promo { position: static; } }
+    @media (max-width: 1023px) { .article-layout { grid-template-columns: 1fr; gap: 56px; } .article-sidebar { max-width: 560px; } .community-promo { position: static; } .article-sidebar :global([data-ad-placement='article-sidebar']) { display: none; } }
     @media (max-width: 720px) { .article-page { padding-top: 48px; } h1 { font-size: clamp(2.25rem, 10vw, 3rem); } .article-date { margin-top: 22px; } .article-figure { margin-top: 30px; } .article-figure img { max-height: none; } .article-prose { margin-top: 30px; font-size: 1.03rem; line-height: 1.78; } .article-footer { margin-top: 44px; } .community-promo { padding: 24px; } .related-section { margin-top: 72px; } }
 </style>
