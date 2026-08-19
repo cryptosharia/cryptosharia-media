@@ -19,7 +19,6 @@
     let menuButton: HTMLButtonElement;
     let mobilePanel: HTMLElement;
     let siteHeader: HTMLElement;
-    let desktopDropdownTrigger: HTMLButtonElement | undefined;
     let isScrolled = $state(false);
     let scrollFrame = 0;
 
@@ -45,26 +44,8 @@
         }
     }
 
-    function closeDesktopDropdown(returnFocus = false) {
-        const trigger = desktopDropdownTrigger;
+    function closeDesktopDropdown() {
         activeDropdown = null;
-        desktopDropdownTrigger = undefined;
-
-        if (returnFocus) {
-            trigger?.focus();
-        }
-    }
-
-    function toggleDesktopDropdown(event: MouseEvent, dropdown: string) {
-        const trigger = event.currentTarget as HTMLButtonElement;
-
-        if (activeDropdown === dropdown) {
-            closeDesktopDropdown();
-            return;
-        }
-
-        activeDropdown = dropdown;
-        desktopDropdownTrigger = trigger;
     }
 
     function openDesktopDropdown(dropdown: string) {
@@ -158,7 +139,7 @@
             }
 
             if (activeDropdown) {
-                closeDesktopDropdown(true);
+                closeDesktopDropdown();
             }
         }
 
@@ -176,7 +157,6 @@
         menuOpen = false;
         mobileDropdown = null;
         activeDropdown = null;
-        desktopDropdownTrigger = undefined;
     });
 
     $effect(() => {
@@ -230,29 +210,23 @@
                 onmouseenter={() => openDesktopDropdown('berita')}
                 onmouseleave={() => closeDesktopDropdownOnLeave('berita')}
             >
-                <button
+                <a
                     class="nav-summary"
                     class:active={isActive('/berita')}
-                    type="button"
-                    aria-expanded={activeDropdown === 'berita'}
-                    aria-controls="desktop-berita-menu"
-                    onclick={(event) => toggleDesktopDropdown(event, 'berita')}
+                    href="/berita"
+                    aria-current={isActive('/berita') ? 'page' : undefined}
+                    onclick={() => closeDesktopDropdown()}
                 >
                     <span>Berita</span>
                     <svg class="summary-chevron" viewBox="0 0 16 16" aria-hidden="true">
                         <path d="m4 6 4 4 4-4" />
                     </svg>
-                </button>
+                </a>
                 <div
                     id="desktop-berita-menu"
                     class="nav-dropdown-menu"
                     hidden={activeDropdown !== 'berita'}
                 >
-                    <a
-                        href="/berita"
-                        aria-current={isSectionIndex('/berita') ? 'page' : undefined}
-                        onclick={() => closeDesktopDropdown()}>Semua Berita</a
-                    >
                     {#each newsCategories as category (category.slug)}
                         <a
                             href={`/berita?kategori=${category.slug}`}
@@ -270,29 +244,23 @@
                 onmouseenter={() => openDesktopDropdown('edukasi')}
                 onmouseleave={() => closeDesktopDropdownOnLeave('edukasi')}
             >
-                <button
+                <a
                     class="nav-summary"
                     class:active={isActive('/edukasi')}
-                    type="button"
-                    aria-expanded={activeDropdown === 'edukasi'}
-                    aria-controls="desktop-edukasi-menu"
-                    onclick={(event) => toggleDesktopDropdown(event, 'edukasi')}
+                    href="/edukasi"
+                    aria-current={isActive('/edukasi') ? 'page' : undefined}
+                    onclick={() => closeDesktopDropdown()}
                 >
                     <span>Edukasi</span>
                     <svg class="summary-chevron" viewBox="0 0 16 16" aria-hidden="true">
                         <path d="m4 6 4 4 4-4" />
                     </svg>
-                </button>
+                </a>
                 <div
                     id="desktop-edukasi-menu"
                     class="nav-dropdown-menu"
                     hidden={activeDropdown !== 'edukasi'}
                 >
-                    <a
-                        href="/edukasi"
-                        aria-current={isSectionIndex('/edukasi') ? 'page' : undefined}
-                        onclick={() => closeDesktopDropdown()}>Semua Edukasi</a
-                    >
                     {#each educationCategories as category (category.slug)}
                         <a
                             href={`/edukasi?kategori=${category.slug}`}
@@ -318,31 +286,23 @@
                 onmouseenter={() => openDesktopDropdown('tentang')}
                 onmouseleave={() => closeDesktopDropdownOnLeave('tentang')}
             >
-                <button
+                <a
                     class="nav-summary"
                     class:active={isActive('/tentang-kami')}
-                    type="button"
-                    aria-expanded={activeDropdown === 'tentang'}
-                    aria-controls="desktop-tentang-menu"
-                    onclick={(event) => toggleDesktopDropdown(event, 'tentang')}
+                    href="/tentang-kami"
+                    aria-current={isActive('/tentang-kami') ? 'page' : undefined}
+                    onclick={() => closeDesktopDropdown()}
                 >
                     <span>Tentang Kami</span>
                     <svg class="summary-chevron" viewBox="0 0 16 16" aria-hidden="true">
                         <path d="m4 6 4 4 4-4" />
                     </svg>
-                </button>
+                </a>
                 <div
                     id="desktop-tentang-menu"
                     class="nav-dropdown-menu"
                     hidden={activeDropdown !== 'tentang'}
                 >
-                    <a
-                        href="/tentang-kami"
-                        aria-current={isAnchorActive('/tentang-kami', '#', true)
-                            ? 'location'
-                            : undefined}
-                        onclick={() => closeDesktopDropdown()}>Tentang Kami</a
-                    >
                     <a
                         href="/tentang-kami#visi-misi"
                         aria-current={isAnchorActive('/tentang-kami', '#visi-misi')
@@ -379,31 +339,23 @@
                 onmouseenter={() => openDesktopDropdown('komunitas')}
                 onmouseleave={() => closeDesktopDropdownOnLeave('komunitas')}
             >
-                <button
+                <a
                     class="nav-summary"
                     class:active={isActive('/komunitas')}
-                    type="button"
-                    aria-expanded={activeDropdown === 'komunitas'}
-                    aria-controls="desktop-komunitas-menu"
-                    onclick={(event) => toggleDesktopDropdown(event, 'komunitas')}
+                    href="/komunitas"
+                    aria-current={isActive('/komunitas') ? 'page' : undefined}
+                    onclick={() => closeDesktopDropdown()}
                 >
                     <span>Komunitas</span>
                     <svg class="summary-chevron" viewBox="0 0 16 16" aria-hidden="true">
                         <path d="m4 6 4 4 4-4" />
                     </svg>
-                </button>
+                </a>
                 <div
                     id="desktop-komunitas-menu"
                     class="nav-dropdown-menu nav-dropdown-menu-end"
                     hidden={activeDropdown !== 'komunitas'}
                 >
-                    <a
-                        href="/komunitas"
-                        aria-current={isAnchorActive('/komunitas', '#', true)
-                            ? 'location'
-                            : undefined}
-                        onclick={() => closeDesktopDropdown()}>Komunitas</a
-                    >
                     <a
                         href="/komunitas#gabung"
                         aria-current={isAnchorActive('/komunitas', '#gabung')
