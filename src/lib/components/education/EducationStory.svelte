@@ -53,9 +53,6 @@
             {/if}
         </div>
 
-        {#if variant !== 'lead'}
-            <span class="story-arrow" aria-hidden="true">→</span>
-        {/if}
     </a>
 </article>
 
@@ -73,18 +70,16 @@
     .lead h2 { max-width: 720px; margin-top: 10px; font-size: clamp(1.95rem, 3vw, 2.45rem); line-height: 1.15; text-wrap: balance; }
     .lead p { display: -webkit-box; max-width: 680px; margin: 14px 0 0; overflow: hidden; color: var(--muted); font-size: .95rem; line-height: 1.65; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
     .read-link { display: inline-flex; gap: 8px; margin-top: 20px; padding-bottom: 3px; border-bottom: 1px solid var(--border-control); font-size: .84rem; font-weight: 700; }
-    .read-link span, .story-arrow { transition: color 180ms ease, transform 180ms ease; }
-    a:hover .read-link span, a:hover .story-arrow { color: var(--text); transform: translateX(3px); }
-    .row a { display: grid; grid-template-columns: 132px minmax(0, 1fr) 16px; gap: 18px; align-items: center; min-height: 132px; padding-block: 20px; border-bottom: 1px solid var(--border); }
+    .read-link span { transition: color 180ms ease, transform 180ms ease; }
+    a:hover .read-link span { color: var(--text); transform: translateX(3px); }
+    .row a { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 18px; align-items: center; min-height: 132px; padding-block: 20px; border-bottom: 1px solid var(--border); }
     .row h2, .row h3 { display: -webkit-box; margin-top: 8px; overflow: hidden; font-size: clamp(1.05rem, 1.55vw, 1.22rem); line-height: 1.3; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; }
     .archive a { display: block; padding: 0 0 8px; border-radius: var(--radius-sm); transition: background var(--motion-micro) var(--ease-standard); }
     .archive .story-media { border-radius: 14px; }
     .archive .story-copy { padding: 16px 4px 0; }
     .archive h3 { display: -webkit-box; margin-top: 8px; overflow: hidden; font-size: clamp(1.1rem, 1.7vw, 1.28rem); line-height: 1.25; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
     .archive p { display: -webkit-box; margin: 9px 0 0; overflow: hidden; color: var(--muted); font-size: .88rem; line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
-    .story-arrow { color: var(--muted); }
-    .archive .story-arrow { display: inline-flex; margin: 16px 4px 0; }
     .archive a:hover { background: color-mix(in srgb, var(--surface-muted) 56%, transparent); }
-    @media (max-width: 760px) { .lead .story-copy { padding-top: 18px; } .lead h2 { font-size: clamp(1.4rem, 6vw, 1.6rem); } .lead p { margin-top: 12px; font-size: .9rem; } .row a { grid-template-columns: 108px minmax(0, 1fr) 14px; gap: 14px; min-height: 124px; padding-block: 18px; } .row h2, .row h3 { margin-top: 6px; font-size: 1rem; line-height: 1.28; } .story-meta { gap: 5px 9px; font-size: .66rem; } }
-    @media (max-width: 380px) { .row a { grid-template-columns: 88px minmax(0, 1fr) 12px; gap: 11px; min-height: 108px; padding-block: 16px; } .story-meta time { display: none; } .row h2, .row h3 { font-size: .94rem; } }
+    @media (max-width: 760px) { .lead .story-copy { padding-top: 18px; } .lead h2 { font-size: clamp(1.4rem, 6vw, 1.6rem); } .lead p { margin-top: 12px; font-size: .9rem; } .row a { grid-template-columns: 108px minmax(0, 1fr); gap: 14px; min-height: 124px; padding-block: 18px; } .row h2, .row h3 { margin-top: 6px; font-size: 1rem; line-height: 1.28; } .story-meta { gap: 5px 9px; font-size: .66rem; } }
+    @media (max-width: 380px) { .row a { grid-template-columns: 88px minmax(0, 1fr); gap: 11px; min-height: 108px; padding-block: 16px; } .story-meta time { display: none; } .row h2, .row h3 { font-size: .94rem; } }
 </style>

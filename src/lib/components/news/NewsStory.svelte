@@ -56,9 +56,6 @@
             {/if}
         </div>
 
-        {#if variant !== 'lead'}
-            <span class="story-arrow" aria-hidden="true">→</span>
-        {/if}
     </a>
 </article>
 
@@ -150,13 +147,11 @@
         font-weight: 700;
     }
 
-    .lead-read span,
-    .story-arrow {
+    .lead-read span {
         transition: color 180ms ease, transform 180ms ease;
     }
 
-    .story-link:hover .lead-read span,
-    .story-link:hover .story-arrow {
+    .story-link:hover .lead-read span {
         color: var(--text);
         transform: translateX(3px);
     }
@@ -164,7 +159,7 @@
     .row .story-link {
         display: grid;
         align-items: center;
-        grid-template-columns: 148px minmax(0, 1fr) 16px;
+        grid-template-columns: 148px minmax(0, 1fr);
         gap: 18px;
         min-height: 132px;
         padding-block: 20px;
@@ -222,22 +217,13 @@
         line-clamp: 2;
     }
 
-    .story-arrow {
-        color: var(--muted);
-    }
-
-    .archive .story-arrow {
-        display: inline-flex;
-        margin: 16px 4px 0;
-    }
-
     .archive .story-link:hover {
         background: color-mix(in srgb, var(--surface-muted) 56%, transparent);
     }
 
     @media (max-width: 1080px) {
         .row .story-link {
-            grid-template-columns: 120px minmax(0, 1fr) 14px;
+            grid-template-columns: 120px minmax(0, 1fr);
             gap: 14px;
             min-height: 128px;
         }
@@ -260,7 +246,7 @@
         }
 
         .row .story-link {
-            grid-template-columns: 108px minmax(0, 1fr) 14px;
+            grid-template-columns: 108px minmax(0, 1fr);
             gap: 14px;
             min-height: 124px;
             padding-block: 18px;
@@ -285,7 +271,7 @@
 
     @media (max-width: 380px) {
         .row .story-link {
-            grid-template-columns: 88px minmax(0, 1fr) 12px;
+            grid-template-columns: 88px minmax(0, 1fr);
             gap: 11px;
             min-height: 108px;
             padding-block: 16px;
