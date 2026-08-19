@@ -5,18 +5,14 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
     const [newsResult, educationResult, tokenResult] = await Promise.all([
         getPosts({ sections: ['news'], statuses: ['published'], limit: 6, page: 1 }),
         getPosts({ sections: ['education'], statuses: ['published'], limit: 3, page: 1 }),
-        getTokens({ statuses: ['published'], limit: 6, page: 1 })
+        getTokens({ statuses: ['published'], limit: 8, page: 1 })
     ]);
 
     const news = newsResult.data?.data.items ?? [];
     const tokens = tokenResult.data?.data.items ?? [];
-    const snapshotToken = tokens.find((token) => {
-        const ticker = token.ticker.toUpperCase();
-        return ticker === 'BTC' || ticker.startsWith('BTC-') || token.slug === 'bitcoin';
-    }) ?? tokens[0];
-    const snapshotQuoteResult = snapshotToken ? await getTokenQuotes(snapshotToken.slug) : null;
-    const snapshotQuote = snapshotQuoteResult?.data?.data.find((item) => item.slug === snapshotToken?.slug) ?? null;
-    const hasUpstreamError = Boolean(newsResult.error || educationResult.error || tokenResult.error || snapshotQuoteResult?.error);
+    const quoteResult = tokens.length ? await getTokenQuotes(tokens.map((token) => token.slug)) : null;
+    const tokenQuotes = quoteResult?.data?.data ?? [];
+    const hasUpstreamError = Boolean(newsResult.error || educationResult.error || tokenResult.error || quoteResult?.error);
     setHeaders({
         'cache-control': hasUpstreamError
             ? 'no-store'
@@ -27,8 +23,7 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
         news: [...news].sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured)),
         education: educationResult.data?.data.items ?? [],
         tokens,
-        snapshotToken,
-        snapshotQuote,
+        tokenQuotes,
         unavailable: {
             news: newsResult.error?.message ?? null,
             education: educationResult.error?.message ?? null,

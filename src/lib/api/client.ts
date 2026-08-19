@@ -131,8 +131,8 @@ export async function getToken(slug: string) {
     return result;
 }
 
-export function getTokenQuotes(slug: string) {
-    return apiRequest<TokenQuote[]>('/tokens/quotes', { query: { slugs: [slug] } });
+export function getTokenQuotes(slugs: string | string[]) {
+    return apiRequest<TokenQuote[]>('/tokens/quotes', { query: { slugs: Array.isArray(slugs) ? slugs : [slugs] } });
 }
 
 export function sendMessage(message: { name: string; email: string; message: string }) {
