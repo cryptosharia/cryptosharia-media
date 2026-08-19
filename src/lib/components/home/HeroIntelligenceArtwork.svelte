@@ -19,14 +19,37 @@
 
 <style>
     .hero-artwork-wrapper {
-        width: min(100%, 540px);
+        position: relative;
+        width: min(100%, 600px);
         margin-left: auto;
+        aspect-ratio: 3 / 4;
     }
 
     .hero-artwork {
+        position: relative;
+        z-index: 0;
         width: 100%;
         height: auto;
         object-fit: contain;
+    }
+
+    /* The supplied dark artwork has an opaque canvas. Fade only its outer edge into the hero canvas. */
+    .hero-artwork-wrapper::before,
+    .hero-artwork-wrapper::after {
+        position: absolute;
+        z-index: 1;
+        pointer-events: none;
+        content: '';
+    }
+
+    .hero-artwork-wrapper::before {
+        inset: 0;
+        background: linear-gradient(to bottom, var(--hero-artwork-fade) 0%, transparent 7%, transparent 93%, var(--hero-artwork-fade) 100%);
+    }
+
+    .hero-artwork-wrapper::after {
+        inset: 0;
+        background: linear-gradient(to right, var(--hero-artwork-fade) 0%, transparent 6%, transparent 94%, var(--hero-artwork-fade) 100%);
     }
 
     .hero-artwork--dark {
@@ -43,14 +66,14 @@
 
     @media (max-width: 900px) {
         .hero-artwork-wrapper {
-            width: min(100%, 540px);
+            width: min(100%, 600px);
             margin-inline: auto;
         }
     }
 
     @media (max-width: 600px) {
         .hero-artwork-wrapper {
-            width: min(100%, 440px);
+            width: min(100%, 480px);
         }
     }
 </style>

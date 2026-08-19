@@ -37,6 +37,7 @@
         overflow: clip;
         color: var(--text);
         background: var(--canvas);
+        --hero-artwork-fade: var(--canvas);
     }
 
     .home-hero::before {
@@ -71,7 +72,7 @@
         grid-template-columns: minmax(0, 1.05fr) minmax(420px, .95fr);
         min-height: 570px;
         align-items: center;
-        gap: clamp(48px, 7vw, 88px);
+        gap: clamp(32px, 4vw, 56px);
         padding-top: 56px;
     }
 
@@ -192,6 +193,7 @@
     :global(:root[data-theme='dark']) .home-hero {
         color: #eeeeF1;
         background: #13161b;
+        --hero-artwork-fade: #13161b;
     }
 
     :global(:root[data-theme='dark']) .home-hero::after {
