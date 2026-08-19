@@ -20,7 +20,7 @@
                     <p class="section-label">Sorotan Redaksi</p>
                     <h2 id="berita-terbaru">Berita Pilihan</h2>
                     <p>Perkembangan ekonomi, pasar, dan aset digital yang relevan bagi investor kripto.</p>
-                    <a class="section-link section-link-mobile" href="/berita">Semua Berita <span aria-hidden="true">→</span></a>
+                    <a class="section-link section-link-mobile" href="/berita">Semua Berita</a>
                 </header>
 
                 {#if featured}
@@ -43,7 +43,7 @@
                             </div>
                             <h3>{featured.title}</h3>
                             <p>{featured.excerpt}</p>
-                            <span class="read-link">Baca analisis <span aria-hidden="true">→</span></span>
+                            <span class="read-link">Baca analisis</span>
                         </div>
                     </a>
                 {:else}
@@ -58,7 +58,7 @@
             {#if featured}
                 <aside class="news-sidebar" aria-label="Berita pilihan lainnya">
                     <div class="news-sidebar-sticky">
-                        <a class="section-link" href="/berita">Semua Berita <span aria-hidden="true">→</span></a>
+                        <a class="section-link" href="/berita">Semua Berita</a>
                         <div class="secondary-stories" aria-label="Berita pilihan lainnya">
                             {#each secondary as post (post.id)}
                                 <a class="story-row" use:reveal={{ delay: 100 + secondary.indexOf(post) * 70, distance: 16 }} href={`/artikel/${post.slug}`} aria-label={`Baca ${post.title}`}>
@@ -82,7 +82,6 @@
                                         </div>
                                         <h3>{post.title}</h3>
                                     </div>
-                                    <span class="row-arrow" aria-hidden="true">→</span>
                                 </a>
                             {/each}
                         </div>
@@ -139,18 +138,6 @@
     .section-link-mobile {
         display: none;
         margin-top: 24px;
-    }
-
-    .section-link span,
-    .read-link span {
-        transition: transform var(--motion-micro) var(--ease-standard);
-    }
-
-    .section-link:hover span,
-    .section-link:focus-visible span,
-    .featured-story:hover .read-link span,
-    .featured-story:focus-visible .read-link span {
-        transform: translateX(3px);
     }
 
     .news-layout {
@@ -250,7 +237,7 @@
 
     .story-row {
         display: grid;
-        grid-template-columns: 136px minmax(0, 1fr) 18px;
+        grid-template-columns: 136px minmax(0, 1fr);
         align-items: center;
         gap: 18px;
         min-height: 152px;
@@ -286,24 +273,7 @@
         transition: color var(--motion-micro) var(--ease-standard);
     }
 
-    .row-arrow {
-        color: var(--muted);
-        transition: color var(--motion-micro) var(--ease-standard), transform var(--motion-micro) var(--ease-standard);
-    }
-
-    .story-row:hover .row-arrow,
-    .story-row:focus-visible .row-arrow {
-        color: var(--text);
-        transform: translateX(3px);
-    }
-
     @media (prefers-reduced-motion: reduce) {
-        .section-link:hover span,
-        .section-link:focus-visible span,
-        .featured-story:hover .read-link span,
-        .featured-story:focus-visible .read-link span,
-        .story-row:hover .row-arrow,
-        .story-row:focus-visible .row-arrow,
         .featured-story:hover :global(.editorial-media img),
         .featured-story:focus-visible :global(.editorial-media img),
         .story-row:hover .row-media :global(img),
@@ -319,7 +289,7 @@
         }
 
         .story-row {
-            grid-template-columns: 112px minmax(0, 1fr) 16px;
+            grid-template-columns: 112px minmax(0, 1fr);
             min-height: 132px;
             gap: 14px;
         }
@@ -365,7 +335,7 @@
         }
 
         .story-row {
-            grid-template-columns: 112px minmax(0, 1fr) 16px;
+            grid-template-columns: 112px minmax(0, 1fr);
             min-height: 126px;
             padding-block: 16px;
         }
@@ -377,7 +347,7 @@
 
     @media (max-width: 420px) {
         .story-row {
-            grid-template-columns: 92px minmax(0, 1fr) 14px;
+            grid-template-columns: 92px minmax(0, 1fr);
             min-height: 110px;
             gap: 12px;
         }
@@ -388,8 +358,5 @@
             line-clamp: 3;
         }
 
-        .row-arrow {
-            font-size: 0.86rem;
-        }
     }
 </style>
