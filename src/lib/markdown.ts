@@ -37,7 +37,13 @@ DOMPurify.addHook('afterSanitizeAttributes', (node) => {
 export function renderMarkdown(markdown: string | null | undefined) {
     if (!markdown) return '';
     const html = marked.parse(markdown, { async: false, gfm: true });
-    return DOMPurify.sanitize(typeof html === 'string' ? html : '', {
+    const content = typeof html === 'string' ? html : '';
+    // A Markdown image title is treated as an optional caption; no title means no invented caption.
+    const figures = content.replace(/<p>(<img\s+[^>]*>)<\/p>/g, (_match, image: string) => {
+        const caption = image.match(/\stitle="([^"]*)"/)?.[1];
+        return `<figure>${image}${caption ? `<figcaption>${caption}</figcaption>` : ''}</figure>`;
+    });
+    return DOMPurify.sanitize(figures, {
         USE_PROFILES: { html: true },
         ADD_TAGS: ['iframe'],
         ADD_ATTR: ['target', 'rel', 'allow', 'allowfullscreen', 'loading', 'referrerpolicy', 'title'],
