@@ -46,7 +46,6 @@
                                 </div>
                                 <h3>{post.title}</h3>
                                 <p>{post.excerpt}</p>
-                                <span class="card-cta">Pelajari <span aria-hidden="true">→</span></span>
                             </div>
                         </a>
                     </article>
@@ -104,8 +103,7 @@
         line-height: 1.6;
     }
 
-    .section-link,
-    .card-cta {
+    .section-link {
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -120,21 +118,17 @@
         border-bottom: 1px solid var(--border-control);
     }
 
-    .section-link span,
-    .card-cta span {
+    .section-link span {
         transition: transform var(--motion-micro) var(--ease-standard);
     }
 
     .section-link:hover,
-    .section-link:focus-visible,
-    .card-cta {
+    .section-link:focus-visible {
         color: var(--accent-text);
     }
 
     .section-link:hover span,
-    .section-link:focus-visible span,
-    .education-card a:hover .card-cta span,
-    .education-card a:focus-visible .card-cta span {
+    .section-link:focus-visible span {
         transform: translateX(3px);
     }
 
@@ -230,16 +224,9 @@
         line-clamp: 3;
     }
 
-    .card-cta {
-        margin-top: auto;
-        padding-top: 20px;
-    }
-
     @media (prefers-reduced-motion: reduce) {
         .section-link:hover span,
         .section-link:focus-visible span,
-        .education-card a:hover .card-cta span,
-        .education-card a:focus-visible .card-cta span,
         .education-card > a:hover,
         .education-card > a:focus-visible {
             transform: none;
