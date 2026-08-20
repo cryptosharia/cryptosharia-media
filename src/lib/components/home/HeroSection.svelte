@@ -50,6 +50,7 @@
         border-radius: 50%;
         content: '';
         opacity: .38;
+        pointer-events: none;
     }
 
     .home-hero::after {
