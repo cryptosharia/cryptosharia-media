@@ -113,15 +113,15 @@
     .article-detail { min-width: 0; }
     .article-header { max-width: 760px; }
     .article-category, .promo-label, .article-tags > p { margin: 0; color: var(--accent-text); font-size: .7rem; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
-    h1 { max-width: 760px; margin: 16px 0 0; font-size: clamp(2.5rem, 4.25vw, 4.35rem); line-height: 1.04; letter-spacing: -.045em; text-wrap: balance; }
+    h1 { max-width: 760px; margin: 16px 0 0; font-size: clamp(2rem, 3.2vw, 2.625rem); line-height: 1.08; letter-spacing: -.045em; text-wrap: balance; }
     .article-date { display: block; margin-top: 28px; color: var(--muted); font-size: .88rem; }
     .article-author { margin: 12px 0 0; color: var(--text); font-size: .92rem; font-weight: 650; }
     .article-figure { margin: 36px 0 0; }
     .article-figure img { display: block; width: 100%; max-height: 560px; object-fit: cover; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-muted); }
     .article-figure :global(figcaption), .article-prose :global(figcaption) { margin-top: 9px; color: var(--muted); font-size: .78rem; line-height: 1.5; }
-    .article-prose { max-width: 720px; margin: 36px 0 0; font-size: clamp(1.05rem, 1.3vw, 1.14rem); line-height: 1.82; }
-    .article-prose :global(h2) { margin-top: 2.35em; font-size: clamp(1.7rem, 2.7vw, 2.1rem); line-height: 1.16; }
-    .article-prose :global(h3) { margin-top: 2em; font-size: clamp(1.35rem, 2.1vw, 1.62rem); line-height: 1.22; }
+    .article-prose { max-width: 720px; margin: 36px 0 0; font-size: clamp(1rem, 1.15vw, 1.125rem); line-height: 1.82; }
+    .article-prose :global(h2) { margin-top: 2.35em; font-size: clamp(1.5rem, 2.1vw, 1.875rem); line-height: 1.2; }
+    .article-prose :global(h3) { margin-top: 2em; font-size: clamp(1.25rem, 1.6vw, 1.375rem); line-height: 1.26; }
     .article-prose :global(p) { margin-block: 0 1.3em; }
     .article-prose :global(figure) { margin: 2.2em 0; }
     .article-prose :global(figure img) { width: 100%; height: auto; border: 1px solid var(--border); border-radius: 12px; }
