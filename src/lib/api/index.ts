@@ -6,7 +6,8 @@ export {
     getToken,
     getTokenQuotes,
     sendMessage,
-    signIn,
+    requestOtp,
+    verifyOtp,
     refreshSession,
     signOut,
     getMe

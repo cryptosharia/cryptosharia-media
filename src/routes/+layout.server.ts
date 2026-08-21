@@ -3,8 +3,7 @@ import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async () => {
     const result = await getContentCategories({
-        contentSections: ['news', 'education'],
-        showInNavigation: true,
+        sections: ['news', 'education'],
         limit: 100,
         page: 1
     });

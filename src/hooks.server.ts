@@ -69,7 +69,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         if (!refreshToken) return false;
         const refreshed = await refreshSession(refreshToken);
         const session = refreshed.data?.data;
-        if (!session?.accessToken || !session.refreshToken) {
+        if (!session?.accessToken) {
             if (refreshed.response.status === 400 || refreshed.response.status === 401) clearSession();
             return false;
         }
@@ -82,14 +82,9 @@ export const handle: Handle = async ({ event, resolve }) => {
             secure,
             maxAge: 60 * 15
         });
-        event.cookies.set('refresh_token', session.refreshToken, {
-            path: '/',
-            httpOnly: true,
-            sameSite: 'strict',
-            secure,
-            maxAge: 60 * 60 * 24 * 30
-        });
-        event.locals.user = session.user;
+        const user = await getMe(session.accessToken);
+        if (!user.data?.data) return false;
+        event.locals.user = user.data.data;
         event.locals.token = session.accessToken;
         return true;
     };

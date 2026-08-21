@@ -8,12 +8,12 @@
 	let { children, data } = $props();
 	const newsCategories = $derived(
 		data.contentCategories
-			.filter((category) => category.showInNavigation && category.contentSection === 'news')
+			.filter((category) => category.section === 'news')
 			.map((category) => ({ label: category.name, slug: category.slug }))
 	);
 	const educationCategories = $derived(
 		data.contentCategories
-			.filter((category) => category.showInNavigation && category.contentSection === 'education')
+			.filter((category) => category.section === 'education')
 			.map((category) => ({ label: category.name, slug: category.slug }))
 	);
 	let scrollProgress = $state(0);

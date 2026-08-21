@@ -18,12 +18,11 @@ export type ContentTag = {
   name: string;
   slug: string;
   description?: string | null;
-  contentSection?: 'news' | 'education' | null;
-  showInNavigation?: boolean;
-  displayOrder?: number | null;
+  /** A non-null section makes this tag available in that section's navigation. */
+  section: 'news' | 'education' | null;
 };
 
-export type ContentCategory = Pick<ContentTag, 'id' | 'name' | 'slug' | 'contentSection' | 'showInNavigation' | 'displayOrder'> & { label: string };
+export type ContentCategory = Pick<ContentTag, 'id' | 'name' | 'slug' | 'section'> & { label: string };
 
 export type UserMetadata = {
   id: string;
@@ -56,20 +55,22 @@ export type PostDetail = Post & { content: string };
 export type Token = {
   id: string;
   slug: string;
-  rank: number;
+  /** @deprecated Only retained for bundled legacy mock data; use quote.rank from API v2. */
+  rank?: number;
   name: string;
   ticker: string;
   shariaStatus: ShariaStatus;
   status: PublishStatus;
   excerpt: string;
   tradingviewSymbol: string | null;
-  website: string;
+  website: string | null;
   publishedAt: string | null;
   createdAt: string;
   updatedAt: string | null;
   createdBy: UserMetadata;
   updatedBy: UserMetadata;
-  logo: AssetMetadata;
+  logo: AssetMetadata | null;
+  quote?: TokenQuote | null;
   tags?: ContentTag[];
 };
 
@@ -122,11 +123,13 @@ export type ListTokensParams = {
   search?: string;
   limit?: number;
   page?: number;
+  quote?: boolean;
 };
 
 export type ListTagsParams = {
-  contentSections?: Array<'news' | 'education'>;
-  showInNavigation?: boolean;
+  sections?: Array<'news' | 'education'>;
+  slugs?: string[];
+  search?: string;
   limit?: number;
   page?: number;
 };
@@ -142,7 +145,6 @@ export type User = {
 };
 
 export type AuthSession = {
-  user: User;
   accessToken: string;
   refreshToken: string;
 };

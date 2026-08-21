@@ -1,32 +1,40 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { signIn } from '$lib/api';
+import { requestOtp, verifyOtp } from '$lib/api';
 import { dev } from '$app/environment';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-    login: async ({ request, cookies }) => {
+    requestOtp: async ({ request }) => {
         const data = await request.formData();
         const email = data.get('email');
-        const password = data.get('password');
 
-        if (typeof email !== 'string' || typeof password !== 'string' || !email || !password) {
-            return fail(400, { email: typeof email === 'string' ? email : '', error: 'Email dan password wajib diisi.' });
+        if (typeof email !== 'string' || !email) {
+            return fail(400, { email: typeof email === 'string' ? email : '', error: 'Email wajib diisi.' });
         }
-        if (email.length > 255 || password.length < 8) {
-            return fail(400, { email, error: 'Email atau password belum valid.' });
+        if (email.length > 255) {
+            return fail(400, { email, error: 'Email belum valid.' });
+        }
+
+        const result = await requestOtp(email);
+        if (result.error) {
+            return fail(result.response.status || 503, { email, error: result.error.message });
+        }
+        return { email, otpRequested: true };
+    },
+
+    verifyOtp: async ({ request, cookies }) => {
+        const data = await request.formData();
+        const email = data.get('email');
+        const code = data.get('code');
+
+        if (typeof email !== 'string' || typeof code !== 'string' || !email || !/^\d{6}$/.test(code)) {
+            return fail(400, { email: typeof email === 'string' ? email : '', otpRequested: true, error: 'Masukkan kode OTP 6 digit.' });
         }
 
         try {
-            const result = await signIn({
-                email,
-                password,
-            });
-
+            const result = await verifyOtp({ email, code });
             if (result.error || !result.data?.data) {
-                return fail(401, {
-                    email,
-                    error: result.error?.message || 'Login gagal. Periksa kembali email dan password Anda.'
-                });
+                return fail(result.response.status || 401, { email, otpRequested: true, error: result.error?.message || 'Kode OTP tidak valid atau kedaluwarsa.' });
             }
 
             const { accessToken, refreshToken } = result.data.data;
@@ -52,8 +60,7 @@ export const actions: Actions = {
                 maxAge: 60 * 60 * 24 * 30
             });
 
-        } catch (err) {
-            console.error('Login action error:', err);
+        } catch {
             return fail(500, { email, error: 'Terjadi kesalahan sistem.' });
         }
 

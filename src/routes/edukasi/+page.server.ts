@@ -5,9 +5,9 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url, setHeaders }) => {
     const requestedCategory = url.searchParams.get('kategori') ?? '';
-    const categoryResult = await getContentCategories({ contentSections: ['education'], showInNavigation: true, limit: 100, page: 1 });
+    const categoryResult = await getContentCategories({ sections: ['education'], limit: 100, page: 1 });
     const publicCategories = categoryResult.data?.data.items.filter(
-        (item) => item.showInNavigation && item.contentSection === 'education'
+        (item) => item.section === 'education'
     ) ?? [];
     const categories = publicCategories.map((item) => ({ label: item.name, slug: item.slug }));
     const category = categories.find((item) => item.slug === requestedCategory) ?? null;

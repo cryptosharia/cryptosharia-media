@@ -1,13 +1,10 @@
 import { error } from '@sveltejs/kit';
-import { getToken, getTokenQuotes } from '$lib/api';
+import { getToken } from '$lib/api';
 import { renderMarkdown } from '$lib/markdown';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, setHeaders }) => {
-    const [tokenResult, quoteResult] = await Promise.all([
-        getToken(params.slug),
-        getTokenQuotes(params.slug)
-    ]);
+    const tokenResult = await getToken(params.slug, { quote: true });
     const token = tokenResult.data?.data;
 
     if (!token) {
@@ -21,7 +18,7 @@ export const load: PageServerLoad = async ({ params, setHeaders }) => {
 
     return {
         token: { ...token, content: '' },
-        quote: quoteResult.data?.data.find((item) => item.slug === token.slug) ?? null,
+        quote: token.quote ?? null,
         html: renderMarkdown(token.content)
     };
 };

@@ -50,7 +50,7 @@
             <div class="coin-identity">
                 {#if data.token.logo?.url}<img src={data.token.logo.url} alt="" width="60" height="60" fetchpriority="high" />
                 {:else}<span class="coin-logo-fallback" aria-hidden="true">{data.token.ticker.slice(0, 3)}</span>{/if}
-                <div><p>#{data.token.rank} · {data.token.ticker}</p><h1>{data.token.name}</h1></div>
+                <div><p>{data.quote ? `#${data.quote.rank} · ` : ''}{data.token.ticker}</p><h1>{data.token.name}</h1></div>
             </div>
             <div class="status-block"><p>Status screening</p><ScreeningStatus status={data.token.shariaStatus} /><time datetime={updatedAt}>Diperbarui {formatDate(updatedAt)}</time></div>
         </div>
