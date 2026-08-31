@@ -3,6 +3,11 @@
     import type { ActionData } from './$types';
 
     let { form }: { form: ActionData | null } = $props();
+
+    function normalizeOtp(event: Event) {
+        const input = event.currentTarget as HTMLInputElement;
+        input.value = input.value.replace(/[^0-9]/g, '').slice(0, 6);
+    }
 </script>
 
 <Seo title="Login — CryptoSharia" description="Masuk ke akun CryptoSharia." canonicalPath="/login" noindex />
@@ -31,7 +36,20 @@
                     <input type="hidden" name="email" value={form.email} />
                     <div class="field">
                         <label for="code">Kode OTP</label>
-                        <input class="input" inputmode="numeric" pattern="[0-9]{6}" id="code" name="code" autocomplete="one-time-code" required maxlength="6" />
+                        <input
+                            class="input"
+                            type="text"
+                            inputmode="numeric"
+                            id="code"
+                            name="code"
+                            autocomplete="one-time-code"
+                            required
+                            minlength="6"
+                            maxlength="6"
+                            aria-describedby="code-hint"
+                            oninput={normalizeOtp}
+                        />
+                        <small id="code-hint" class="muted">Masukkan tepat 6 angka dari email.</small>
                     </div>
                     <button type="submit" class="button button-primary">Verifikasi dan masuk</button>
                 </form>
