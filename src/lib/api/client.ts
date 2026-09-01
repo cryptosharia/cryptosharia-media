@@ -32,7 +32,14 @@ function toQuery(params: Record<string, unknown> | undefined) {
 
     for (const [key, value] of Object.entries(params)) {
         if (value === undefined || value === null || value === '') continue;
-        query.set(key, Array.isArray(value) ? value.join(',') : String(value));
+        if (Array.isArray(value)) {
+            for (const item of value) {
+                if (item === undefined || item === null || item === '') continue;
+                query.append(key, String(item));
+            }
+            continue;
+        }
+        query.set(key, String(value));
     }
     return query;
 }
