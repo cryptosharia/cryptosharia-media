@@ -1,18 +1,20 @@
-import { getPosts, getTokenQuotes, getTokens } from '$lib/api';
+import { getPosts, getTokens } from '$lib/api';
+import { compareTokensByPopularity } from '$lib/token-ranking';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ setHeaders }) => {
     const [newsResult, educationResult, tokenResult] = await Promise.all([
         getPosts({ sections: ['news'], statuses: ['published'], limit: 6, page: 1 }),
         getPosts({ sections: ['education'], statuses: ['published'], limit: 3, page: 1 }),
-        getTokens({ statuses: ['published'], limit: 8, page: 1 })
+        getTokens({ statuses: ['published'], limit: 100, page: 1, quote: true })
     ]);
 
     const news = newsResult.data?.data.items ?? [];
-    const tokens = tokenResult.data?.data.items ?? [];
-    const quoteResult = tokens.length ? await getTokenQuotes(tokens.map((token) => token.slug)) : null;
-    const tokenQuotes = quoteResult?.data?.data ?? [];
-    const hasUpstreamError = Boolean(newsResult.error || educationResult.error || tokenResult.error || quoteResult?.error);
+    const tokens = [...(tokenResult.data?.data.items ?? [])]
+        .sort(compareTokensByPopularity)
+        .slice(0, 8);
+    const tokenQuotes = tokens.flatMap((token) => (token.quote ? [token.quote] : []));
+    const hasUpstreamError = Boolean(newsResult.error || educationResult.error || tokenResult.error);
     setHeaders({
         'cache-control': hasUpstreamError
             ? 'no-store'
