@@ -117,7 +117,8 @@
     .article-date { display: block; margin-top: 28px; color: var(--muted); font-size: .88rem; }
     .article-author { margin: 12px 0 0; color: var(--text); font-size: .92rem; font-weight: 650; }
     .article-figure { margin: 36px 0 0; }
-    .article-figure img { display: block; width: 100%; max-height: 560px; object-fit: cover; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-muted); }
+    .article-cover-figure { aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-muted); }
+    .article-cover-figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
     .article-figure :global(figcaption), .article-prose :global(figcaption) { margin-top: 9px; color: var(--muted); font-size: .78rem; line-height: 1.5; }
     .article-prose { max-width: 720px; margin: 36px 0 0; font-size: clamp(1rem, 1.15vw, 1.125rem); line-height: 1.82; }
     .article-prose :global(h2) { margin-top: 2.35em; font-size: clamp(1.5rem, 2.1vw, 1.875rem); line-height: 1.2; }
@@ -153,5 +154,5 @@
     .related-section .section-heading { margin-bottom: 28px; }
 
     @media (max-width: 1023px) { .article-layout { grid-template-columns: 1fr; gap: 56px; } .article-sidebar { max-width: 560px; } .community-promo { position: static; } .article-sidebar :global([data-ad-placement='article-sidebar']) { display: none; } }
-    @media (max-width: 720px) { .article-page { padding-top: 48px; } h1 { font-size: clamp(2.25rem, 10vw, 3rem); } .article-date { margin-top: 22px; } .article-figure { margin-top: 30px; } .article-figure img { max-height: none; } .article-prose { margin-top: 30px; font-size: 1.03rem; line-height: 1.78; } .article-footer { margin-top: 44px; } .community-promo { padding: 24px; } .related-section { margin-top: 72px; } }
+    @media (max-width: 720px) { .article-page { padding-top: 48px; } h1 { font-size: clamp(2.25rem, 10vw, 3rem); } .article-date { margin-top: 22px; } .article-figure { margin-top: 30px; } .article-prose { margin-top: 30px; font-size: 1.03rem; line-height: 1.78; } .article-footer { margin-top: 44px; } .community-promo { padding: 24px; } .related-section { margin-top: 72px; } }
 </style>

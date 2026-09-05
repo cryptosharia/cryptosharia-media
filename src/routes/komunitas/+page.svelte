@@ -272,7 +272,8 @@
     .channel-copy strong, .channel-copy small { display: block; }
     .channel-copy strong { font-size: 1rem; letter-spacing: -.01em; }
     .channel-copy small { margin-top: 4px; color: var(--muted); font-size: .84rem; line-height: 1.45; }
-    .channel-arrow { flex: 0 0 auto; color: var(--accent-text); font-size: 1.15rem; transition: transform var(--motion-micro) var(--ease-standard); }
+    .channel-arrow { display: inline-grid; width: 30px; height: 30px; flex: 0 0 auto; place-items: center; color: var(--accent-text); border: 1px solid var(--border-control); border-radius: 50%; font-size: 1rem; line-height: 1; transition: transform var(--motion-micro) var(--ease-standard), color var(--motion-micro) var(--ease-standard), background var(--motion-micro) var(--ease-standard); }
+    .channel-row:hover .channel-arrow, .channel-row:focus-visible .channel-arrow { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
     .channel-row:hover .channel-arrow, .channel-row:focus-visible .channel-arrow { transform: translate(3px, -3px); }
 
     .community-premium { position: relative; padding-block: clamp(72px, 9vw, 112px); overflow: clip; background: var(--canvas); }
