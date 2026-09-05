@@ -963,7 +963,7 @@ a {
 
 .article-cover {
   width: min(980px, calc(100% - 32px));
-  max-height: 560px;
+  height: min(560px, calc((100vw - 32px) * 9 / 16));
   margin: 0 auto 44px;
   object-fit: cover;
   border: 1px solid var(--border);
@@ -1141,6 +1141,7 @@ a {
 
   .article-cover {
     width: calc(100% - 24px);
+    height: calc((100vw - 24px) * 9 / 16);
   }
 }
 
