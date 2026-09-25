@@ -5,15 +5,27 @@
     import { reveal } from '$lib/actions/reveal';
     import { TEAM_MEMBERS, type TeamMember } from '$lib/team';
 
-    const chiefExecutive = TEAM_MEMBERS.find((member) => member.id === 'sholahuddin');
-    const members = chiefExecutive
-        ? [chiefExecutive, ...TEAM_MEMBERS.filter((member) => member.id !== chiefExecutive.id)]
-        : TEAM_MEMBERS;
+    let { members: propMembers }: { members?: TeamMember[] | null } = $props();
+
+    const rawMembers = $derived(propMembers && propMembers.length > 0 ? propMembers : TEAM_MEMBERS);
+    const chiefExecutive = $derived(
+        rawMembers.find(
+            (member) =>
+                member.id === 'sholahuddin' ||
+                member.slug === 'sholahuddin' ||
+                member.role.toLowerCase().includes('chief executive')
+        )
+    );
+    const members = $derived(
+        chiefExecutive
+            ? [chiefExecutive, ...rawMembers.filter((member) => member.id !== chiefExecutive.id)]
+            : rawMembers
+    );
     let selectedIndex = $state(0);
     let selectorTrack: HTMLDivElement;
     let transitionDirection = $state<1 | -1>(1);
     let reducedMotion = $state(false);
-    const selected = $derived(members[selectedIndex]);
+    const selected = $derived(members[selectedIndex] || members[0]);
 
     onMount(() => {
         const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');

@@ -1,5 +1,20 @@
 export type TeamExpertise = { title: string; description: string };
-export type TeamMember = { id: string; name: string; credentials?: string; role: string; image: string; description: string; focus: string; contribution?: string; joined?: string; expertise: TeamExpertise[] };
+export type TeamMember = {
+    id: string;
+    slug?: string | null;
+    name: string;
+    credentials?: string | null;
+    role: string;
+    image: string;
+    imageUrl?: string | null;
+    description: string;
+    focus: string;
+    contribution?: string | null;
+    joined?: string | null;
+    expertise: TeamExpertise[];
+    orderIndex?: number;
+    isActive?: boolean;
+};
 
 export const TEAM_MEMBERS: TeamMember[] = [
  { id:'devin', name:'Ust. Devin Halim Wijaya', credentials:'B.B.A., M.Sc.', role:'Board of Commissioners', image:'/team/board-devin-halim-wijaya.webp', description:'Mendukung penguatan perspektif syariah CryptoSharia melalui kajian fikih muamalah, fatwa aset kripto, dan screening aset digital.', focus:'Fikih Muamalah & Screening Syariah', contribution:'Pemateri MasterClass CryptoSharia 2026 pada sesi Fikih Muamalah & Fatwa Crypto serta Screening Koin & Bedah Kasus.', expertise:[{title:'Fikih Muamalah',description:'Prinsip transaksi dalam Islam'},{title:'Fatwa Crypto',description:'Kajian hukum aset digital'},{title:'Screening Syariah',description:'Penilaian aset dari aspek syariah'},{title:'Aset Digital',description:'Kajian produk dan transaksi crypto'}] },

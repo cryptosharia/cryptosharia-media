@@ -1,18 +1,22 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { getPosts, sendMessage } from '$lib/api';
+import { getPosts, getTeamMembers, sendMessage } from '$lib/api';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url }) => {
-    const activities = await getPosts({
-        sections: ['activity'],
-        statuses: ['published'],
-        limit: 6,
-        page: 1
-    });
+    const [activities, teamRes] = await Promise.all([
+        getPosts({
+            sections: ['activity'],
+            statuses: ['published'],
+            limit: 6,
+            page: 1
+        }),
+        getTeamMembers({ isActive: true }).catch(() => null)
+    ]);
 
     return {
         activities: activities.data?.data.items ?? [],
         activityError: activities.error?.message ?? null,
+        teamMembers: teamRes?.data?.data && teamRes.data.data.length > 0 ? teamRes.data.data : null,
         messageSent: url.searchParams.get('pesan') === 'terkirim'
     };
 };

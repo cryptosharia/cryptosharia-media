@@ -66,7 +66,7 @@
         </div>
     </section>
 
-    <InteractiveTeamDirectory />
+    <InteractiveTeamDirectory members={data.teamMembers} />
 
     <section id="aktivitas" class="about-activities" aria-labelledby="aktivitas-title">
         <div class="container">

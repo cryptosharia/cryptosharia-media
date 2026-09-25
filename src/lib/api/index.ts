@@ -10,7 +10,8 @@ export {
     verifyOtp,
     refreshSession,
     signOut,
-    getMe
+    getMe,
+    getTeamMembers
 } from './client';
 
 // Re-export useful utilities

@@ -209,4 +209,9 @@ export function getMe(token: string) {
     return apiRequest<User>('/auth/me', { headers: { Authorization: `Bearer ${token}` } });
 }
 
+export function getTeamMembers(params: { search?: string; isActive?: boolean } = {}) {
+    return apiRequest<import('$lib/team').TeamMember[]>('/team-members', { query: params });
+}
+
 export { API_BASE_URL };
+
