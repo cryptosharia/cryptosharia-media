@@ -1,7 +1,7 @@
-import { getTokenQuotes, getTokens } from '$lib/api';
+import { getTokens } from '$lib/api';
 import { compareTokensByPopularity } from '$lib/token-ranking';
 import { error } from '@sveltejs/kit';
-import type { ShariaStatus, Token, TokenQuote } from '$types/api';
+import type { ShariaStatus, Token } from '$types/api';
 import type { PageServerLoad } from './$types';
 
 const VALID_STATUSES = new Set<ShariaStatus>(['halal', 'haram', 'syubhat']);
@@ -27,27 +27,27 @@ async function loadMarketData(): Promise<MarketDatasets> {
 
     marketMapRequest = (async () => {
         try {
-            const firstPage = await getTokens({ statuses: ['published'], page: 1, limit: MARKET_CANDIDATE_LIMIT });
+            const firstPage = await getTokens({ statuses: ['published'], page: 1, limit: MARKET_CANDIDATE_LIMIT, quote: true });
             if (firstPage.error || !firstPage.data) throw new Error(firstPage.error?.message ?? 'Token listing returned no data');
 
-            const validTokens = firstPage.data.data.items.filter((token) => token.slug && VALID_STATUSES.has(token.shariaStatus));
-            if (!validTokens.length) {
-                const data = { marketMap: [], trendingTokens: [] };
-                marketMapCache = { data, expiresAt: Date.now() + MARKET_MAP_CACHE_MS };
-                return data;
+            const { pagination } = firstPage.data.data;
+            const remainingPages = pagination.totalPages > 1
+                ? await Promise.all(Array.from({ length: pagination.totalPages - 1 }, (_, index) =>
+                    getTokens({ statuses: ['published'], page: index + 2, limit: MARKET_CANDIDATE_LIMIT, quote: true })
+                ))
+                : [];
+            const failedPage = remainingPages.find((page) => page.error || !page.data);
+            if (failedPage) {
+                throw new Error(failedPage.error?.message ?? 'A market map page returned no data');
             }
 
-            const quoteResult = await getTokenQuotes(validTokens.map((token) => token.slug));
-            if (quoteResult.error || !quoteResult.data) {
-                console.error('[screening] Market map quotes unavailable:', quoteResult.error?.message ?? 'No quote data returned');
-                const data = { marketMap: [], trendingTokens: [] };
-                marketMapCache = { data, expiresAt: Date.now() + MARKET_MAP_CACHE_MS };
-                return data;
-            }
-
-            const quotes = new Map<string, TokenQuote>(quoteResult.data.data.map((quote) => [quote.slug, quote]));
-            const marketMap = validTokens.flatMap((token): MarketItem[] => {
-                const quote = quotes.get(token.slug);
+            const tokens = [
+                ...firstPage.data.data.items,
+                ...remainingPages.flatMap((page) => page.data?.data.items ?? [])
+            ];
+            const marketMap = tokens.flatMap((token): MarketItem[] => {
+                const quote = token.quote;
+                if (!token.slug || !VALID_STATUSES.has(token.shariaStatus)) return [];
                 if (!quote || !Number.isFinite(quote.marketCapUsd) || quote.marketCapUsd <= 0) return [];
                 return [{
                     slug: token.slug,
@@ -98,7 +98,7 @@ export const load: PageServerLoad = async ({ url, setHeaders }) => {
     };
     const [marketData, result] = await Promise.all([
         loadMarketData(),
-        getTokens({ ...tokenParams, page: sort === 'popular' ? page : 1, limit: sort === 'popular' ? limit : 100, quote: sort === 'popular' })
+        getTokens({ ...tokenParams, page: sort === 'popular' ? page : 1, limit: sort === 'popular' ? limit : 100 })
     ]);
 
     if (result.error) throw error(503, result.error.message);

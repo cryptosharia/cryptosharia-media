@@ -4,7 +4,6 @@ export {
     getPost,
     getTokens,
     getToken,
-    getTokenQuotes,
     sendMessage,
     requestOtp,
     verifyOtp,

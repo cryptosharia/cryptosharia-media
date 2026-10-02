@@ -221,36 +221,6 @@ export async function getToken(slug: string): Promise<any> {
 }
 
 /**
- * Mock: Fetch token price quotes
- */
-export async function getTokenQuotes(slugs: string | string[]): Promise<any> {
-    await delay();
-
-    const requestedSlugs = Array.isArray(slugs) ? slugs : [slugs];
-
-    return {
-        data: {
-            success: true,
-            message: 'Token quotes fetched (mock)',
-            data: requestedSlugs.map((slug) => (
-                {
-                    slug,
-                    rank: 1,
-                    infiniteSupply: false,
-                    maxSupply: 21000000,
-                    circulatingSupply: 19500000,
-                    priceUsd: 0,
-                    marketCapUsd: 0,
-                    marketCapDominance: 0,
-                    percentChange24h: 0,
-                }
-            )),
-        },
-        error: undefined,
-    };
-}
-
-/**
  * Mock: Send a contact/feedback message
  */
 export async function sendMessage(message: { name: string; email: string; message: string }): Promise<any> {
