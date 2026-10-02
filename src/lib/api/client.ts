@@ -162,12 +162,14 @@ export async function getToken(slug: string, options: { quote?: boolean } = {}) 
 }
 
 export async function getTokenQuotes(slugs: string | string[]) {
-    const result = await getTokens({ slugs: Array.isArray(slugs) ? slugs : [slugs], quote: true });
-    if (result.data) {
-        const quotes = result.data.data.items.flatMap((token) => (token.quote ? [token.quote] : []));
-        return { ...result, data: { ...result.data, data: quotes } } as ApiResult<TokenQuote[]>;
-    }
-    return result as unknown as ApiResult<TokenQuote[]>;
+    const result = await apiRequest<TokenQuote[] | ApiResponse<TokenQuote[]>>('/tokens/quotes', {
+        query: { slugs: (Array.isArray(slugs) ? slugs : [slugs]).join(',') }
+    });
+    if (!result.data) return result as ApiResult<TokenQuote[]>;
+
+    const payload = result.data.data;
+    const quotes = Array.isArray(payload) ? payload : payload.data;
+    return { ...result, data: { ...result.data, data: quotes } } as ApiResult<TokenQuote[]>;
 }
 
 export function sendMessage(message: { name: string; email: string; message: string }) {

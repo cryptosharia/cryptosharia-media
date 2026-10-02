@@ -1,5 +1,6 @@
 <script lang="ts">
     import Pagination from '$lib/components/Pagination.svelte';
+    import MarketMap from '$lib/components/screening/MarketMap.svelte';
     import ScreeningRow from '$lib/components/screening/ScreeningRow.svelte';
     import Seo from '$lib/components/Seo.svelte';
     import StateMessage from '$lib/components/StateMessage.svelte';
@@ -17,6 +18,7 @@
 <Seo title="Screening Coin — CryptoSharia" description="Cari dan baca hasil screening coin yang telah dipublikasikan oleh CryptoSharia." canonicalPath={canonicalPath()} noindex={Boolean(data.search)} />
 
 <main id="main-content" class="site-main">
+    <MarketMap items={data.marketMap} />
     <header class="container screening-intro"><p class="screening-kicker">Screening Coin</p><h1>Kenali status setiap coin</h1><p>Cari coin dan buka penjelasan screening yang telah dipublikasikan oleh tim CryptoSharia.</p></header>
     <section class="container screening-discovery" aria-label="Screener coin">
         <form class="screening-search" method="GET" action="/screening" role="search">
