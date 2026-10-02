@@ -25,7 +25,6 @@
   --radius-sm: 8px;
   --radius: 10px;
   --radius-lg: 14px;
-  --sidebar-width: 224px;
   --max-width: 1200px;
   --header-height: 66px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -1140,10 +1139,6 @@ a {
     width: calc(100% - 24px);
     height: calc((100vw - 24px) * 9 / 16);
   }
-}
-
-@media (min-width: 1021px) {
-  .page-column { min-width: 0; margin-left: var(--sidebar-width); }
 }
 
 @media (max-width: 1020px) {
