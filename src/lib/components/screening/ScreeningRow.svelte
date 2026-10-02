@@ -12,7 +12,7 @@
         <span class="status-cell"><ScreeningStatus status={token.shariaStatus} /></span>
     </span>
     <span class="excerpt">{token.excerpt}</span>
-    <span class="card-action">Baca hasil screening <span aria-hidden="true">â†’</span></span>
+    <span class="card-action">Baca hasil screening <span aria-hidden="true">&rarr;</span></span>
 </a>
 
 <style>

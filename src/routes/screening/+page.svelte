@@ -29,7 +29,7 @@
             {#if data.sort !== 'popular'}<input type="hidden" name="sort" value={data.sort} />{/if}
             <label class="sr-only" for="search-coin">Cari nama aset atau ticker</label>
             <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.25"></circle><path d="m12.4 12.4 4.1 4.1"></path></svg>
-            <input id="search-coin" type="search" name="q" value={data.search} placeholder="Cari nama aset atau tickerâ€¦" autocomplete="off" />
+            <input id="search-coin" type="search" name="q" value={data.search} placeholder="Cari nama aset atau ticker&hellip;" autocomplete="off" />
             <button type="submit">Cari</button>
         </form>
     </header>
@@ -49,13 +49,13 @@
             <div>
                 <p class="results-kicker">CryptoSharia</p>
                 <h2 id="results-heading">Daftar Screening</h2>
-                <p class="results-count">Menampilkan {data.pagination.total ? (data.pagination.page - 1) * data.pagination.limit + 1 : 0}â€“{Math.min(data.pagination.page * data.pagination.limit, data.pagination.total)} dari {data.pagination.total} aset</p>
+                <p class="results-count">Menampilkan {data.pagination.total ? (data.pagination.page - 1) * data.pagination.limit + 1 : 0}&ndash;{Math.min(data.pagination.page * data.pagination.limit, data.pagination.total)} dari {data.pagination.total} aset</p>
             </div>
             <form class="sort-control" method="GET" action="/screening">
                 {#if data.status}<input type="hidden" name="status" value={data.status} />{/if}
                 {#if data.search}<input type="hidden" name="q" value={data.search} />{/if}
                 <label for="screening-sort">Urutkan</label>
-                <select id="screening-sort" name="sort" value={data.sort} onchange={(event) => event.currentTarget.form?.requestSubmit()}><option value="popular">Paling terkenal</option><option value="latest">Terbaru diperbarui</option><option value="az">Aâ€“Z</option></select>
+                <select id="screening-sort" name="sort" value={data.sort} onchange={(event) => event.currentTarget.form?.requestSubmit()}><option value="popular">Paling terkenal</option><option value="latest">Terbaru diperbarui</option><option value="az">A&ndash;Z</option></select>
             </form>
         </header>
         {#if data.latestUpdatedAt}<p class="screening-freshness">Pembaruan terbaru {formatDate(data.latestUpdatedAt)}</p>{/if}
