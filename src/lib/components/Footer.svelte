@@ -86,9 +86,9 @@
     .site-footer {
         margin-top: 0;
         padding-block: 64px 28px;
-        color: #eeeef1;
-        border-top: 1px solid #2b303b;
-        background: #0f1115;
+        color: var(--text);
+        border-top: 1px solid var(--border);
+        background: var(--surface);
     }
 
     .footer-layout {
@@ -107,7 +107,7 @@
         min-height: 44px;
         align-items: center;
         gap: 11px;
-        color: #ffffff;
+        color: var(--text);
         font-size: 1.08rem;
         font-weight: 800;
         letter-spacing: -0.025em;
@@ -126,7 +126,7 @@
     .footer-intro p {
         max-width: 350px;
         margin: 20px 0 0;
-        color: #b5bbc7;
+        color: var(--muted);
         font-size: 0.96rem;
         line-height: 1.7;
     }
@@ -143,7 +143,7 @@
 
     .footer-group h2 {
         margin: 0 0 18px;
-        color: #eeeef1;
+        color: var(--text);
         font-size: 0.76rem;
         font-weight: 700;
         letter-spacing: 0.12em;
@@ -160,7 +160,7 @@
         min-height: 38px;
         align-items: center;
         width: fit-content;
-        color: #aeb5c1;
+        color: var(--muted);
         font-size: 0.9rem;
         text-decoration: none;
         text-underline-offset: 4px;
@@ -168,7 +168,7 @@
     }
 
     .footer-links a:hover {
-        color: #ffffff;
+        color: var(--text);
         text-decoration: underline;
         transform: translateX(2px);
     }
@@ -180,8 +180,8 @@
         gap: 16px;
         margin-top: 52px;
         padding-top: 22px;
-        color: #8f97a5;
-        border-top: 1px solid #2b303b;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
         font-size: 0.8rem;
     }
 
@@ -230,11 +230,11 @@
 
         .footer-navigation-mobile {
             display: block;
-            border-bottom: 1px solid #2b303b;
+            border-bottom: 1px solid var(--border);
         }
 
         .footer-accordion {
-            border-top: 1px solid #2b303b;
+            border-top: 1px solid var(--border);
         }
 
         .footer-accordion summary {
@@ -243,7 +243,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 16px;
-            color: #eeeef1;
+            color: var(--text);
             cursor: pointer;
             font-size: 0.76rem;
             font-weight: 700;
@@ -259,7 +259,7 @@
         .footer-accordion summary::after {
             content: '+';
             flex: 0 0 auto;
-            color: #aeb5c1;
+            color: var(--muted);
             font-size: 1.15rem;
             font-weight: 400;
             line-height: 1;

@@ -48,8 +48,8 @@
         aspect-ratio: 1;
         border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
         border-radius: 50%;
-        content: '';
-        opacity: .38;
+        content: none;
+        opacity: 0;
         pointer-events: none;
     }
 
@@ -57,13 +57,7 @@
         position: absolute;
         inset: 0;
         pointer-events: none;
-        background-image:
-            linear-gradient(rgb(20 24 31 / 4%) 1px, transparent 1px),
-            linear-gradient(90deg, rgb(20 24 31 / 4%) 1px, transparent 1px);
-        background-size: 44px 44px;
-        mask-image: radial-gradient(ellipse 90% 105% at 62% 46%, black 15%, transparent 74%);
-        opacity: .72;
-        content: '';
+        content: none;
     }
 
     .hero-layout {
@@ -195,13 +189,6 @@
         color: #eeeeF1;
         background: #13161b;
         --hero-artwork-fade: #13161b;
-    }
-
-    :global(:root[data-theme='dark']) .home-hero::after {
-        background-image:
-            linear-gradient(rgb(255 255 255 / 5%) 1px, transparent 1px),
-            linear-gradient(90deg, rgb(255 255 255 / 5%) 1px, transparent 1px);
-        opacity: .56;
     }
 
     :global(:root[data-theme='dark']) .hero-cta.secondary {

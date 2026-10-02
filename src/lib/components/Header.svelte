@@ -279,6 +279,9 @@
                 onclick={() => closeDesktopDropdown()}>Screening Coin</a
             >
 
+            <a class="nav-link side-link" class:active={isActive('/riset')} href="/riset" aria-current={isActive('/riset') ? 'page' : undefined}>Riset</a>
+            <a class="nav-link side-link" class:active={isActive('/komunitas')} href="/komunitas#premium" aria-current={isActive('/komunitas') ? 'page' : undefined}>Premium</a>
+
             <div
                 class="nav-dropdown"
                 class:open={activeDropdown === 'tentang'}
@@ -1026,6 +1029,74 @@
         .brand-name {
             display: none;
         }
+    }
+
+    @media (min-width: 1021px) {
+        .site-header,
+        .site-header.scrolled {
+            position: fixed;
+            inset: 0 auto 0 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            border-right: 1px solid var(--border);
+            border-bottom: 0;
+            background: var(--surface);
+            backdrop-filter: none;
+            animation: none;
+        }
+
+        .site-nav.container {
+            display: grid;
+            width: 100%;
+            height: 100%;
+            grid-template-rows: auto minmax(0, 1fr) auto;
+            align-items: start;
+            justify-content: stretch;
+            gap: 0;
+            margin: 0;
+            padding: 20px 14px 16px;
+        }
+
+        .header-brand { min-height: 44px; }
+        .header-brand img { width: 32px; height: 32px; }
+
+        .desktop-nav {
+            display: flex;
+            min-height: 0;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: start;
+            gap: 3px;
+            margin-top: 22px;
+            overflow: visible;
+        }
+
+        .desktop-nav > .nav-link,
+        .desktop-nav > .nav-dropdown .nav-summary {
+            min-height: 40px;
+            justify-content: flex-start;
+            padding: 0 10px;
+            border-radius: 7px;
+        }
+
+        .desktop-nav > .nav-link:hover,
+        .desktop-nav > .nav-dropdown .nav-summary:hover,
+        .desktop-nav > .nav-link.active,
+        .desktop-nav > .nav-dropdown .nav-summary.active {
+            color: var(--text);
+            background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+        }
+
+        .desktop-nav .nav-link::after,
+        .desktop-nav .nav-summary::after { top: 8px; right: auto; bottom: 8px; left: 0; width: 2px; height: auto; transform: none; }
+        .desktop-nav .nav-link.active::after,
+        .desktop-nav .nav-summary.active::after { opacity: 1; }
+        .desktop-nav .nav-dropdown { display: block; }
+        .desktop-nav .nav-dropdown-menu { top: 0; left: calc(100% + 5px); }
+        .desktop-nav .nav-dropdown-menu-end { right: auto; left: calc(100% + 5px); }
+        .header-actions { align-self: end; justify-content: flex-start; margin-top: 12px; }
+        .theme-toggle { width: 40px; height: 40px; }
+        .mobile-toggle { display: none; }
     }
 
     @keyframes submenu-enter {

@@ -1,7 +1,9 @@
 <script lang="ts">
     import Pagination from '$lib/components/Pagination.svelte';
     import MarketMap from '$lib/components/screening/MarketMap.svelte';
+    import MarketSummary from '$lib/components/screening/MarketSummary.svelte';
     import ScreeningRow from '$lib/components/screening/ScreeningRow.svelte';
+    import TrendingTokens from '$lib/components/screening/TrendingTokens.svelte';
     import Seo from '$lib/components/Seo.svelte';
     import StateMessage from '$lib/components/StateMessage.svelte';
     import { formatDate } from '$lib/format';
@@ -15,41 +17,63 @@
     function filterHref(status: string) { const query = new URLSearchParams(); if (status) query.set('status', status); if (data.search) query.set('q', data.search); if (data.sort !== 'popular') query.set('sort', data.sort); return `/screening${query.size ? `?${query}` : ''}`; }
 </script>
 
-<Seo title="Screening Coin — CryptoSharia" description="Cari dan baca hasil screening coin yang telah dipublikasikan oleh CryptoSharia." canonicalPath={canonicalPath()} noindex={Boolean(data.search)} />
+<Seo title="Screening Crypto Syariah — CryptoSharia" description="Cari dan baca hasil screening aset kripto yang telah dipublikasikan oleh CryptoSharia." canonicalPath={canonicalPath()} noindex={Boolean(data.search)} />
 
-<main id="main-content" class="site-main">
-    <MarketMap items={data.marketMap} />
-    <header class="container screening-intro"><p class="screening-kicker">Screening Coin</p><h1>Kenali status setiap coin</h1><p>Cari coin dan buka penjelasan screening yang telah dipublikasikan oleh tim CryptoSharia.</p></header>
-    <section class="container screening-discovery" aria-label="Screener coin">
+<main id="main-content" class="site-main screening-page">
+    <header class="container screening-hero">
+        <p class="screening-kicker">CryptoSharia · Screening aset digital</p>
+        <h1>Screening Crypto Syariah</h1>
+        <p class="hero-description">Cari aset dan pelajari status screening berdasarkan kajian CryptoSharia.</p>
         <form class="screening-search" method="GET" action="/screening" role="search">
             {#if data.status}<input type="hidden" name="status" value={data.status} />{/if}
             {#if data.sort !== 'popular'}<input type="hidden" name="sort" value={data.sort} />{/if}
-            <label class="sr-only" for="search-coin">Cari coin atau ticker</label><input id="search-coin" type="search" name="q" value={data.search} placeholder="Cari nama coin atau ticker…" autocomplete="off" />
-            <button type="submit" aria-label="Cari coin"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.25"></circle><path d="m12.4 12.4 4.1 4.1"></path></svg></button>
+            <label class="sr-only" for="search-coin">Cari nama aset atau ticker</label>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.25"></circle><path d="m12.4 12.4 4.1 4.1"></path></svg>
+            <input id="search-coin" type="search" name="q" value={data.search} placeholder="Cari nama aset atau tickerâ€¦" autocomplete="off" />
+            <button type="submit">Cari</button>
         </form>
-        <nav class="status-tabs" aria-label="Filter status screening">{#each filters as filter (filter.value)}<a class={`status-tab ${filter.value || 'all'}`} class:active={data.status === filter.value} href={filterHref(filter.value)} aria-current={data.status === filter.value ? 'page' : undefined}>{filter.label}</a>{/each}</nav>
-        <div class="toolbar-meta">
-            <form class="sort-control" method="GET" action="/screening">
-                {#if data.status}<input type="hidden" name="status" value={data.status} />{/if}{#if data.search}<input type="hidden" name="q" value={data.search} />{/if}
-                <label for="screening-sort">Urutkan</label><select id="screening-sort" name="sort" value={data.sort} onchange={(event) => event.currentTarget.form?.requestSubmit()}><option value="popular">Paling terkenal</option><option value="latest">Terbaru diperbarui</option><option value="az">A–Z</option></select>
-            </form>
-            <span class="asset-count" aria-live="polite">{data.pagination.total} aset</span>
-        </div>
+    </header>
+
+    <section class="container screening-controls" aria-label="Filter status screening">
+        <nav class="status-tabs" aria-label="Filter status">
+            {#each filters as filter (filter.value)}<a class={`status-tab ${filter.value || 'all'}`} class:active={data.status === filter.value} href={filterHref(filter.value)} aria-current={data.status === filter.value ? 'page' : undefined}><span class={`filter-dot ${filter.value || 'all'}`} aria-hidden="true"></span>{filter.label}</a>{/each}
+        </nav>
     </section>
-    {#if data.latestUpdatedAt}<p class="container screening-freshness">Pembaruan terbaru {formatDate(data.latestUpdatedAt)}</p>{/if}
-    <section class="container screening-content" aria-label="Daftar coin tersaring">
+
+    <MarketMap items={data.marketMap} />
+    <TrendingTokens tokens={data.trendingTokens} />
+    <MarketSummary items={data.marketMap} />
+
+    <section class="container screening-results" aria-labelledby="results-heading">
+        <header class="results-header">
+            <div>
+                <p class="results-kicker">CryptoSharia</p>
+                <h2 id="results-heading">Daftar Screening</h2>
+                <p class="results-count">Menampilkan {data.pagination.total ? (data.pagination.page - 1) * data.pagination.limit + 1 : 0}â€“{Math.min(data.pagination.page * data.pagination.limit, data.pagination.total)} dari {data.pagination.total} aset</p>
+            </div>
+            <form class="sort-control" method="GET" action="/screening">
+                {#if data.status}<input type="hidden" name="status" value={data.status} />{/if}
+                {#if data.search}<input type="hidden" name="q" value={data.search} />{/if}
+                <label for="screening-sort">Urutkan</label>
+                <select id="screening-sort" name="sort" value={data.sort} onchange={(event) => event.currentTarget.form?.requestSubmit()}><option value="popular">Paling terkenal</option><option value="latest">Terbaru diperbarui</option><option value="az">Aâ€“Z</option></select>
+            </form>
+        </header>
+        {#if data.latestUpdatedAt}<p class="screening-freshness">Pembaruan terbaru {formatDate(data.latestUpdatedAt)}</p>{/if}
         {#if data.tokens.length}
             <div class="screening-directory">{#each data.tokens as token (token.id)}<ScreeningRow {token} />{/each}</div>
             <div class="screening-pagination"><Pagination pagination={data.pagination} {buildHref} /></div>
-        {:else}<StateMessage title={data.error ? 'Data screening belum dapat dimuat' : 'Tidak ada aset yang cocok'} message={data.error || 'Coba kata kunci atau filter status yang berbeda.'} actionHref="/screening" actionLabel="Reset pencarian" />{/if}
-        <aside class="screening-note"><p>Catatan</p><span>Hasil screening bersifat informasi dan bukan nasihat finansial. Baca penjelasan lengkap serta lakukan pertimbangan mandiri sebelum mengambil keputusan.</span></aside>
+        {:else}
+            <StateMessage title={data.error ? 'Data screening belum dapat dimuat' : 'Tidak ada aset yang cocok'} message={data.error || 'Coba kata kunci atau filter status yang berbeda.'} actionHref="/screening" actionLabel="Reset pencarian" />
+        {/if}
+        <aside class="screening-note"><strong>Catatan</strong><span>Hasil screening merupakan informasi berdasarkan metodologi CryptoSharia, bukan fatwa personal maupun nasihat finansial.</span></aside>
     </section>
 </main>
 
 <style>
- .screening-intro{padding-top:80px}.screening-kicker{margin:0 0 12px;color:var(--muted);font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase}.screening-intro h1{max-width:760px;margin:0;font-size:clamp(3rem,4.5vw,3.5rem);line-height:1.08;letter-spacing:-.05em}.screening-intro>p:last-child{max-width:660px;margin:16px 0 0;color:var(--muted);font-size:1.02rem;line-height:1.65}
- .screening-discovery{position:sticky;top:calc(var(--header-height) + 12px);z-index:10;display:grid;grid-template-columns:minmax(280px,1.3fr) auto auto;align-items:center;gap:12px 16px;margin-top:52px;padding-block:14px;border-block:1px solid var(--border);background:var(--canvas)}.screening-search{display:grid;min-height:46px;grid-template-columns:minmax(0,1fr) 46px;align-items:center;overflow:hidden;border:1px solid var(--border-control);border-radius:8px;background:var(--surface)}.screening-search:focus-within{border-color:var(--accent)}.screening-search input{width:100%;min-width:0;height:44px;padding:0 4px 0 14px;color:var(--text);border:0;outline:0;background:transparent;font:inherit;font-size:.86rem}.screening-search input::placeholder{color:var(--muted);opacity:.8}.screening-search button{display:grid;width:46px;height:44px;place-items:center;padding:0;color:var(--muted);border:0;background:transparent;cursor:pointer}.screening-search button:hover{color:var(--text);background:var(--surface-muted)}.screening-search svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-width:1.6}
- .status-tabs{display:flex;gap:5px;min-width:0}.status-tab{display:inline-flex;min-height:36px;flex:0 0 auto;align-items:center;padding:7px 10px;color:var(--muted);border:1px solid transparent;border-radius:7px;font-size:.8rem;font-weight:650}.status-tab:hover{color:var(--text);border-color:var(--border)}.status-tab.active.all{color:#17130e;border-color:var(--accent);background:var(--accent)}.status-tab.active.halal{color:var(--success);border-color:color-mix(in srgb,var(--success) 45%,var(--border));background:color-mix(in srgb,var(--success-bg) 68%,transparent)}.status-tab.active.syubhat{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 45%,var(--border));background:color-mix(in srgb,var(--warning-bg) 68%,transparent)}.status-tab.active.haram{color:var(--danger);border-color:color-mix(in srgb,var(--danger) 45%,var(--border));background:color-mix(in srgb,var(--danger-bg) 68%,transparent)}.toolbar-meta{display:flex;align-items:center;justify-content:end;gap:14px}.sort-control{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:.76rem;white-space:nowrap}.sort-control select{min-width:128px;padding:6px 22px 6px 8px;color:var(--text);border:1px solid var(--border);border-radius:6px;background:var(--surface);font:inherit;font-size:.76rem;cursor:pointer}.asset-count{color:var(--muted);font-size:.8rem;white-space:nowrap}
- .screening-freshness{margin-top:14px;color:var(--muted);font-size:.78rem}.screening-content{padding-block:18px 104px}.screening-directory{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}.screening-pagination :global(.pagination){flex-wrap:wrap;margin-top:48px;padding-top:28px;border-top:1px solid var(--border)}.screening-pagination :global(.pagination .button){border-radius:7px;background:transparent}.screening-note{display:grid;max-width:760px;grid-template-columns:110px minmax(0,1fr);gap:20px;margin-top:56px;padding:20px 0 0 18px;color:var(--muted);border-top:1px solid var(--border);border-left:2px solid var(--accent);font-size:.9rem;line-height:1.65}.screening-note p{margin:0;color:var(--text);font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
- @media(min-width:1440px){.screening-directory{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 14px}}@media(max-width:1040px){.screening-discovery{grid-template-columns:minmax(280px,1fr) auto}.toolbar-meta{justify-content:flex-start}}@media(max-width:760px){.screening-intro{padding-top:64px}.screening-intro h1{font-size:2.25rem}.screening-discovery{position:static;grid-template-columns:1fr;gap:12px;margin-top:36px}.status-tabs{width:calc(100% + 16px);overflow-x:auto;padding-right:16px;scrollbar-width:none}.status-tabs::-webkit-scrollbar{display:none}.toolbar-meta{justify-content:space-between}.screening-directory{grid-template-columns:1fr;gap:10px}}@media(max-width:600px){.screening-intro{padding-top:52px}.screening-intro h1{font-size:clamp(2rem,9.2vw,2.25rem)}.screening-intro>p:last-child{margin-top:12px;font-size:.94rem}.screening-freshness{margin-top:12px;font-size:.76rem}.screening-content{padding-block:16px 80px}.sort-control label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.screening-pagination :global(.pagination){gap:8px;margin-top:40px}.screening-pagination :global(.pagination>span:not(.button)){order:-1;width:100%;text-align:center}.screening-note{grid-template-columns:1fr;gap:7px;margin-top:44px;padding-left:15px}}
+    .screening-hero{padding-top:48px}.screening-kicker,.results-kicker{margin:0 0 8px;color:var(--muted);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.screening-hero h1{margin:0;font-size:clamp(2.1rem,4vw,3.15rem);line-height:1.08;letter-spacing:-.045em}.hero-description{margin:10px 0 22px;color:var(--muted);font-size:.96rem}.screening-search{display:grid;width:min(760px,100%);min-height:58px;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:10px;padding:6px 7px 6px 17px;border:1px solid var(--border-control);border-radius:10px;background:var(--surface);transition:border-color 140ms ease,box-shadow 140ms ease}.screening-search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}.screening-search svg{width:19px;height:19px;fill:none;stroke:var(--muted);stroke-linecap:round;stroke-width:1.7}.screening-search input{width:100%;min-width:0;height:42px;color:var(--text);border:0;outline:0;background:transparent;font:inherit}.screening-search input::placeholder{color:var(--muted);opacity:.82}.screening-search button{min-height:42px;padding:0 20px;color:var(--on-accent);border:0;border-radius:7px;background:var(--accent);font-size:.84rem;font-weight:700;cursor:pointer}.screening-search button:hover{background:var(--accent-hover)}
+    .screening-controls{margin-top:22px}.status-tabs{display:flex;flex-wrap:wrap;gap:8px}.status-tab{display:inline-flex;min-height:38px;align-items:center;gap:8px;padding:7px 12px;color:var(--muted);border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:.8rem;font-weight:650}.status-tab:hover{color:var(--text);border-color:var(--border-control)}.status-tab.active{color:var(--text);border-color:color-mix(in srgb,var(--accent) 55%,var(--border));background:color-mix(in srgb,var(--accent) 10%,var(--surface))}.filter-dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}.filter-dot.halal{background:var(--success)}.filter-dot.syubhat{background:var(--warning)}.filter-dot.haram{background:var(--danger)}.filter-dot.all{background:var(--accent)}
+    .screening-results{padding-block:42px 80px}.results-header{display:flex;align-items:end;justify-content:space-between;gap:20px;padding-bottom:15px;border-bottom:1px solid var(--border)}.results-kicker{margin-bottom:5px}.results-header h2{margin:0;font-size:1.55rem;line-height:1.2;letter-spacing:-.03em}.results-count{margin:6px 0 0;color:var(--muted);font-size:.82rem}.sort-control{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.77rem}.sort-control select{min-height:38px;padding:6px 28px 6px 10px;color:var(--text);border:1px solid var(--border);border-radius:7px;background:var(--surface);font:inherit}.screening-freshness{margin:12px 0;color:var(--muted);font-size:.74rem}.screening-directory{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}.screening-pagination :global(.pagination){flex-wrap:wrap;margin-top:28px;padding-top:18px;border-top:1px solid var(--border)}.screening-pagination :global(.pagination .button){border-radius:7px;background:var(--surface)}.screening-note{display:flex;max-width:860px;gap:16px;margin-top:38px;padding:14px 0 0;color:var(--muted);border-top:1px solid var(--border);font-size:.8rem;line-height:1.55}.screening-note strong{flex:0 0 auto;color:var(--text)}
+    @media(max-width:1100px){.screening-directory{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){.screening-hero{padding-top:34px}.screening-search{min-height:54px}.screening-results{padding-block:30px 68px}.screening-directory{grid-template-columns:1fr}}
+    @media(max-width:520px){.screening-hero h1{font-size:2rem}.hero-description{font-size:.88rem}.screening-search{grid-template-columns:20px minmax(0,1fr) auto;gap:7px;padding-left:12px}.screening-search button{padding-inline:14px}.status-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.status-tab{justify-content:center;gap:5px;padding-inline:5px;font-size:.72rem}.filter-dot{width:6px;height:6px}.results-header{align-items:start;flex-direction:column}.sort-control{width:100%;justify-content:space-between}.screening-note{gap:10px;font-size:.74rem}}
 </style>

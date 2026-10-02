@@ -2,15 +2,13 @@
     import { page } from "$app/stores";
 
     function isActive(path: string) {
-        if (path === "/") {
-            return $page.url.pathname === "/";
-        }
+        if (path === "/") return $page.url.pathname === "/";
         return $page.url.pathname.startsWith(path);
     }
 </script>
 
-<nav class="bottom-nav">
-    <a href="/" class="tab" class:active={isActive("/")}>
+<nav class="bottom-nav" aria-label="Navigasi cepat">
+    <a href="/berita" class="tab" class:active={isActive("/berita")} aria-current={isActive("/berita") ? 'page' : undefined}>
         <svg
             width="20"
             height="20"
@@ -25,7 +23,7 @@
         </svg>
         <span>News</span>
     </a>
-    <a href="/education" class="tab" class:active={isActive("/education")}>
+    <a href="/edukasi" class="tab" class:active={isActive("/edukasi")} aria-current={isActive("/edukasi") ? 'page' : undefined}>
         <svg
             width="20"
             height="20"
@@ -41,7 +39,7 @@
         </svg>
         <span>Education</span>
     </a>
-    <a href="/research" class="tab" class:active={isActive("/research")}>
+    <a href="/riset" class="tab" class:active={isActive("/riset")} aria-current={isActive("/riset") ? 'page' : undefined}>
         <svg
             width="20"
             height="20"
@@ -55,7 +53,7 @@
         </svg>
         <span>Research</span>
     </a>
-    <a href="/screening" class="tab" class:active={isActive("/screening")}>
+    <a href="/screening" class="tab" class:active={isActive("/screening")} aria-current={isActive("/screening") ? 'page' : undefined}>
         <svg
             width="20"
             height="20"
@@ -69,7 +67,7 @@
         </svg>
         <span>Screening</span>
     </a>
-    <a href="/community" class="tab" class:active={isActive("/community")}>
+    <a href="/komunitas#premium" class="tab" class:active={isActive("/komunitas")} aria-current={isActive("/komunitas") ? 'page' : undefined}>
         <svg
             width="20"
             height="20"
@@ -85,3 +83,13 @@
         <span>Premium</span>
     </a>
 </nav>
+
+<style>
+    .bottom-nav{position:fixed;right:0;bottom:0;left:0;z-index:900;display:none;grid-template-columns:repeat(5,minmax(0,1fr));padding:4px 8px calc(4px + env(safe-area-inset-bottom));border-top:1px solid var(--border);background:var(--surface)}
+    .tab{display:grid;min-width:0;min-height:54px;align-content:center;justify-items:center;gap:3px;padding:4px 2px;color:var(--muted);border-radius:7px;font-size:.63rem;font-weight:650;line-height:1.1;text-align:center}
+    .tab svg{width:19px;height:19px}
+    .tab.active{color:var(--accent-text);background:color-mix(in srgb,var(--accent) 9%,var(--surface))}
+    .tab:focus-visible{outline-offset:-2px}
+    @media(max-width:1020px){.bottom-nav{display:grid}}
+    @media(max-width:360px){.tab{font-size:.58rem}}
+</style>

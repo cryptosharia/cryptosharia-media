@@ -2,6 +2,7 @@
 	import '../app.css';
 	import Header from "$lib/components/Header.svelte";
 	import Footer from "$lib/components/Footer.svelte";
+	import BottomNav from "$lib/components/BottomNav.svelte";
 	import NavigationLoader from "$lib/components/NavigationLoader.svelte";
 	import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_LINKS } from '$lib/config';
 
@@ -59,8 +60,11 @@
 <NavigationLoader />
 <div class="scroll-progress" style:--scroll-progress={scrollProgress} aria-hidden="true"></div>
 <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
-<Header newsCategories={newsCategories} educationCategories={educationCategories} />
-
-{@render children()}
-
-<Footer />
+<div class="app-shell">
+	<Header newsCategories={newsCategories} educationCategories={educationCategories} />
+	<div class="page-column">
+		{@render children()}
+		<Footer />
+	</div>
+</div>
+<BottomNav />

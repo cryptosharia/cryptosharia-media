@@ -79,8 +79,7 @@
         padding: clamp(28px, 5vw, 56px);
         border: 1px solid var(--border);
         border-radius: 10px;
-        background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 5%, transparent), transparent 34%), var(--surface);
-        box-shadow: var(--shadow-sm);
+        background: var(--surface);
     }
 
     .screening-header {
