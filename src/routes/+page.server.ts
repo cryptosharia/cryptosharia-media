@@ -15,11 +15,28 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
         .slice(0, 8);
     const tokenQuotes = tokens.flatMap((token) => (token.quote ? [token.quote] : []));
     const hasUpstreamError = Boolean(newsResult.error || educationResult.error || tokenResult.error);
-    setHeaders({
-        'cache-control': hasUpstreamError
-            ? 'no-store'
-            : 'public, max-age=60, s-maxage=300, stale-while-revalidate=600'
-    });
+    const totalTokens = tokens.length;
+    const quotedCount = tokenQuotes.length;
+    const quoteHealth: 'complete' | 'partial' | 'empty' =
+        quotedCount === 0 || totalTokens === 0
+            ? 'empty'
+            : quotedCount < Math.ceil(totalTokens * 0.8)
+              ? 'partial'
+              : 'complete';
+
+    if (hasUpstreamError || quoteHealth === 'empty') {
+        setHeaders({
+            'cache-control': 'public, max-age=5, s-maxage=5'
+        });
+    } else if (quoteHealth === 'partial') {
+        setHeaders({
+            'cache-control': 'public, max-age=15, s-maxage=30'
+        });
+    } else {
+        setHeaders({
+            'cache-control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600'
+        });
+    }
 
     return {
         news: [...news].sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured)),

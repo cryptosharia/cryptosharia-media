@@ -6,6 +6,7 @@ import type { PageServerLoad } from './$types';
 
 const VALID_STATUSES = new Set<ShariaStatus>(['halal', 'haram', 'syubhat']);
 const MARKET_MAP_CACHE_MS = 60_000;
+const FAILED_MARKET_MAP_CACHE_MS = 5_000;
 const MARKET_CANDIDATE_LIMIT = 100;
 
 type MarketItem = Pick<Token, 'slug' | 'name' | 'ticker' | 'shariaStatus'> & {
@@ -15,7 +16,10 @@ type MarketItem = Pick<Token, 'slug' | 'name' | 'ticker' | 'shariaStatus'> & {
     percentChange24h: number;
     logoUrl: string | null;
 };
-type MarketDatasets = { marketMap: MarketItem[]; trendingTokens: MarketItem[] };
+type MarketHealth = 'complete' | 'partial' | 'empty';
+type MarketDatasets = { marketMap: MarketItem[]; trendingTokens: MarketItem[]; health: MarketHealth };
+
+const PARTIAL_MARKET_MAP_CACHE_MS = 15_000;
 
 let marketMapCache: { expiresAt: number; data: MarketDatasets } | undefined;
 let marketMapRequest: Promise<MarketDatasets> | undefined;
@@ -66,13 +70,28 @@ async function loadMarketData(): Promise<MarketDatasets> {
                 .filter((item) => Number.isFinite(item.percentChange24h))
                 .sort((a, b) => Math.abs(b.percentChange24h) - Math.abs(a.percentChange24h) || a.rank - b.rank || b.marketCapUsd - a.marketCapUsd)
                 .slice(0, 10);
-            const data = { marketMap, trendingTokens };
-            marketMapCache = { data, expiresAt: Date.now() + MARKET_MAP_CACHE_MS };
+            const totalTokens = tokens.length;
+            const quotedCount = marketMap.length;
+            const health: MarketHealth =
+                quotedCount === 0 || totalTokens === 0
+                    ? 'empty'
+                    : quotedCount < Math.ceil(totalTokens * 0.8)
+                      ? 'partial'
+                      : 'complete';
+
+            const data: MarketDatasets = { marketMap, trendingTokens, health };
+            const ttl =
+                health === 'complete'
+                    ? MARKET_MAP_CACHE_MS
+                    : health === 'partial'
+                      ? PARTIAL_MARKET_MAP_CACHE_MS
+                      : FAILED_MARKET_MAP_CACHE_MS;
+            marketMapCache = { data, expiresAt: Date.now() + ttl };
             return data;
         } catch (cause) {
             console.error('[screening] Market map data unavailable:', cause);
-            const data = { marketMap: [], trendingTokens: [] };
-            marketMapCache = { data, expiresAt: Date.now() + MARKET_MAP_CACHE_MS };
+            const data: MarketDatasets = { marketMap: [], trendingTokens: [], health: 'empty' };
+            marketMapCache = { data, expiresAt: Date.now() + FAILED_MARKET_MAP_CACHE_MS };
             return data;
         } finally {
             marketMapRequest = undefined;
@@ -132,7 +151,19 @@ export const load: PageServerLoad = async ({ url, setHeaders }) => {
         throw error(404, 'Halaman screening tidak ditemukan.');
     }
 
-    setHeaders({ 'cache-control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600' });
+    if (marketData.health === 'empty') {
+        setHeaders({
+            'cache-control': 'public, max-age=5, s-maxage=5'
+        });
+    } else if (marketData.health === 'partial') {
+        setHeaders({
+            'cache-control': 'public, max-age=15, s-maxage=30'
+        });
+    } else {
+        setHeaders({
+            'cache-control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600'
+        });
+    }
 
     const tokens = sort === 'popular' ? sortedTokens : sortedTokens.slice((page - 1) * limit, page * limit);
     const latestUpdatedAt = sortedTokens.reduce<string | null>((latest, token) => {
