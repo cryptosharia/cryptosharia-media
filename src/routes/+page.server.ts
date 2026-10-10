@@ -15,9 +15,10 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
         .slice(0, 8);
     const tokenQuotes = tokens.flatMap((token) => (token.quote ? [token.quote] : []));
     const hasUpstreamError = Boolean(newsResult.error || educationResult.error || tokenResult.error);
+    const isQuotesDegraded = tokens.length > 0 && tokenQuotes.length === 0;
     setHeaders({
-        'cache-control': hasUpstreamError
-            ? 'no-store'
+        'cache-control': hasUpstreamError || isQuotesDegraded
+            ? 'public, max-age=5, s-maxage=5'
             : 'public, max-age=60, s-maxage=300, stale-while-revalidate=600'
     });
 

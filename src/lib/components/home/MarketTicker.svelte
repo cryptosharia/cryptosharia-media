@@ -24,7 +24,7 @@
 <section class="market-ticker" aria-label="Ringkasan pasar aset digital">
     <div class="market-ticker-track">
         {#each tokens as token (token.id)}
-            {@const quote = quoteBySlug.get(token.slug)}
+            {@const quote = quoteBySlug.get(token.slug) ?? token.quote}
             <a href={`/screening/${token.slug}`} aria-label={`Lihat screening ${token.name} (${token.ticker})`}>
                 {#if token.logo?.url}
                     <img src={token.logo.url} alt="" width="30" height="30" loading="lazy" />

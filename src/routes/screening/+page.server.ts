@@ -6,6 +6,7 @@ import type { PageServerLoad } from './$types';
 
 const VALID_STATUSES = new Set<ShariaStatus>(['halal', 'haram', 'syubhat']);
 const MARKET_MAP_CACHE_MS = 60_000;
+const FAILED_MARKET_MAP_CACHE_MS = 5_000;
 const MARKET_CANDIDATE_LIMIT = 100;
 
 type MarketItem = Pick<Token, 'slug' | 'name' | 'ticker' | 'shariaStatus'> & {
@@ -67,12 +68,13 @@ async function loadMarketData(): Promise<MarketDatasets> {
                 .sort((a, b) => Math.abs(b.percentChange24h) - Math.abs(a.percentChange24h) || a.rank - b.rank || b.marketCapUsd - a.marketCapUsd)
                 .slice(0, 10);
             const data = { marketMap, trendingTokens };
-            marketMapCache = { data, expiresAt: Date.now() + MARKET_MAP_CACHE_MS };
+            const ttl = marketMap.length > 0 ? MARKET_MAP_CACHE_MS : FAILED_MARKET_MAP_CACHE_MS;
+            marketMapCache = { data, expiresAt: Date.now() + ttl };
             return data;
         } catch (cause) {
             console.error('[screening] Market map data unavailable:', cause);
             const data = { marketMap: [], trendingTokens: [] };
-            marketMapCache = { data, expiresAt: Date.now() + MARKET_MAP_CACHE_MS };
+            marketMapCache = { data, expiresAt: Date.now() + FAILED_MARKET_MAP_CACHE_MS };
             return data;
         } finally {
             marketMapRequest = undefined;
@@ -132,7 +134,12 @@ export const load: PageServerLoad = async ({ url, setHeaders }) => {
         throw error(404, 'Halaman screening tidak ditemukan.');
     }
 
-    setHeaders({ 'cache-control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600' });
+    const isDegraded = marketData.marketMap.length === 0;
+    setHeaders({
+        'cache-control': isDegraded
+            ? 'public, max-age=5, s-maxage=5'
+            : 'public, max-age=60, s-maxage=300, stale-while-revalidate=600'
+    });
 
     const tokens = sort === 'popular' ? sortedTokens : sortedTokens.slice((page - 1) * limit, page * limit);
     const latestUpdatedAt = sortedTokens.reduce<string | null>((latest, token) => {
