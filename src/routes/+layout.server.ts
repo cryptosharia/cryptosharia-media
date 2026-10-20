@@ -1,12 +1,11 @@
-import { getContentCategories } from '$lib/api';
+import { getAcademyVisibility, getContentCategories } from '$lib/api';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async () => {
-    const result = await getContentCategories({
-        sections: ['news', 'education'],
-        limit: 100,
-        page: 1
-    });
+    const [result, academyVisibility] = await Promise.all([
+        getContentCategories({ sections: ['news', 'education'], limit: 100, page: 1 }),
+        getAcademyVisibility()
+    ]);
 
-    return { contentCategories: result.data?.data.items ?? [] };
+    return { contentCategories: result.data?.data.items ?? [], academyVisibility };
 };

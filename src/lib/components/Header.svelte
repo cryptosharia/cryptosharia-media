@@ -4,7 +4,7 @@
     import { theme, type Theme } from '$lib/stores/theme';
     import { tick } from 'svelte';
 
-    let { newsCategories, educationCategories }: { newsCategories: ReadonlyArray<{ label: string; slug: string }>; educationCategories: ReadonlyArray<{ label: string; slug: string }> } = $props();
+    let { newsCategories, educationCategories, showAcademy = true }: { newsCategories: ReadonlyArray<{ label: string; slug: string }>; educationCategories: ReadonlyArray<{ label: string; slug: string }>; showAcademy?: boolean } = $props();
 
     const DESKTOP_BREAKPOINT = 1020;
     const themes: Theme[] = ['light', 'dark', 'system'];
@@ -272,6 +272,7 @@
                 </div>
             </div>
 
+            {#if showAcademy}
             <a
                 class="nav-link academy-link"
                 href={ACADEMY_URLS.catalog}
@@ -280,6 +281,7 @@
                 aria-label="Academy, membuka tab baru"
                 onclick={() => closeDesktopDropdown()}>Academy <span aria-hidden="true">↗</span></a
             >
+            {/if}
 
             <a
                 class="nav-link screening-link"
@@ -526,6 +528,7 @@
                 </div>
             </div>
 
+            {#if showAcademy}
             <a
                 class="mobile-primary-link academy-link"
                 href={ACADEMY_URLS.catalog}
@@ -534,6 +537,7 @@
                 aria-label="Academy, membuka tab baru"
                 onclick={handleMobileNavigate}>Academy <span aria-hidden="true">↗</span></a
             >
+            {/if}
 
             <a
                 class="mobile-primary-link screening-link"
