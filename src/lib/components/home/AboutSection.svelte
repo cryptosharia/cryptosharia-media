@@ -1,5 +1,6 @@
 <script lang="ts">
     import { reveal } from '$lib/actions/reveal';
+    import { ACADEMY_URLS } from '$lib/config';
 </script>
 
 <section class="about-section" aria-labelledby="tentang-ringkas">
@@ -20,6 +21,9 @@
             <p>Ikuti diskusi pasar, pembelajaran aset digital, dan pembahasan syariah bersama komunitas CryptoSharia.</p>
             <span class="panel-cta">Gabung Komunitas <span class="cta-arrow" aria-hidden="true">→</span></span>
         </a>
+        <div class="about-academy-link">
+            <a href={ACADEMY_URLS.catalog} target="_blank" rel="noopener noreferrer">Kenali program Academy <span aria-hidden="true">↗</span></a>
+        </div>
     </div>
 </section>
 
@@ -34,6 +38,17 @@
         grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.8fr);
         border-block: 1px solid var(--border);
     }
+
+    .about-academy-link {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: flex-end;
+        padding-block: 18px;
+        border-top: 1px solid var(--border);
+    }
+
+    .about-academy-link a { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: .84rem; font-weight: 650; text-underline-offset: 4px; }
+    .about-academy-link a:hover, .about-academy-link a:focus-visible { color: var(--accent-text); }
 
     .about-copy,
     .community-note {

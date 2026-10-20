@@ -1,7 +1,30 @@
+import { env } from '$env/dynamic/public';
+
 export const SITE_NAME = 'CryptoSharia';
 export const SITE_URL = 'https://www.cryptosharia.id';
 export const SITE_DESCRIPTION =
     'Berita, edukasi, dan screening aset kripto dari perspektif syariah dalam satu platform.';
+
+const ACADEMY_STAGING_URL = 'https://cryptosharia-learning.vercel.app';
+
+function academyOrigin(value: string | undefined): string {
+    try {
+        const url = new URL(value?.trim() || ACADEMY_STAGING_URL);
+        if (url.protocol === 'https:' || url.protocol === 'http:') return url.origin;
+    } catch {
+        // Keep public links on the known Academy staging deployment until a valid URL is configured.
+    }
+    return ACADEMY_STAGING_URL;
+}
+
+const academyBaseUrl = academyOrigin(env.PUBLIC_ACADEMY_URL);
+
+export const ACADEMY_URLS = {
+    home: `${academyBaseUrl}/e-learning`,
+    catalog: `${academyBaseUrl}/e-learning`,
+    login: `${academyBaseUrl}/auth/login`,
+    dashboard: `${academyBaseUrl}/profile`
+} as const;
 
 export const NEWS_CATEGORIES = [
     { label: 'Crypto News', slug: 'crypto-news' },

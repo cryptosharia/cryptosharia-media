@@ -2,6 +2,7 @@
     import EditorialMedia from '$lib/components/EditorialMedia.svelte';
     import StateMessage from '$lib/components/StateMessage.svelte';
     import { reveal } from '$lib/actions/reveal';
+    import { ACADEMY_URLS } from '$lib/config';
     import { formatDate } from '$lib/format';
     import type { Post } from '$types/api';
 
@@ -58,6 +59,16 @@
                 actionHref="/edukasi"
             />
         {/if}
+
+        <aside class="academy-nudge" aria-label="Belajar lebih terstruktur">
+            <div>
+                <h3>Ingin belajar lebih terstruktur?</h3>
+                <p>Jelajahi kurikulum CryptoSharia Academy untuk mempelajari aset digital secara bertahap.</p>
+            </div>
+            <a href={ACADEMY_URLS.catalog} target="_blank" rel="noopener noreferrer">
+                Jelajahi CryptoSharia Academy <span aria-hidden="true">↗</span>
+            </a>
+        </aside>
     </div>
 </section>
 
@@ -224,6 +235,45 @@
         line-clamp: 3;
     }
 
+    .academy-nudge {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding-top: 28px;
+    }
+
+    .academy-nudge h3 {
+        margin: 0;
+        color: var(--text);
+        font-size: 1rem;
+        letter-spacing: -0.02em;
+    }
+
+    .academy-nudge p {
+        max-width: 620px;
+        margin: 7px 0 0;
+        color: var(--muted);
+        font-size: 0.88rem;
+        line-height: 1.55;
+    }
+
+    .academy-nudge a {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: 8px;
+        color: var(--text);
+        border-bottom: 1px solid var(--border-control);
+        padding-bottom: 4px;
+        font-size: 0.84rem;
+        font-weight: 700;
+        text-underline-offset: 4px;
+    }
+
+    .academy-nudge a:hover,
+    .academy-nudge a:focus-visible { color: var(--accent-text); border-color: currentColor; }
+
     @media (prefers-reduced-motion: reduce) {
         .section-link:hover span,
         .section-link:focus-visible span,
@@ -264,6 +314,8 @@
             margin-top: 28px;
             padding-bottom: 40px;
         }
+
+        .academy-nudge { align-items: flex-start; flex-direction: column; gap: 16px; padding-top: 24px; }
 
         h3 {
             font-size: 1.35rem;

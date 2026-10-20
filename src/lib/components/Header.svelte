@@ -1,5 +1,6 @@
 <script lang="ts">
     import { page } from '$app/state';
+    import { ACADEMY_URLS } from '$lib/config';
     import { theme, type Theme } from '$lib/stores/theme';
     import { tick } from 'svelte';
 
@@ -272,6 +273,15 @@
             </div>
 
             <a
+                class="nav-link academy-link"
+                href={ACADEMY_URLS.catalog}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Academy, membuka tab baru"
+                onclick={() => closeDesktopDropdown()}>Academy <span aria-hidden="true">↗</span></a
+            >
+
+            <a
                 class="nav-link screening-link"
                 class:active={isActive('/screening')}
                 href="/screening"
@@ -517,6 +527,15 @@
             </div>
 
             <a
+                class="mobile-primary-link academy-link"
+                href={ACADEMY_URLS.catalog}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Academy, membuka tab baru"
+                onclick={handleMobileNavigate}>Academy <span aria-hidden="true">↗</span></a
+            >
+
+            <a
                 class="mobile-primary-link screening-link"
                 class:active={isActive('/screening')}
                 href="/screening"
@@ -677,7 +696,7 @@
         align-items: stretch;
         align-self: stretch;
         justify-content: flex-end;
-        gap: 24px;
+        gap: clamp(10px, 1.2vw, 18px);
     }
 
     .nav-link,
@@ -743,6 +762,8 @@
     .screening-link {
         font-weight: 600;
     }
+
+    .academy-link span { color: var(--accent-text); font-size: .72rem; }
 
     .summary-chevron,
     .mobile-chevron {
@@ -1009,6 +1030,13 @@
         .mobile-submenu a[aria-current] {
             color: var(--text);
         }
+    }
+
+    @media (min-width: 1021px) and (max-width: 1120px) {
+        .site-nav { gap: 10px; }
+        .desktop-nav { gap: 9px; }
+        .nav-link, .nav-summary { font-size: .78rem; }
+        .header-brand { gap: 7px; font-size: .9rem; }
     }
 
     @media (max-width: 680px) {

@@ -2,6 +2,7 @@
     import StateMessage from '$lib/components/StateMessage.svelte';
     import type { Token } from '$types/api';
     import { reveal } from '$lib/actions/reveal';
+    import { ACADEMY_URLS } from '$lib/config';
 
     let { tokens, unavailable }: { tokens: Token[]; unavailable?: string | null } = $props();
 </script>
@@ -58,6 +59,15 @@
                 <div class="screening-action">
                     <a href="/screening">Lihat Semua Screening <span aria-hidden="true">→</span></a>
                 </div>
+                <aside class="academy-screening-cta" aria-labelledby="academy-screening-title">
+                    <div>
+                        <h3 id="academy-screening-title">Ingin memahami bagaimana aset kripto dianalisis?</h3>
+                        <p>Pelajari prinsip analisis fundamental dan fikih muamalah melalui kurikulum CryptoSharia Academy.</p>
+                    </div>
+                    <a href={ACADEMY_URLS.catalog} target="_blank" rel="noopener noreferrer">
+                        Lihat Kurikulum Academy <span aria-hidden="true">↗</span>
+                    </a>
+                </aside>
             {:else}
                 <StateMessage
                     title="Data screening belum tersedia"
@@ -271,6 +281,23 @@
         }
     }
 
+    .academy-screening-cta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: 28px;
+        padding: 22px 24px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: color-mix(in srgb, var(--surface-muted) 44%, transparent);
+    }
+
+    .academy-screening-cta h3 { margin: 0; font-size: 1rem; letter-spacing: -0.02em; }
+    .academy-screening-cta p { max-width: 680px; margin: 7px 0 0; color: var(--muted); font-size: .88rem; line-height: 1.55; }
+    .academy-screening-cta a { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; color: var(--text); border-bottom: 1px solid var(--border-control); padding-bottom: 4px; font-size: .84rem; font-weight: 700; }
+    .academy-screening-cta a:hover, .academy-screening-cta a:focus-visible { color: var(--accent-text); border-color: currentColor; }
+
     @media (max-width: 760px) {
         .screening-section {
             padding-block: 80px;
@@ -333,5 +360,9 @@
             padding-inline: 6px;
             font-size: 0.62rem;
         }
+    }
+
+    @media (max-width: 600px) {
+        .academy-screening-cta { align-items: flex-start; flex-direction: column; gap: 16px; padding: 18px; }
     }
 </style>
