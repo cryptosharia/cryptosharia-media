@@ -5,8 +5,52 @@
 	import BottomNav from "$lib/components/BottomNav.svelte";
 	import NavigationLoader from "$lib/components/NavigationLoader.svelte";
 	import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_LINKS } from '$lib/config';
+	import { onMount, setContext, untrack } from 'svelte';
+	import { calculateAcademyVisibility, isAcademyVisibility } from '$lib/academy-visibility.js';
+	import { ACADEMY_VISIBILITY_CONTEXT, type AcademyVisibilityState } from '$lib/academy-visibility-context';
 
 	let { children, data } = $props();
+	const initialAcademyVisibility = untrack(() => data.academyVisibility);
+	const academyVisibility = $state<AcademyVisibilityState>({
+		academyPromotionEnabled: initialAcademyVisibility.academyPromotionEnabled,
+		academyNavbarEnabled: initialAcademyVisibility.academyNavbarEnabled,
+		academyHomepageSectionEnabled: initialAcademyVisibility.academyHomepageSectionEnabled,
+		effectiveNavbar: initialAcademyVisibility.effectiveNavbar,
+		effectiveSection: initialAcademyVisibility.effectiveSection
+	});
+	setContext(ACADEMY_VISIBILITY_CONTEXT, academyVisibility);
+
+	onMount(() => {
+		let refreshInFlight = false;
+		const refreshAcademyVisibility = async () => {
+			if (refreshInFlight) return;
+			refreshInFlight = true;
+			try {
+				const response = await fetch('/api/site-settings/academy', { cache: 'no-store' });
+				if (!response.ok) return;
+				const values: unknown = await response.json();
+				if (!isAcademyVisibility(values)) return;
+				Object.assign(academyVisibility, calculateAcademyVisibility(values));
+			} catch {
+				// Keep the last verified server-rendered state during a transient outage.
+			} finally {
+				refreshInFlight = false;
+			}
+		};
+		const refreshWhenVisible = () => {
+			if (document.visibilityState === 'visible') void refreshAcademyVisibility();
+		};
+
+		void refreshAcademyVisibility();
+		const interval = window.setInterval(refreshWhenVisible, 30_000);
+		document.addEventListener('visibilitychange', refreshWhenVisible);
+		window.addEventListener('focus', refreshWhenVisible);
+		return () => {
+			window.clearInterval(interval);
+			document.removeEventListener('visibilitychange', refreshWhenVisible);
+			window.removeEventListener('focus', refreshWhenVisible);
+		};
+	});
 	const newsCategories = $derived(
 		data.contentCategories
 			.filter((category) => category.section === 'news')
@@ -61,7 +105,11 @@
 <div class="scroll-progress" style:--scroll-progress={scrollProgress} aria-hidden="true"></div>
 <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
 <div class="app-shell">
-	<Header newsCategories={newsCategories} educationCategories={educationCategories} />
+	<Header
+		newsCategories={newsCategories}
+		educationCategories={educationCategories}
+		showAcademy={academyVisibility.effectiveNavbar}
+	/>
 	<div class="page-column">
 		{@render children()}
 		<Footer />

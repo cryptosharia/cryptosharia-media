@@ -26,15 +26,15 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
 
     if (hasUpstreamError || quoteHealth === 'empty') {
         setHeaders({
-            'cache-control': 'public, max-age=5, s-maxage=5'
+            'cache-control': 'public, max-age=0, s-maxage=5, stale-while-revalidate=5'
         });
     } else if (quoteHealth === 'partial') {
         setHeaders({
-            'cache-control': 'public, max-age=15, s-maxage=30'
+            'cache-control': 'public, max-age=0, s-maxage=10, stale-while-revalidate=10'
         });
     } else {
         setHeaders({
-            'cache-control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600'
+            'cache-control': 'public, max-age=0, s-maxage=15, stale-while-revalidate=15'
         });
     }
 

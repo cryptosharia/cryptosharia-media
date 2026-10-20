@@ -8,9 +8,12 @@
     import ScreeningSection from '$lib/components/home/ScreeningSection.svelte';
     import TrustStrip from '$lib/components/home/TrustStrip.svelte';
     import Seo from '$lib/components/Seo.svelte';
+    import { getContext } from 'svelte';
+    import { ACADEMY_VISIBILITY_CONTEXT, type AcademyVisibilityState } from '$lib/academy-visibility-context';
     import type { PageData } from './$types';
 
     let { data }: { data: PageData } = $props();
+    const academyVisibility = getContext<AcademyVisibilityState>(ACADEMY_VISIBILITY_CONTEXT);
 </script>
 
 <Seo
@@ -26,7 +29,9 @@
     <NewsSection posts={data.news} unavailable={data.unavailable.news} />
     <AdSlot placement="homepage-middle" />
     <EducationSection posts={data.education} unavailable={data.unavailable.education} />
-    <AcademySpotlight />
+    {#if academyVisibility.effectiveSection}
+        <AcademySpotlight />
+    {/if}
     <ScreeningSection tokens={data.tokens} unavailable={data.unavailable.tokens} />
     <AboutSection />
 </main>

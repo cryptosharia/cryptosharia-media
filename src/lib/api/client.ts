@@ -15,6 +15,11 @@ import type {
     ListTagsParams,
     User
 } from '$types/api';
+import {
+    calculateAcademyVisibility,
+    isAcademyVisibility,
+    VERIFIED_ACADEMY_VISIBILITY_DEFAULT
+} from '$lib/academy-visibility.js';
 
 const API_BASE_URL = (publicEnv.PUBLIC_CS_API_URL || 'https://api.cryptosharia.id').replace(/\/$/, '');
 
@@ -24,6 +29,56 @@ type ApiResult<T> = {
     error?: ApiError;
     response: { status: number; totalItems?: number };
 };
+
+export type AcademyVisibility = {
+    academyPromotionEnabled: boolean;
+    academyNavbarEnabled: boolean;
+    academyHomepageSectionEnabled: boolean;
+    effectiveNavbar: boolean;
+    effectiveSection: boolean;
+};
+
+let lastValidAcademyVisibility: AcademyVisibility | null = null;
+let academyVisibilityCacheUntil = 0;
+let academyVisibilityRetryAfter = 0;
+let academyVisibilityRequest: Promise<AcademyVisibility & { isStale: boolean }> | null = null;
+
+/** Runtime public configuration with a bounded fresh cache and last-known-good fallback. */
+export async function getAcademyVisibility() {
+    const now = Date.now();
+    if (lastValidAcademyVisibility && now < academyVisibilityCacheUntil) {
+        return { ...lastValidAcademyVisibility, isStale: false };
+    }
+    if (academyVisibilityRequest) return academyVisibilityRequest;
+    if (now < academyVisibilityRetryAfter) {
+        return { ...(lastValidAcademyVisibility ?? VERIFIED_ACADEMY_VISIBILITY_DEFAULT), isStale: true };
+    }
+
+    academyVisibilityRequest = (async () => {
+        const result = await apiRequest<unknown>('/public/site-settings/academy', {
+            cache: 'no-store',
+            signal: AbortSignal.timeout(2500)
+        });
+        if (result.data && isAcademyVisibility(result.data.data)) {
+            lastValidAcademyVisibility = calculateAcademyVisibility(result.data.data);
+            academyVisibilityCacheUntil = Date.now() + 15_000;
+            academyVisibilityRetryAfter = 0;
+            return { ...lastValidAcademyVisibility, isStale: false };
+        }
+
+        console.error('[academy visibility] Runtime configuration request failed; serving the last verified state.', {
+            status: result.error?.status ?? result.response.status
+        });
+        academyVisibilityRetryAfter = Date.now() + 5_000;
+        return { ...(lastValidAcademyVisibility ?? VERIFIED_ACADEMY_VISIBILITY_DEFAULT), isStale: true };
+    })();
+
+    try {
+        return await academyVisibilityRequest;
+    } finally {
+        academyVisibilityRequest = null;
+    }
+}
 
 function toQuery(params: Record<string, unknown> | undefined) {
     const query = new URLSearchParams();

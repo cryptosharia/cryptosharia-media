@@ -12,6 +12,7 @@ export {
     getMe,
     getTeamMembers
 } from './client';
+export { getAcademyVisibility } from './client';
 
 // Re-export useful utilities
 export { getAssetUrl, getPostCoverUrl, getTokenLogoUrl } from '../utils/assets';
