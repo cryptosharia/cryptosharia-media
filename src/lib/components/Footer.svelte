@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { SOCIAL_LINKS } from '$lib/config';
+    import { ACADEMY_URLS, SOCIAL_LINKS } from '$lib/config';
     import { reveal } from '$lib/actions/reveal';
 </script>
 
@@ -34,6 +34,16 @@
                     </div>
                 </div>
 
+                <div class="footer-group">
+                    <h2>Pembelajaran</h2>
+                    <div class="footer-links">
+                        <a href={ACADEMY_URLS.home} target="_blank" rel="noopener noreferrer">CryptoSharia Academy</a>
+                        <a href={ACADEMY_URLS.catalog} target="_blank" rel="noopener noreferrer">Katalog Academy</a>
+                        <a href={ACADEMY_URLS.login} target="_blank" rel="noopener noreferrer">Masuk Academy</a>
+                        <a href="https://masterclass.cryptosharia.id/" target="_blank" rel="noopener noreferrer">Masterclass</a>
+                    </div>
+                </div>
+
                 <div class="footer-group footer-group-social">
                     <h2>Ikuti Kami</h2>
                     <div class="footer-links social-links">
@@ -61,6 +71,16 @@
                         <a href="/tentang-kami#aktivitas">Aktivitas</a>
                         <a href="/komunitas">Komunitas</a>
                         <a href="/tentang-kami#hubungi-kami">Hubungi Kami</a>
+                    </div>
+                </details>
+
+                <details class="footer-accordion">
+                    <summary>Pembelajaran</summary>
+                    <div class="footer-links">
+                        <a href={ACADEMY_URLS.home} target="_blank" rel="noopener noreferrer">CryptoSharia Academy</a>
+                        <a href={ACADEMY_URLS.catalog} target="_blank" rel="noopener noreferrer">Katalog Academy</a>
+                        <a href={ACADEMY_URLS.login} target="_blank" rel="noopener noreferrer">Masuk Academy</a>
+                        <a href="https://masterclass.cryptosharia.id/" target="_blank" rel="noopener noreferrer">Masterclass</a>
                     </div>
                 </details>
 
@@ -93,7 +113,7 @@
 
     .footer-layout {
         display: grid;
-        grid-template-columns: minmax(260px, 1.15fr) minmax(520px, 1.85fr);
+        grid-template-columns: minmax(190px, .8fr) minmax(0, 2.2fr);
         gap: clamp(48px, 8vw, 112px);
         align-items: start;
     }
@@ -133,8 +153,8 @@
 
     .footer-navigation {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: clamp(28px, 4vw, 56px);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: clamp(14px, 2vw, 28px);
     }
 
     .footer-navigation-mobile {

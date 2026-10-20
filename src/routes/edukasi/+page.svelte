@@ -2,6 +2,7 @@
     import EducationStory from '$lib/components/education/EducationStory.svelte';
     import Pagination from '$lib/components/Pagination.svelte';
     import Seo from '$lib/components/Seo.svelte';
+    import { ACADEMY_URLS } from '$lib/config';
     import type { Post } from '$types/api';
     import type { PageData } from './$types';
 
@@ -99,6 +100,14 @@
             <div class="education-empty" role="status"><p class="education-kicker">Arsip edukasi</p><h2>{emptyTitle()}</h2><p>Coba gunakan kata kunci lain atau pilih kategori berbeda.</p>{#if data.search || data.category}<a href="/edukasi">Reset filter <span aria-hidden="true">→</span></a>{/if}</div>
         {/if}
     </section>
+    <aside class="container education-academy-nudge" aria-label="Kurikulum CryptoSharia Academy">
+        <div>
+            <p class="education-kicker">Belajar lebih terstruktur</p>
+            <h2>Jelajahi kurikulum CryptoSharia Academy</h2>
+            <p>Pelajari aset digital secara bertahap melalui bidang pembelajaran yang tersedia.</p>
+        </div>
+        <a href={ACADEMY_URLS.catalog} target="_blank" rel="noopener noreferrer">Lihat pratinjau kurikulum <span aria-hidden="true">↗</span></a>
+    </aside>
 </main>
 
 <style>
@@ -136,7 +145,13 @@
     .education-empty a { display: inline-flex; gap: 8px; margin-top: 24px; padding-bottom: 3px; border-bottom: 1px solid var(--border-control); font-size: .84rem; font-weight: 700; }
     .education-pagination :global(.pagination) { flex-wrap: wrap; margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--border); }
     .education-pagination :global(.pagination .button) { border-radius: 7px; background: transparent; }
+    .education-academy-nudge { display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:80px;padding:24px;border:1px solid var(--border);border-radius:10px;background:var(--surface); }
+    .education-academy-nudge h2 { margin:0;font-size:1.25rem;line-height:1.25;letter-spacing:-.03em; }
+    .education-academy-nudge > div > p:last-child { margin:8px 0 0;color:var(--muted);font-size:.88rem;line-height:1.55; }
+    .education-academy-nudge > a { display:inline-flex;flex:0 0 auto;align-items:center;gap:8px;color:var(--text);border-bottom:1px solid var(--border-control);padding-bottom:4px;font-size:.84rem;font-weight:700; }
+    .education-academy-nudge > a:hover,.education-academy-nudge > a:focus-visible { color:var(--accent-text);border-color:currentColor; }
     @media (max-width: 1080px) { .discovery-toolbar { gap: 16px; } .category-tab { padding-inline: 9px; font-size: .78rem; } .education-search { width: 310px; flex-basis: 310px; } .lead-layout { grid-template-columns: minmax(0, 1.45fr) minmax(280px, 1fr); gap: 32px; } .archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; } }
     @media (max-width: 900px) { .education-intro { padding-top: 64px; } .education-intro h1 { font-size: 2.25rem; } .discovery-toolbar { align-items: stretch; flex-direction: column; } .category-tabs { overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; overscroll-behavior-inline: contain; } .category-tabs::-webkit-scrollbar { display: none; } .education-search { width: 100%; flex-basis: auto; } .lead-layout { grid-template-columns: 1fr; gap: 36px; } }
     @media (max-width: 600px) { .education-intro { padding-top: 52px; } .education-intro h1 { font-size: clamp(2rem, 9.2vw, 2.25rem); } .education-intro > p:last-child { margin-top: 12px; font-size: .94rem; } .education-discovery { margin-top: 36px; } .discovery-toolbar { gap: 12px; padding-block: 12px; } .category-tabs { width: calc(100% + 16px); padding-right: 16px; } .category-tab { min-height: 38px; padding: 7px 10px; } .education-content { padding-block: 40px 80px; } .archive-section { margin-top: 56px; } .archive-grid { grid-template-columns: 1fr; gap: 32px; } .archive-heading, .results-heading { align-items: start; flex-direction: column; gap: 12px; padding-bottom: 16px; } .archive-heading h2, .results-heading h2 { font-size: 1.55rem; } .results-meta { width: 100%; justify-content: space-between; } .education-empty { padding-block: 40px 56px; } .education-pagination :global(.pagination) { gap: 8px; margin-top: 48px; } .education-pagination :global(.pagination > span:not(.button)) { order: -1; width: 100%; text-align: center; } }
+    @media (max-width: 600px) { .education-academy-nudge { align-items:flex-start;flex-direction:column;margin-bottom:56px;padding:20px; } }
 </style>

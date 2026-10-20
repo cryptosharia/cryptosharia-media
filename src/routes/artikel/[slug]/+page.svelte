@@ -2,6 +2,7 @@
     import ArticleCard from '$lib/components/ArticleCard.svelte';
     import AdSlot from '$lib/components/AdSlot.svelte';
     import { AD_PLACEMENTS } from '$lib/config/ads';
+    import { ACADEMY_URLS } from '$lib/config';
     import Seo from '$lib/components/Seo.svelte';
     import { formatDate, safeExternalUrl } from '$lib/format';
     import type { PageData } from './$types';
@@ -76,6 +77,14 @@
                     <a class="source-link" href={externalLink} target="_blank" rel="noopener noreferrer">Buka sumber terkait <span aria-hidden="true">↗</span></a>
                 {/if}
             </footer>
+
+            {#if data.post.section === 'education'}
+                <aside class="article-academy-nudge" aria-label="Kurikulum CryptoSharia Academy">
+                    <p class="promo-label">Belajar lebih terstruktur?</p>
+                    <p>Jelajahi kurikulum CryptoSharia Academy untuk mempelajari aset digital secara bertahap.</p>
+                    <a href={ACADEMY_URLS.catalog} target="_blank" rel="noopener noreferrer">Jelajahi CryptoSharia Academy <span aria-hidden="true">↗</span></a>
+                </aside>
+            {/if}
         </article>
 
         <aside class="article-sidebar" aria-label="Komunitas CryptoSharia">
@@ -132,6 +141,10 @@
     .article-prose :global(th), .article-prose :global(td) { padding: 10px 12px; border: 1px solid var(--border); text-align: left; }
     .article-prose :global(th) { background: var(--surface-muted); }
     .article-footer { max-width: 720px; margin-top: 52px; padding-top: 26px; border-top: 1px solid var(--border); }
+    .article-academy-nudge { max-width:720px;margin-top:26px;padding:20px 22px;border:1px solid var(--border);border-radius:10px;background:var(--surface); }
+    .article-academy-nudge > p:nth-child(2) { margin:9px 0 0;color:var(--muted);font-size:.9rem;line-height:1.55; }
+    .article-academy-nudge a { display:inline-flex;align-items:center;gap:8px;margin-top:14px;color:var(--text);border-bottom:1px solid var(--border-control);padding-bottom:3px;font-size:.84rem;font-weight:700; }
+    .article-academy-nudge a:hover,.article-academy-nudge a:focus-visible { color:var(--accent-text);border-color:currentColor; }
     .article-tags > div { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
     .article-tags span { padding: 5px 10px; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; font-size: .82rem; }
     .source-link { display: inline-flex; gap: 7px; margin-top: 24px; color: var(--accent-text); border-bottom: 1px solid currentColor; font-size: .88rem; font-weight: 700; }

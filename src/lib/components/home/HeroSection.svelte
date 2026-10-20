@@ -1,6 +1,7 @@
 <script lang="ts">
     import MarketTicker from '$lib/components/home/MarketTicker.svelte';
     import HeroIntelligenceArtwork from '$lib/components/home/HeroIntelligenceArtwork.svelte';
+    import { ACADEMY_URLS } from '$lib/config';
     import type { Token, TokenQuote } from '$types/api';
 
     let { tokens, quotes }: { tokens: Token[]; quotes: TokenQuote[] } = $props();
@@ -20,7 +21,8 @@
             </p>
             <div class="hero-actions hero-enter hero-enter-4">
                 <a class="hero-cta primary" href="/screening">Cek Screening Coin <span aria-hidden="true">→</span></a>
-                <a class="hero-cta secondary" href="/berita">Baca Berita <span aria-hidden="true">→</span></a>
+                <a class="hero-cta secondary" href={ACADEMY_URLS.catalog} target="_blank" rel="noopener noreferrer" aria-label="Jelajahi Academy, terbuka di tab baru">Jelajahi Academy <span aria-hidden="true">↗</span></a>
+                <a class="hero-cta tertiary" href="/berita">Baca berita terbaru <span aria-hidden="true">→</span></a>
             </div>
             <p class="hero-trust hero-enter hero-enter-4">Riset berbasis data <span>•</span> Screening syariah <span>•</span> Edukasi terstruktur</p>
         </div>
@@ -179,6 +181,18 @@
 
     .hero-cta.secondary:hover span {
         transform: translateX(3px);
+    }
+
+    .hero-cta.tertiary {
+        padding-inline: 6px;
+        color: var(--muted);
+    }
+
+    .hero-cta.tertiary:hover,
+    .hero-cta.tertiary:focus-visible {
+        color: var(--text);
+        text-decoration: underline;
+        text-underline-offset: 4px;
     }
 
     .hero-trust { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; color: var(--muted); font-size: .72rem; font-weight: 600; }
